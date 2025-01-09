@@ -34,3 +34,7 @@
 /.vs
 *.pdb
 *.log
+
+# Directories
+Debug/
+Release/
