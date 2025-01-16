@@ -6,7 +6,7 @@
 	do{\
 		char _buffer[256];\
 		int _res = snprintf(_buffer, std::size(_buffer), "{%.3f}: "##format##"\n", VEngine::Core::TimeUtil::GetTime(), __VA_ARGS__);\
-		OutputDebugString(_buffer)\
+		OutputDebugStringA(_buffer)\
 	}while(false)
 
 #define ASSERT(condition, format, ...)\

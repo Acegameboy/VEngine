@@ -2,14 +2,14 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Inc">
-      <UniqueIdentifier>{a73b3334-3040-4df4-bf42-7667f914f7d7}</UniqueIdentifier>
+      <UniqueIdentifier>{0ae0c332-48d7-4f92-b7af-850aa380f4fd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src">
-      <UniqueIdentifier>{d4bfc88c-11cd-4639-bbf0-ee78a0372b28}</UniqueIdentifier>
+      <UniqueIdentifier>{1156509b-ca82-4999-90e6-cdb08acb6631}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Inc\Core.h">
+    <ClInclude Include="Inc\VMath.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Inc\Common.h">
@@ -18,16 +18,22 @@
     <ClInclude Include="Src\Precompiled.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\DebugUtil.h">
+    <ClInclude Include="Inc\Vector2.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\TimeUtil.h">
+    <ClInclude Include="Inc\Vector3.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\Window.h">
+    <ClInclude Include="Inc\Vector4.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\WindowMessageHandler.h">
+    <ClInclude Include="Inc\Matrix4.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Quaternion.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Constant.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,13 +41,7 @@
     <ClCompile Include="Src\Precompiled.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\TimeUtil.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Window.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\WindowMessageHandler.cpp">
+    <ClCompile Include="Src\VMath.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

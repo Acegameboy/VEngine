@@ -15,6 +15,7 @@ namespace VEngine::Core
 	private:
 		HINSTANCE mInstance = nullptr;
 		HWND mWindow = nullptr;
+		RECT mScreenRect{};
 		std::wstring mAppName;
 		bool mActive = false;
 	};
