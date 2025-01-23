@@ -152,6 +152,9 @@
     <ProjectReference Include="..\..\Framework\Core\Core.vcxproj">
       <Project>{7b9af0cf-95eb-4bab-a33d-828a422e7619}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Framework\Graphics\Graphics.vcxproj">
+      <Project>{06715d2d-ed14-4c97-ad48-69d4791835dc}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\Math\Math.vcxproj">
       <Project>{466c8526-9784-4fba-8081-bf42092b4aa6}</Project>
     </ProjectReference>

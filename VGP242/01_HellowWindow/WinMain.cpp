@@ -1,6 +1,7 @@
 #include <VEngine/Inc/VEngine.h>
 
 using namespace VEngine;
+using namespace VEngine::Graphics;
 
 class StartState : public AppState
 {
@@ -8,6 +9,9 @@ public:
 	void Initialize() override
 	{
 		LOG("Initialized Start State");
+		mLifeTime = 5.0f;
+
+		GraphicsSystem::Get()->SetClearColor(Colors::Blue);
 	}
 
 	void Update(float deltaTime) override
@@ -29,6 +33,9 @@ public:
 	void Initialize() override
 	{
 		LOG("Initialized Game State");
+		mLifeTime = 5.0f;
+
+		GraphicsSystem::Get()->SetClearColor(Colors::Red);
 	}
 
 	void Update(float deltaTime) override

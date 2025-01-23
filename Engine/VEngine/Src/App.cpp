@@ -4,6 +4,7 @@
 
 using namespace VEngine;
 using namespace VEngine::Core;
+using namespace VEngine::Graphics;
 
 void App::Run(const AppConfig& config)
 {
@@ -16,6 +17,10 @@ void App::Run(const AppConfig& config)
 		config.winWidth,
 		config.winHeight);
 	ASSERT(myWindow.IsActive(), "App: Failed to create window");
+
+	//call all static initializes
+	HWND window = myWindow.GetWindowHandle();
+	GraphicsSystem::StaticInitials(window, false);
 
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");
 	mCurrentState->Initialize();
@@ -38,12 +43,24 @@ void App::Run(const AppConfig& config)
 			mCurrentState->Initialize();
 		}
 
+		//update current state
 		float deltaTime = TimeUtil::GetDeltaTime();
 		mCurrentState->Update(deltaTime);
+
+		//render everything
+		GraphicsSystem* gs = GraphicsSystem::Get();
+		gs->BeginRender();
+			mCurrentState->Render();
+		gs->EndRender();
 	}
 
+	//terminate current state
 	mCurrentState->Terminate();
 
+	//call all static terminates
+	GraphicsSystem::StaticTerminate();
+
+	//destroy window
 	myWindow.Terminate();
 }
 
