@@ -7,7 +7,7 @@ class StartState : public AppState
 public:
 	void Initialize() override
 	{
-		LOG("Initialized Start State")
+		LOG("Initialized Start State");
 	}
 
 	void Update(float deltaTime) override
@@ -28,7 +28,7 @@ class GameState : public AppState
 public:
 	void Initialize() override
 	{
-		LOG("Initialized Game State")
+		LOG("Initialized Game State");
 	}
 
 	void Update(float deltaTime) override
