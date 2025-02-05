@@ -22,3 +22,24 @@ public:
 	void Initialize() override;
 	void Update(float deltaTime) override;
 };
+
+class TriforceShapeState : public ShapeState
+{
+public:
+	void Initialize() override;
+	void Update(float deltaTime) override;
+};
+
+class DiamondShapeState : public ShapeState
+{
+public:
+	void Initialize() override;
+	void Update(float deltaTime) override;
+};
+
+class HeartShapeState : public ShapeState
+{
+public:
+	void Initialize() override;
+	void Update(float deltaTime) override;
+};
