@@ -5,6 +5,7 @@
 using namespace VEngine;
 using namespace VEngine::Core;
 using namespace VEngine::Graphics;
+using namespace VEngine::Input;
 
 void App::Run(const AppConfig& config)
 {
@@ -21,7 +22,9 @@ void App::Run(const AppConfig& config)
 	//call all static initializes
 	HWND window = myWindow.GetWindowHandle();
 	GraphicsSystem::StaticInitials(window, false);
+	InputSystem::StaticInitialize(window);
 
+	//Initialize current state
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");
 	mCurrentState->Initialize();
 
@@ -30,7 +33,11 @@ void App::Run(const AppConfig& config)
 	{
 		//Run the application
 		myWindow.ProcessMessage();
-		if (!myWindow.IsActive())
+
+		InputSystem* inputSystem = InputSystem::Get();
+		inputSystem->Update();
+
+		if (!myWindow.IsActive() || inputSystem->IsKeyPressed(KeyCode::ESCAPE))
 		{
 			Quit();
 			break;
@@ -58,6 +65,7 @@ void App::Run(const AppConfig& config)
 	mCurrentState->Terminate();
 
 	//call all static terminates
+	InputSystem::StaticTerminate();
 	GraphicsSystem::StaticTerminate();
 
 	//destroy window
