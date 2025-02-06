@@ -164,11 +164,11 @@ void VEngine::Graphics::GraphicsSystem::Resize(uint32_t width, uint32_t height)
 
 	mViewport.Width = static_cast<float>(GetBackBufferWidth());
 	mViewport.Height = static_cast<float>(GetBackBufferHeight());
-	mViewport.MinDepth = 0.0F;
+	mViewport.MinDepth = 0.0f;
 	mViewport.MaxDepth = 1.0f;
 	mViewport.TopLeftX = 0;
 	mViewport.TopLeftY = 0;
-	ResetRenderTarget();
+	ResetViewport();
 }
 
 void VEngine::Graphics::GraphicsSystem::ResetRenderTarget()
