@@ -64,6 +64,7 @@ void VEngine::Graphics::Camera::Walk(float distance)
 void VEngine::Graphics::Camera::Strafe(float distance)
 {
 	const Math::Vector3 right = Math::Normalize(Math::Cross(Math::Vector3::YAxis, mDirection));
+	mPosition += right * distance;
 }
 
 void VEngine::Graphics::Camera::Rise(float distance)

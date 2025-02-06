@@ -19,5 +19,5 @@ private:
 	VEngine::Graphics::MeshBuffer mMeshBuffer;
 	VEngine::Graphics::VertexShader mVertexShader;
 	VEngine::Graphics::PixelShader mPixelShader;
-
+	VEngine::Graphics::ConstantBuffer mTransformBuffer;
 };

@@ -9,3 +9,5 @@
 #include "PixelShader.h"
 #include "MeshBuffer.h"
 #include "Camera.h"
+#include "MeshTypes.h"
+#include "ConstantBuffer.h"

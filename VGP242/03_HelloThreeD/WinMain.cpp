@@ -1,4 +1,5 @@
 #include <VEngine/Inc/VEngine.h>
+#include "GameState.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;
@@ -6,14 +7,10 @@ using namespace VEngine::Graphics;
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
 	AppConfig config;
-	config.appName = L"Hello Shapes";
+	config.appName = L"Hello 3D";
 
 	App& myApp = MainApp();
-	myApp.AddState<ShapeState>("ShapeState");
-	myApp.AddState<ColoredShapeState>("ColoredShapeState");
-	myApp.AddState<TriforceShapeState>("TriforceShapeState");
-	myApp.AddState<DiamondShapeState>("DiamondShapeState");
-	myApp.AddState<HeartShapeState>("HeartShapeState");
+	myApp.AddState<GameState>("GameState");
 	myApp.Run(config);
 
 	return 0;
