@@ -11,3 +11,6 @@
 #include "Camera.h"
 #include "MeshTypes.h"
 #include "ConstantBuffer.h"
+#include "Texture.h"
+#include "Sampler.h"
+#include "MeshBuilder.h"
