@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 #include "ConstantBuffer.h"
+#include "GraphicsSystem.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;

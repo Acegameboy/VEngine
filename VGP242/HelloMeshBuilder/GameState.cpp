@@ -10,14 +10,14 @@ void GameState::Initialize()
 	mCamera.SetPosition({ 0.0f, 1.0f, -3.0f });
 	mCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
 
-	std::filesystem::path shaderFile = L"../../Assets/Shaders/DoTransformColor.fx";
-	mVertexShader.Initialize<VertexPC>(shaderFile);
+	std::filesystem::path shaderFile = L"../../Assets/Shaders/DoTransformTexture.fx";
+	mVertexShader.Initialize<VertexPX>(shaderFile);
 	mPixelShader.Initialize(shaderFile);
 	mTransformBuffer.Initialize(sizeof(Matrix4));
 
-	MeshPC mesh = MeshBuilder::CreateCylinderPC(10, 2);
+	MeshPX mesh = MeshBuilder::CreateSkySpherePX(10, 10, 100.0f);
 
-	mMeshBuffer.Initialize<MeshPC>(mesh);
+	mMeshBuffer.Initialize<MeshPX>(mesh);
 
 	mTexture.Initialize(L"../../Assets/Textures/Images/Images/cat.bmp");
 	mSampler.Initialize(Sampler::Filter::Linear, Sampler::AddressMode::Wrap);
@@ -49,8 +49,8 @@ void GameState::Render()
 	mTransformBuffer.Update(&wvp);
 	mTransformBuffer.BindVS(0);
 
-	/*mTexture.BindPS(0);
-	mSampler.BindPS(0);*/
+	mTexture.BindPS(0);
+	mSampler.BindPS(0);
 	mMeshBuffer.Render();
 }
 void GameState::UpdateCamera(float deltaTime)

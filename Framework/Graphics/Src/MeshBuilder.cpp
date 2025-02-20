@@ -272,5 +272,98 @@ MeshPC MeshBuilder::CreateCylinderPC(uint32_t slices, uint32_t rings)
 
 MeshPC VEngine::Graphics::MeshBuilder::CreateSpherePC(uint32_t slices, uint32_t rings, float radius)
 {
-	return MeshPC();
+	srand(time(nullptr));
+	int index = rand() % 100;
+
+	MeshPC mesh;
+
+	const float vertRotation = (Math::Constants::Pi / static_cast<float>(rings));
+	const float horzRotation = (Math::Constants::TwoPi / static_cast<float>(slices));
+
+	for (uint32_t r = 0; r <= rings; ++r)
+	{
+		const float ring = static_cast<float>(r);
+		const float phi = ring * vertRotation;
+		for (uint32_t s = 0; s <= slices; ++s)
+		{
+			const float slice = static_cast<float>(s);
+			const float rot = slice * horzRotation;
+
+			mesh.vertices.push_back({ {
+				radius * sin(rot) * sin(phi),
+				radius * cos(phi),
+				radius * cos(rot) * sin(phi)},
+				GetNextColor(index)});
+		}
+	}
+
+	CreatePlaneIndices(mesh.indices, rings, slices);
+
+	return mesh;
+}
+
+MeshPX VEngine::Graphics::MeshBuilder::CreateSpherePX(uint32_t slices, uint32_t rings, float radius)
+{
+	MeshPX mesh;
+
+	const float vertRotation = (Math::Constants::Pi / static_cast<float>(rings));
+	const float horzRotation = (Math::Constants::TwoPi / static_cast<float>(slices));
+	const float uInc = 1.0f / static_cast<float>(slices);
+	const float vInc = 1.0f / static_cast<float>(rings);
+
+	for (uint32_t r = 0; r <= rings; ++r)
+	{
+		const float ring = static_cast<float>(r);
+		const float phi = ring * vertRotation;
+		for (uint32_t s = 0; s <= slices; ++s)
+		{
+			const float slice = static_cast<float>(s);
+			const float rot = slice * horzRotation;
+			const float u = 1.0f - (uInc * slice);
+			const float v = vInc * ring;
+
+			mesh.vertices.push_back({ {
+				radius * sin(rot) * sin(phi),
+				radius * cos(phi),
+				radius * cos(rot) * sin(phi)},
+				{u, v} });
+		}
+	}
+
+	CreatePlaneIndices(mesh.indices, rings, slices);
+
+	return mesh;
+}
+
+MeshPX VEngine::Graphics::MeshBuilder::CreateSkySpherePX(uint32_t slices, uint32_t rings, float radius)
+{
+	MeshPX mesh;
+
+	const float vertRotation = (Math::Constants::Pi / static_cast<float>(rings));
+	const float horzRotation = (Math::Constants::TwoPi / static_cast<float>(slices));
+	const float uInc = 1.0f / static_cast<float>(slices);
+	const float vInc = 1.0f / static_cast<float>(rings);
+
+	for (uint32_t r = 0; r <= rings; ++r)
+	{
+		const float ring = static_cast<float>(r);
+		const float phi = ring * vertRotation;
+		for (uint32_t s = 0; s <= slices; ++s)
+		{
+			const float slice = static_cast<float>(s);
+			const float rot = slice * horzRotation;
+			const float u = 1.0f - (uInc * slice);
+			const float v = vInc * ring;
+
+			mesh.vertices.push_back({ {
+				radius * cos(rot) * sin(phi),
+				radius * cos(phi),
+				radius * sin(rot) * sin(phi)},
+				{u, v} });
+		}
+	}
+
+	CreatePlaneIndices(mesh.indices, rings, slices);
+
+	return mesh;
 }

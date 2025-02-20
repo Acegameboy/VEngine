@@ -21,5 +21,7 @@ namespace VEngine::Graphics
 		static MeshPC CreateCylinderPC(uint32_t slices, uint32_t rings);
 		//Sphere
 		static MeshPC CreateSpherePC(uint32_t slices, uint32_t rings, float radius);
+		static MeshPX CreateSpherePX(uint32_t slices, uint32_t rings, float radius);
+		static MeshPX CreateSkySpherePX(uint32_t slices, uint32_t rings, float radius);
 	};
 }
