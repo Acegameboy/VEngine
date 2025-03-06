@@ -1,4 +1,4 @@
-// Description: Simple shader, uses position and color and transform vertices into ndc space
+// Description: Simple shader, uses position and uv cordinates and transform vertices into ndc space
 
 cbuffer TransformBuffer : register(b0)
 {

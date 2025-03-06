@@ -67,11 +67,21 @@ void GameState::DebugUI()
 	ImGui::ColorEdit4("LineColor", &mLineColor.r);
 
 	ImGui::Checkbox("GroundPlane", &mShowGroundPlane);
+	ImGui::Checkbox("ShowAABB", &mShowAABB);
+	ImGui::Checkbox("ShowFilledAABB", &mShowFilledAABB);
 	ImGui::End();
 
 	if (mShowGroundPlane)
 	{
 		SimpleDraw::AddGroundPlane(20, Colors::White);
+	}
+	if (mShowAABB)
+	{
+		SimpleDraw::AddAABB({ -1.0f, 0.0f, -1.0f }, { 1.0f, 2.0f, 1.0f }, Colors::Green);
+	}
+	if (mShowFilledAABB)
+	{
+		SimpleDraw::AddFilledAABB({ -1.0f, 0.0f, -1.0f }, { 1.0f, 2.0f, 1.0f }, Colors::Green);
 	}
 
 	SimpleDraw::AddLine(mLineA, mLineB, mLineColor);

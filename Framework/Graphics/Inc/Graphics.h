@@ -16,3 +16,8 @@
 #include "MeshBuilder.h"
 #include "DebugUI.h"
 #include "SimpleDraw.h"
+#include "StandardEffect.h"
+#include "RenderObject.h"
+#include "Transform.h"
+#include "Material.h"
+#include "LightTypes.h"
