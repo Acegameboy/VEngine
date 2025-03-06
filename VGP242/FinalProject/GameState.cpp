@@ -49,7 +49,7 @@ void GameState::Initialize()
 	std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
 	mStandardEffect.Initialize(shaderFile);
 	mStandardEffect.SetCamera(mCamera);
-	mStandardEffect.SetDirectionalLight(mDirectionalLight);
+	mStandardEffect.SetDirectionalLight(mDirectionalLight);	
 
 	Mesh mesh = MeshBuilder::CreateSkySphere(100.0f, 100.f, 500.0f);
 	mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
@@ -57,6 +57,31 @@ void GameState::Initialize()
 
 	constexpr uint32_t size = 512;
 	mRenderTarget.Initialize(size, size, RenderTarget::Format::RGBA_U32);
+
+	std::vector<std::string> planetTextures = {
+		"sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", "mars.jpg",
+		"jupiter.jpg", "saturn.jpg", "uranus.jpg", "neptune.jpg", "pluto.jpg"
+	};
+
+	std::vector<float> orbitradius = {};
+	std::vector<float> orbitSpeed = {};
+	std::vector<float> rotSpeed = {};
+	
+	for (size_t i = 0; i < planetTextures.size(); i++)
+	{
+		Planet planet;
+		planet.name = planetTextures[i];
+		planet.orbitRadius = orbitradius[i];
+		planet.orbitSpeed = orbitSpeed[i];
+		planet.rotationSpeed = rotSpeed[i];
+		planet.angle = 0.0f;
+		planet.selfRotation = 0.0f;
+
+		Mesh mesh = MeshBuilder::CreateSkySphere(20.0f, 20.f, 1.0f);
+		mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
+		mRenderObject.texture.Initialize(L"../../Assets/Textures/planets/" + std::wstring(planetTextures[i].begin(), planetTextures[i].end()));
+		planets.push_back(planet);
+	}
 }
 void GameState::Terminate()
 {
