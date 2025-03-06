@@ -5,12 +5,31 @@ using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Math;
 
-const char* comboBoxNames[] =
+struct Planet {
+	std::string name;
+	float orbitRadius;
+	float orbitSpeed;
+	float rotationSpeed;
+	float angle; 
+	float selfRotation;
+	RenderObject renderObject;
+};
+
+
+
+std::vector<Planet> planets;
+
+const char* plantetNames[] =
 {
-	"Object1",
-	"Object2",
-	"Object3",
-	"Object4",
+	"Sun",
+	"Mercury",
+	"Venus",
+	"Earth",
+	"Mars",
+	"Jupiter",
+	"Saturn",
+	"Uranus",
+	"Neptune"
 };
 
 void GameState::Initialize()
@@ -27,16 +46,14 @@ void GameState::Initialize()
 	mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
 	mDirectionalLight.direction = Math::Normalize({ 1.0f, -1.0f, 1.0f });
 
-
-
 	std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
 	mStandardEffect.Initialize(shaderFile);
 	mStandardEffect.SetCamera(mCamera);
 	mStandardEffect.SetDirectionalLight(mDirectionalLight);
-	
-	Mesh mesh = MeshBuilder::CreateSphere(10, 10, 1.0f);
+
+	Mesh mesh = MeshBuilder::CreateSkySphere(100.0f, 100.f, 500.0f);
 	mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
-	mRenderObject.texture.Initialize(L"../../Assets/Textures/earth.jpg");
+	mRenderObject.texture.Initialize(L"../../Assets/Textures/space.jpg");
 
 	constexpr uint32_t size = 512;
 	mRenderTarget.Initialize(size, size, RenderTarget::Format::RGBA_U32);
@@ -103,7 +120,7 @@ void GameState::DebugUI()
 		{ 1, 1 },
 		{ 1, 1, 1, 1 },
 		{ 1, 1, 1, 1 });
-	if (ImGui::Combo("ComboBox", &mCurrentSelection, comboBoxNames, std::size(comboBoxNames)))
+	if (ImGui::Combo("ComboBox", &mCurrentSelection, plantetNames, std::size(plantetNames)))
 	{
 		//do stuff if the current selection changes
 	}

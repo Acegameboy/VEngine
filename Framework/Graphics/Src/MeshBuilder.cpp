@@ -388,9 +388,9 @@ Mesh MeshBuilder::CreateSphere(uint32_t slices, uint32_t rings, float radius)
 			const float u = 1.0f - (uInc * slice);
 			const float v = vInc * ring;
 
-			const float x = radius * cos(rot)* sin(phi);
+			const float x = radius * sin(rot)* sin(phi);
 			const float y = radius * cos(phi);
-			const float z = radius * sin(rot) * sin(phi);
+			const float z = radius * cos(rot) * sin(phi);
 
 			Math::Vector3 pos = { x, y, z };
 			Math::Vector3 norm = Math::Normalize(pos);
@@ -398,6 +398,44 @@ Mesh MeshBuilder::CreateSphere(uint32_t slices, uint32_t rings, float radius)
 			Math::Vector2 uvCoord = { u,v };
 
 			mesh.vertices.push_back({pos, norm, tan, uvCoord});
+		}
+	}
+
+	CreatePlaneIndices(mesh.indices, rings, slices);
+
+	return mesh;
+}
+
+Mesh VEngine::Graphics::MeshBuilder::CreateSkySphere(uint32_t slices, uint32_t rings, float radius)
+{
+	Mesh mesh;
+
+	const float vertRotation = (Math::Constants::Pi / static_cast<float>(rings));
+	const float horzRotation = (Math::Constants::TwoPi / static_cast<float>(slices));
+	const float uInc = 1.0f / static_cast<float>(slices);
+	const float vInc = 1.0f / static_cast<float>(rings);
+
+	for (uint32_t r = 0; r <= rings; ++r)
+	{
+		const float ring = static_cast<float>(r);
+		const float phi = ring * vertRotation;
+		for (uint32_t s = 0; s <= slices; ++s)
+		{
+			const float slice = static_cast<float>(s);
+			const float rot = slice * horzRotation;
+			const float u = 1.0f - (uInc * slice);
+			const float v = vInc * ring;
+
+			const float x = radius * cos(rot) * sin(phi);
+			const float y = radius * cos(phi);
+			const float z = radius * sin(rot)* sin(phi);
+
+			Math::Vector3 pos = { x, y, z };
+			Math::Vector3 norm = Math::Normalize(pos);
+			Math::Vector3 tan = Math::Normalize({ -z, 0.0f, x });
+			Math::Vector2 uvCoord = { u,v };
+
+			mesh.vertices.push_back({ pos, norm, tan, uvCoord });
 		}
 	}
 

@@ -5,12 +5,17 @@ using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Math;
 
-const char* comboBoxNames[] =
+const char* plantetNames[] =
 {
-	"Object1",
-	"Object2",
-	"Object3",
-	"Object4",
+	"Sun",
+	"Mercury",
+	"Venus",
+	"Earth",
+	"Mars",
+	"Jupiter",
+	"Saturn",
+	"Uranus",
+	"Neptune"
 };
 
 void GameState::Initialize()
@@ -103,7 +108,7 @@ void GameState::DebugUI()
 		{ 1, 1 },
 		{ 1, 1, 1, 1 },
 		{ 1, 1, 1, 1 });
-	if (ImGui::Combo("ComboBox", &mCurrentSelection, comboBoxNames, std::size(comboBoxNames)))
+	if (ImGui::Combo("ComboBox", &mCurrentSelection, plantetNames, std::size(plantetNames)))
 	{
 		//do stuff if the current selection changes
 	}
