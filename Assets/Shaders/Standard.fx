@@ -4,7 +4,7 @@ cbuffer TransformBuffer : register(b0)
 {
     matrix wvp;
     matrix world;
-    matrix viewPosition;
+    float3 viewPosition;
 }
 
 cbuffer SettingBuffer : register(b1)
@@ -45,14 +45,23 @@ struct VS_INPUT
 struct VS_OUTPUT
 {
     float4 position : SV_Position;
-    float2 textCoord : TEXCOORD;
+    float3 worldNormal : Normal;
+    float2 textCoord : TEXCOORD0;
+    float3 dirToLight : TEXCOORD1;
+    float3 dirToView : TEXCOORD2;
 };
 
 VS_OUTPUT VS(VS_INPUT input)
 {
     VS_OUTPUT output;
     output.position = mul(float4(input.position, 1.0f), wvp);
+    output.worldNormal = mul(input.normal, (float3x3)world);
     output.textCoord = input.textCoord;
+    
+    float3 worldPosition = mul(float4(input.position, 1.0f), world).xyz;
+    output.dirToLight = -lightDirection;
+    output.dirToView = normalize(viewPosition - worldPosition);
+    
     return output;
 }
 
@@ -64,12 +73,18 @@ float4 PS(VS_OUTPUT input) : SV_Target
         return diffuseColor;
     }
     
+    float3 n = normalize(input.worldNormal);
+    float3 L = normalize(input.dirToLight);
+    float3 v = normalize(input.dirToView);
+    
     //ambient color
-        float4 ambient = materialAmbient;
+    float4 ambient = lightAmbient * materialAmbient;
     //diffuse color
-    float4 diffuse = materialDiffuse;
+    float4 diffuse = max(dot(L, n), 0.0f) * lightDiffuse * materialDiffuse;
     //specular color
-    float4 specular = materialSpecular;
+    float3 r = reflect(-L, n);
+    float s = pow(max(dot(r, n), 0.0f), materialShininess);
+    float4 specular = s * lightSpecular * materialSpecular;
     //final color
     float4 finalColor = (materialEmissive + diffuse + ambient) * diffuseColor + specular;
     return finalColor;

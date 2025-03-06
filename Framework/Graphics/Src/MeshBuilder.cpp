@@ -388,9 +388,9 @@ Mesh MeshBuilder::CreateSphere(uint32_t slices, uint32_t rings, float radius)
 			const float u = 1.0f - (uInc * slice);
 			const float v = vInc * ring;
 
-			const float x = radius * sin(rot) * sin(phi);
+			const float x = radius * cos(rot)* sin(phi);
 			const float y = radius * cos(phi);
-			const float z = radius * cos(rot) * sin(phi);
+			const float z = radius * sin(rot) * sin(phi);
 
 			Math::Vector3 pos = { x, y, z };
 			Math::Vector3 norm = Math::Normalize(pos);

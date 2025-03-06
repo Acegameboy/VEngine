@@ -31,7 +31,7 @@ namespace VEngine::Graphics
 		void BindPS(uint32_t slot) const;
 
 		void* GetRawData() const;
-	private:
+	protected:
 		ID3D11ShaderResourceView* mShaderResourceView = nullptr;
 	};
 }

@@ -21,3 +21,4 @@
 #include "Transform.h"
 #include "Material.h"
 #include "LightTypes.h"
+#include "RenderTarget.h"

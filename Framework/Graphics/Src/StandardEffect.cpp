@@ -41,6 +41,7 @@ void StandardEffect::Begin()
 	mTransformBuffer.BindVS(0);
 	mSettingsBuffer.BindPS(1);
 	mMaterialBuffer.BindPS(2);
+	mDirectionalLightBuffer.BindVS(3);
 	mDirectionalLightBuffer.BindPS(3);
 }
 
