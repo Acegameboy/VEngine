@@ -38,7 +38,7 @@ const char* plantetNames[] =
 
 void GameState::Initialize()
 {
-	mCamera.SetPosition({ 0.0f, 1.0f, -3.0f });
+	mCamera.SetPosition({ 0.0f, 1.0f, -25.0f });
 	mCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
 
 	mRenderTargetCamera.SetPosition({ 0.0f, 1.0f, -3.0f });
@@ -76,9 +76,10 @@ void GameState::Initialize()
 	std::vector<float> rotSpeed = { 0.0f, 0.002f, -0.0005f, 1.0f, 0.98f, 2.4f, 2.2f, -1.4f, 1.5f, -0.2f };
 	
 	//Create planet data according to string
+	planets.resize(planetTextures.size());
 	for (size_t i = 0; i < planetTextures.size(); i++)
 	{
-		Planet planet;
+		Planet& planet = planets[i];
 		planet.name = planetTextures[i];
 		planet.dfs = dfs[i];
 		planet.orbitSpeed = orbitSpeed[i];
@@ -89,8 +90,7 @@ void GameState::Initialize()
 
 		Mesh mesh = MeshBuilder::CreateSphere(20.0f, 20.f, planetSize[i]);
 		planet.renderObject.meshBuffer.Initialize<Mesh>(mesh);
-		mRenderObject.texture.Initialize(L"../../Assets/Textures/planets/" + std::wstring(planetTextures[i].begin(), planetTextures[i].end()));
-		planets.emplace_back(std::move(planet));
+		planet.renderObject.texture.Initialize(L"../../Assets/Textures/planets/" + std::wstring(planetTextures[i].begin(), planetTextures[i].end()));
 	}
 }
 void GameState::Terminate()
@@ -134,14 +134,9 @@ void GameState::Render()
 			planet.dfs * sin(planet.angle)
 		};
 
-		planet.renderObject.transform.rotation = Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, planet.selfRotation);
 		planet.renderObject.texture.BindPS(0);
 		mStandardEffect.Render(planet.renderObject);
 
-		if (planet.showOrbit) 
-		{
-			SimpleDraw::AddGroundCircle(60, planet.dfs, Colors::White);
-		}
 	}
 
 	mStandardEffect.End();
