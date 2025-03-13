@@ -7,17 +7,21 @@ using namespace VEngine::Math;
 
 struct Planet {
 	std::string name;
-	float orbitRadius;
+	float planetSize;
+	float dfs; //distance from sun
 	float orbitSpeed;
 	float rotationSpeed;
+	float tilt;
 	float angle; 
-	float selfRotation;
+	float selfRotation; 
 	RenderObject renderObject;
+	bool showOrbit = true; 
 };
 
 
 
 std::vector<Planet> planets;
+RenderObject skybox;
 
 const char* plantetNames[] =
 {
@@ -51,66 +55,95 @@ void GameState::Initialize()
 	mStandardEffect.SetCamera(mCamera);
 	mStandardEffect.SetDirectionalLight(mDirectionalLight);	
 
-	Mesh mesh = MeshBuilder::CreateSkySphere(100.0f, 100.f, 500.0f);
-	mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
-	mRenderObject.texture.Initialize(L"../../Assets/Textures/space.jpg");
+	//Skybox
+	Mesh skyboxMesh = MeshBuilder::CreateSkySphere(100.0f, 100.f, 500.0f);
+	skybox.meshBuffer.Initialize<Mesh>(skyboxMesh);
+	skybox.texture.Initialize(L"../../Assets/Textures/space.jpg");
 
 	constexpr uint32_t size = 512;
 	mRenderTarget.Initialize(size, size, RenderTarget::Format::RGBA_U32);
 
+	//Get planet textures
 	std::vector<std::string> planetTextures = {
 		"sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", "mars.jpg",
 		"jupiter.jpg", "saturn.jpg", "uranus.jpg", "neptune.jpg", "pluto.jpg"
 	};
 
-	std::vector<float> orbitradius = {};
-	std::vector<float> orbitSpeed = {};
-	std::vector<float> rotSpeed = {};
+	//Planet data 
+	std::vector<float> planetSize = { 20.0f, 0.4f, 0.95f, 1.0f, 0.53f, 11.2f, 9.45f, 4.0f, 3.88f, 0.18f };
+	std::vector<float> dfs = { 0.0f, 5.0f, 10.0f, 15.0f, 22.5f, 40.0f, 55.0f, 70.0f, 85.0f, 100.0f };
+	std::vector<float> orbitSpeed = { 0.0f, 4.15f, 1.61f, 1.0f, 0.53f, 0.084f, 0.034f, 0.011f, 0.006f, 0.004f };
+	std::vector<float> rotSpeed = { 0.0f, 0.002f, -0.0005f, 1.0f, 0.98f, 2.4f, 2.2f, -1.4f, 1.5f, -0.2f };
 	
+	//Create planet data according to string
 	for (size_t i = 0; i < planetTextures.size(); i++)
 	{
 		Planet planet;
 		planet.name = planetTextures[i];
-		planet.orbitRadius = orbitradius[i];
+		planet.dfs = dfs[i];
 		planet.orbitSpeed = orbitSpeed[i];
+
 		planet.rotationSpeed = rotSpeed[i];
 		planet.angle = 0.0f;
 		planet.selfRotation = 0.0f;
 
-		Mesh mesh = MeshBuilder::CreateSkySphere(20.0f, 20.f, 1.0f);
-		mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
+		Mesh mesh = MeshBuilder::CreateSphere(20.0f, 20.f, planetSize[i]);
+		planet.renderObject.meshBuffer.Initialize<Mesh>(mesh);
 		mRenderObject.texture.Initialize(L"../../Assets/Textures/planets/" + std::wstring(planetTextures[i].begin(), planetTextures[i].end()));
-		planets.push_back(planet);
+		planets.emplace_back(std::move(planet));
 	}
 }
 void GameState::Terminate()
 {
 	mRenderTarget.Terminate();
-	mRenderObject.Terminate();
+	skybox.Terminate();
 	mStandardEffect.Terminate();
+	for (auto& planet : planets)
+	{
+		planet.renderObject.meshBuffer.Terminate();
+		planet.renderObject.texture.Terminate();
+	}
+
 }
 void GameState::Update(float deltaTime)
 {
 	UpdateCamera(deltaTime);
 
-	if (InputSystem::Get()->IsKeyPressed(KeyCode::SPACE))
+	for (auto& planet : planets) 
 	{
-		mRenderTargetCamera.SetPosition(mCamera.GetPosition());
-		mRenderTargetCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+		planet.selfRotation += Math::Constants::Pi * planet.rotationSpeed * deltaTime;
+		if (planet.dfs > 0.0f) 
+		{
+			planet.angle += Math::Constants::Pi * planet.orbitSpeed * deltaTime;
+		}
 	}
 }
 void GameState::Render()
 {
-	mStandardEffect.SetCamera(mRenderTargetCamera);
-	mRenderTarget.BeginRender();
-	mStandardEffect.Begin();
-		mStandardEffect.Render(mRenderObject);
-	mStandardEffect.End();
-	mRenderTarget.EndRender();
-
 	mStandardEffect.SetCamera(mCamera);
 	mStandardEffect.Begin();
-	mStandardEffect.Render(mRenderObject);
+
+	skybox.transform.position = { 0.0f, 0.0f, 0.0f };
+	mStandardEffect.Render(skybox);
+
+	for (auto& planet : planets) 
+	{
+		planet.renderObject.transform.position = {
+			planet.dfs * cos(planet.angle),
+			0.0f,
+			planet.dfs * sin(planet.angle)
+		};
+
+		planet.renderObject.transform.rotation = Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, planet.selfRotation);
+		planet.renderObject.texture.BindPS(0);
+		mStandardEffect.Render(planet.renderObject);
+
+		if (planet.showOrbit) 
+		{
+			SimpleDraw::AddGroundCircle(60, planet.dfs, Colors::White);
+		}
+	}
+
 	mStandardEffect.End();
 }
 void GameState::DebugUI()
