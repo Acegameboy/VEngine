@@ -24,5 +24,11 @@ private:
 
 	VEngine::Graphics::RenderTarget mRenderTarget;
 
+	VEngine::Graphics::PointLight mSunLight;
+
 	int mCurrentSelection = -1;
+	bool showOrbitRings = true;
+	bool mShowGrid = false;
+	int mFocusedPlanetIndex = 0;
+
 };

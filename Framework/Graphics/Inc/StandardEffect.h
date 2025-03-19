@@ -23,6 +23,7 @@ namespace VEngine::Graphics
 		void Render(const RenderObject& renderObject);
 		void SetCamera(const Camera& camera);
 		void SetDirectionalLight(const DirectionalLight& directionalLight);
+		void SetPointLight(const PointLight& pointLight);
 		void DebugUI();
 
 	private:
@@ -45,10 +46,12 @@ namespace VEngine::Graphics
 		using SettingsBuffer = TypeConstantBuffer<SettingsData>;
 		using MaterialBuffer = TypeConstantBuffer<Material>;
 		using DirectionalLightBuffer = TypeConstantBuffer<DirectionalLight>;
+		using PointLightBuffer = TypeConstantBuffer<PointLight>;
 		TransformBuffer mTransformBuffer;
 		SettingsBuffer mSettingsBuffer;
 		MaterialBuffer mMaterialBuffer;
 		DirectionalLightBuffer mDirectionalLightBuffer;
+		PointLightBuffer mPointLightBuffer;
 
 		VEngine::Graphics::VertexShader mVertexShader;
 		VEngine::Graphics::PixelShader mPixelShader;
@@ -57,5 +60,6 @@ namespace VEngine::Graphics
 		const Camera* mCamera = nullptr;
 		SettingsData mSettingsData;
 		const DirectionalLight* mDirectionalLight = nullptr;
+		const PointLight* mPointLight = nullptr;
 	};
 }

@@ -23,7 +23,7 @@ struct Planet {
 std::vector<Planet> planets;
 RenderObject skybox;
 
-const char* plantetNames[] =
+const char* planetNames[] =
 {
 	"Sun",
 	"Mercury",
@@ -49,6 +49,12 @@ void GameState::Initialize()
 	mDirectionalLight.diffuse = { 0.6f, 0.6f, 0.6f, 1.0f };
 	mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
 	mDirectionalLight.direction = Math::Normalize({ 1.0f, -1.0f, 1.0f });
+
+	mSunLight.position = { 0.0f, 0.0f, 0.0f };  
+	mSunLight.range = 1000.0f; 
+	mSunLight.ambient = { 22.2f, 22.2f, 22.2f, 22.0f };
+	mSunLight.diffuse = { 21.0f, 21.0f, 22.8f, 22.0f };
+	mSunLight.specular = { 21.0f, 21.0f, 22.0f, 22.0f };
 
 	std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
 	mStandardEffect.Initialize(shaderFile);
@@ -109,10 +115,10 @@ void GameState::Update(float deltaTime)
 {
 	UpdateCamera(deltaTime);
 
-	for (auto& planet : planets) 
+	for (auto& planet : planets)
 	{
 		planet.selfRotation += Math::Constants::Pi * planet.rotationSpeed * deltaTime;
-		if (planet.dfs > 0.0f) 
+		if (planet.dfs > 0.0f)
 		{
 			planet.angle += Math::Constants::Pi * planet.orbitSpeed * deltaTime;
 		}
@@ -123,9 +129,31 @@ void GameState::Render()
 	mStandardEffect.SetCamera(mCamera);
 	mStandardEffect.Begin();
 
+	//Render Skybox
 	skybox.transform.position = { 0.0f, 0.0f, 0.0f };
 	mStandardEffect.Render(skybox);
 
+	//Set Sun Light
+	mStandardEffect.SetPointLight(mSunLight);
+
+	//Render Orbit Rings
+	if (showOrbitRings)
+	{
+		for (auto& planet : planets)
+		{
+			if (planet.dfs > 0.0f) 
+			{
+				SimpleDraw::AddGroundCircle(100, planet.dfs, Colors::White);
+			}
+		}
+	}
+
+	//Render Grid
+	if (mShowGrid)
+	{
+		SimpleDraw::AddGroundPlane(500.0f, Colors::White);
+	}
+	//Render Planets
 	for (auto& planet : planets) 
 	{
 		planet.renderObject.transform.position = {
@@ -136,10 +164,31 @@ void GameState::Render()
 
 		planet.renderObject.texture.BindPS(0);
 		mStandardEffect.Render(planet.renderObject);
+	}
 
+	//Render Target Camera
+	if (mCurrentSelection >= 0 && mCurrentSelection < planets.size())
+	{
+		mRenderTarget.BeginRender();
+
+		mStandardEffect.SetCamera(mRenderTargetCamera);
+		mStandardEffect.Begin();
+
+		Planet& focusedPlanet = planets[mCurrentSelection];
+
+		mRenderTargetCamera.SetPosition({ 0.0f, 0.0f, -focusedPlanet.planetSize * 3 });
+		mRenderTargetCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+
+		focusedPlanet.renderObject.transform.position = { 0.0f, 0.0f, 0.0f };
+		focusedPlanet.renderObject.texture.BindPS(0);
+		mStandardEffect.Render(focusedPlanet.renderObject);
+
+		mStandardEffect.End();
+		mRenderTarget.EndRender();
 	}
 
 	mStandardEffect.End();
+	SimpleDraw::Render(mCamera);
 }
 void GameState::DebugUI()
 {
@@ -154,6 +203,7 @@ void GameState::DebugUI()
 		ImGui::DragFloat("Shineness", &mRenderObject.material.shininess, 0.1f, 0.0f, 100.0f);
 	}
 	ImGui::PopID();
+
 	ImGui::PushID("Lighting");
 	if (ImGui::CollapsingHeader("Lighting", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -166,6 +216,15 @@ void GameState::DebugUI()
 		}
 	}
 	ImGui::PopID();
+
+	ImGui::PushID("Toggles");
+	if (ImGui::CollapsingHeader("Toggles", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::Checkbox("Show Orbit Rings", &showOrbitRings);
+		ImGui::Checkbox("Show Grid", &mShowGrid);
+	}
+	ImGui::PopID();
+
 	ImGui::Image(
 		mRenderTarget.GetRawData(),
 		{ 128, 128 },
@@ -173,10 +232,18 @@ void GameState::DebugUI()
 		{ 1, 1 },
 		{ 1, 1, 1, 1 },
 		{ 1, 1, 1, 1 });
-	if (ImGui::Combo("ComboBox", &mCurrentSelection, plantetNames, std::size(plantetNames)))
+
+	ImGui::Combo("Select Planet", &mCurrentSelection, planetNames, IM_ARRAYSIZE(planetNames));
+
+	if (mCurrentSelection >= 0 && mCurrentSelection < planets.size())
 	{
-		//do stuff if the current selection changes
+		float& rotationSpeed = planets[mCurrentSelection].rotationSpeed;
+		float& orbitSpeed = planets[mCurrentSelection].orbitSpeed;
+
+		ImGui::DragFloat("Rotation Speed", &rotationSpeed, 0.01f);
+		ImGui::DragFloat("Orbit Speed", &orbitSpeed, 0.01f);
 	}
+
 	mStandardEffect.DebugUI();
 	ImGui::End();
 }

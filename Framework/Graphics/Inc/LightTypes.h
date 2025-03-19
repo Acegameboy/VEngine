@@ -12,4 +12,13 @@ namespace VEngine::Graphics
 		Math::Vector3 direction = -Math::Vector3::YAxis;
 		float padding = 0.0f;
 	};
+
+	struct PointLight
+	{
+		VEngine::Math::Vector3 position;
+		float range;
+		VEngine::Math::Vector4 ambient;
+		VEngine::Math::Vector4 diffuse;
+		VEngine::Math::Vector4 specular;
+	};
 }

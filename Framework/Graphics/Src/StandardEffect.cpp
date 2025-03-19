@@ -17,10 +17,12 @@ void StandardEffect::Initialize(const std::filesystem::path& filePath)
 	mSettingsBuffer.Initialize();
 	mMaterialBuffer.Initialize();
 	mDirectionalLightBuffer.Initialize();
+	mPointLightBuffer.Initialize();
 }
 
 void StandardEffect::Terminate()
 {
+	mPointLightBuffer.Terminate();
 	mDirectionalLightBuffer.Terminate();
 	mMaterialBuffer.Terminate();
 	mSettingsBuffer.Terminate();
@@ -43,6 +45,8 @@ void StandardEffect::Begin()
 	mMaterialBuffer.BindPS(2);
 	mDirectionalLightBuffer.BindVS(3);
 	mDirectionalLightBuffer.BindPS(3);
+	mPointLightBuffer.BindVS(4);
+	mPointLightBuffer.BindPS(4);
 }
 
 void StandardEffect::End()
@@ -78,6 +82,11 @@ void StandardEffect::SetCamera(const Camera& camera)
 void StandardEffect::SetDirectionalLight(const DirectionalLight& directionalLight)
 {
 	mDirectionalLight = &directionalLight;
+}
+
+void VEngine::Graphics::StandardEffect::SetPointLight(const PointLight& pointLight)
+{
+	mPointLight = &pointLight;
 }
 
 void StandardEffect::DebugUI()
