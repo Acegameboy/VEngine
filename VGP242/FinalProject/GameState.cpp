@@ -45,21 +45,14 @@ void GameState::Initialize()
 	mRenderTargetCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
 	mRenderTargetCamera.SetAspectRatio(1.0f);
 
-	mDirectionalLight.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
-	mDirectionalLight.diffuse = { 0.6f, 0.6f, 0.6f, 1.0f };
-	mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
-	mDirectionalLight.direction = Math::Normalize({ 1.0f, -1.0f, 1.0f });
+	mPointLight.position = { 0.0f, 0.0f, 0.0f };  
+	mPointLight.range = 200.0f;
 
-	mSunLight.position = { 0.0f, 0.0f, 0.0f };  
-	mSunLight.range = 1000.0f; 
-	mSunLight.ambient = { 22.2f, 22.2f, 22.2f, 22.0f };
-	mSunLight.diffuse = { 21.0f, 21.0f, 22.8f, 22.0f };
-	mSunLight.specular = { 21.0f, 21.0f, 22.0f, 22.0f };
-
-	std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
+	std::filesystem::path shaderFile = L"../../Assets/Shaders/PointLight.fx";
 	mStandardEffect.Initialize(shaderFile);
 	mStandardEffect.SetCamera(mCamera);
-	mStandardEffect.SetDirectionalLight(mDirectionalLight);	
+	mStandardEffect.SetDirectionalLight(mDirectionalLight);
+	mStandardEffect.SetPointLight(mPointLight); //Sun Light
 
 	//Skybox
 	Mesh skyboxMesh = MeshBuilder::CreateSkySphere(100.0f, 100.f, 500.0f);
@@ -77,7 +70,7 @@ void GameState::Initialize()
 
 	//Planet data 
 	std::vector<float> planetSize = { 20.0f, 0.4f, 0.95f, 1.0f, 0.53f, 11.2f, 9.45f, 4.0f, 3.88f, 0.18f };
-	std::vector<float> dfs = { 0.0f, 5.0f, 10.0f, 15.0f, 22.5f, 40.0f, 55.0f, 70.0f, 85.0f, 100.0f };
+	std::vector<float> dfs = { 0.0f, 35.9f, 67.2f, 92.9f, 141.6f, 483.8f, 890.7f, 1787.0f, 2798.0f, 3700.0f };
 	std::vector<float> orbitSpeed = { 0.0f, 4.15f, 1.61f, 1.0f, 0.53f, 0.084f, 0.034f, 0.011f, 0.006f, 0.004f };
 	std::vector<float> rotSpeed = { 0.0f, 0.002f, -0.0005f, 1.0f, 0.98f, 2.4f, 2.2f, -1.4f, 1.5f, -0.2f };
 	
@@ -93,6 +86,7 @@ void GameState::Initialize()
 		planet.rotationSpeed = rotSpeed[i];
 		planet.angle = 0.0f;
 		planet.selfRotation = 0.0f;
+		planet.planetSize = planetSize[i];
 
 		Mesh mesh = MeshBuilder::CreateSphere(20.0f, 20.f, planetSize[i]);
 		planet.renderObject.meshBuffer.Initialize<Mesh>(mesh);
@@ -117,10 +111,10 @@ void GameState::Update(float deltaTime)
 
 	for (auto& planet : planets)
 	{
-		planet.selfRotation += Math::Constants::Pi * planet.rotationSpeed * deltaTime;
+		planet.selfRotation += Math::Constants::Pi * (planet.rotationSpeed * 0.1f) * deltaTime;
 		if (planet.dfs > 0.0f)
 		{
-			planet.angle += Math::Constants::Pi * planet.orbitSpeed * deltaTime;
+			planet.angle += Math::Constants::Pi * (planet.orbitSpeed * 0.1f) * deltaTime;
 		}
 	}
 }
@@ -133,9 +127,6 @@ void GameState::Render()
 	skybox.transform.position = { 0.0f, 0.0f, 0.0f };
 	mStandardEffect.Render(skybox);
 
-	//Set Sun Light
-	mStandardEffect.SetPointLight(mSunLight);
-
 	//Render Orbit Rings
 	if (showOrbitRings)
 	{
@@ -145,6 +136,14 @@ void GameState::Render()
 			{
 				SimpleDraw::AddGroundCircle(100, planet.dfs, Colors::White);
 			}
+
+			planet.renderObject.transform.position = {
+		   planet.dfs * cos(planet.angle),
+		   0.0f,
+		   planet.dfs * sin(planet.angle)};
+
+			planet.renderObject.transform.rotation = Math::Quaternion::CreateFromAxisAngle(
+				Math::Vector3::YAxis, planet.selfRotation);
 		}
 	}
 
@@ -153,46 +152,68 @@ void GameState::Render()
 	{
 		SimpleDraw::AddGroundPlane(500.0f, Colors::White);
 	}
+
 	//Render Planets
-	for (auto& planet : planets) 
+	for (size_t i = 0; i < planets.size(); ++i)
 	{
+		Planet& planet = planets[i];
+
 		planet.renderObject.transform.position = {
 			planet.dfs * cos(planet.angle),
 			0.0f,
 			planet.dfs * sin(planet.angle)
 		};
 
-		planet.renderObject.texture.BindPS(0);
-		mStandardEffect.Render(planet.renderObject);
+		if (mWireframeMode)
+		{
+			Color wireframeColor = Colors::White;
+			switch (i)
+			{
+			case 0: wireframeColor = Colors::Yellow; break; // Sun
+			case 1: wireframeColor = Colors::Gray; break; // Mercury
+			case 2: wireframeColor = Colors::Orange; break; // Venus
+			case 3: wireframeColor = Colors::Blue; break; // Earth
+			case 4: wireframeColor = Colors::Red; break; // Mars
+			case 5: wireframeColor = Colors::Brown; break; // Jupiter
+			case 6: wireframeColor = Colors::LightGray; break; // Saturn
+			case 7: wireframeColor = Colors::Cyan; break; // Uranus
+			case 8: wireframeColor = Colors::DarkBlue; break; // Neptune
+			}
+
+			SimpleDraw::AddSphere(16, 16, planet.planetSize, planet.renderObject.transform.position, wireframeColor);
+		}
 	}
+	mStandardEffect.End();
 
 	//Render Target Camera
 	if (mCurrentSelection >= 0 && mCurrentSelection < planets.size())
 	{
 		mRenderTarget.BeginRender();
-
 		mStandardEffect.SetCamera(mRenderTargetCamera);
 		mStandardEffect.Begin();
 
 		Planet& focusedPlanet = planets[mCurrentSelection];
+		
+		float planetSize = focusedPlanet.planetSize;
 
-		mRenderTargetCamera.SetPosition({ 0.0f, 0.0f, -focusedPlanet.planetSize * 3 });
-		mRenderTargetCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+		Vector3 planetPos = focusedPlanet.renderObject.transform.position;
+		Vector3 cameraOffset = { 0.0f, 0.0f, -planetSize * 5.0f };
 
-		focusedPlanet.renderObject.transform.position = { 0.0f, 0.0f, 0.0f };
+		mRenderTargetCamera.SetPosition(planetPos + cameraOffset);
+		mRenderTargetCamera.SetLookAt(planetPos);
+
 		focusedPlanet.renderObject.texture.BindPS(0);
 		mStandardEffect.Render(focusedPlanet.renderObject);
-
 		mStandardEffect.End();
 		mRenderTarget.EndRender();
 	}
 
-	mStandardEffect.End();
 	SimpleDraw::Render(mCamera);
 }
 void GameState::DebugUI()
 {
-	ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Solar System", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
 	ImGui::PushID("Material");
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -209,7 +230,7 @@ void GameState::DebugUI()
 	{
 		ImGui::ColorEdit4("Ambient", &mDirectionalLight.ambient.r);
 		ImGui::ColorEdit4("Diffuse", &mDirectionalLight.diffuse.r);
-		ImGui::ColorEdit4("Specular", &mDirectionalLight.specular.r);
+		ImGui::ColorEdit4("Specular", &mPointLight.specular.r);
 		if (ImGui::DragFloat("Direction", &mDirectionalLight.direction.x, 0.01f))
 		{
 			mDirectionalLight.direction = Normalize(mDirectionalLight.direction);
@@ -225,23 +246,33 @@ void GameState::DebugUI()
 	}
 	ImGui::PopID();
 
-	ImGui::Image(
-		mRenderTarget.GetRawData(),
-		{ 128, 128 },
-		{ 0, 0 },
-		{ 1, 1 },
-		{ 1, 1, 1, 1 },
-		{ 1, 1, 1, 1 });
-
 	ImGui::Combo("Select Planet", &mCurrentSelection, planetNames, IM_ARRAYSIZE(planetNames));
+
+	ImGui::Checkbox("Wireframe Mode", &mWireframeMode);
 
 	if (mCurrentSelection >= 0 && mCurrentSelection < planets.size())
 	{
-		float& rotationSpeed = planets[mCurrentSelection].rotationSpeed;
-		float& orbitSpeed = planets[mCurrentSelection].orbitSpeed;
+		Planet& selectedPlanet = planets[mCurrentSelection];
 
-		ImGui::DragFloat("Rotation Speed", &rotationSpeed, 0.01f);
-		ImGui::DragFloat("Orbit Speed", &orbitSpeed, 0.01f);
+		float& newRotationSpeed = planets[mCurrentSelection].rotationSpeed;
+		float& newOrbitSpeed = planets[mCurrentSelection].orbitSpeed;
+
+		if (ImGui::DragFloat("Rotation Speed", &newRotationSpeed, 0.01f))
+		{
+			selectedPlanet.rotationSpeed = Math::Clamp(newRotationSpeed, -5.0f, 5.0f);
+		}
+		if (ImGui::DragFloat("Orbit Speed", &newOrbitSpeed, 0.01f))
+		{
+			selectedPlanet.orbitSpeed = Math::Clamp(newOrbitSpeed, 0.0f, 10.0f);
+		}
+
+		ImGui::Image(
+			mRenderTarget.GetRawData(),
+			{ 128, 128 },
+			{ 0, 0 },
+			{ 1, 1 },
+			{ 1, 1, 1, 1 },
+			{ 1, 1, 1, 1 });
 	}
 
 	mStandardEffect.DebugUI();

@@ -17,8 +17,8 @@ namespace VEngine::Graphics
 	{
 		VEngine::Math::Vector3 position;
 		float range;
-		VEngine::Math::Vector4 ambient;
-		VEngine::Math::Vector4 diffuse;
-		VEngine::Math::Vector4 specular;
+		Color ambient = Colors::White;
+		Color diffuse = Colors::White;
+		Color specular = Colors::White;
 	};
 }

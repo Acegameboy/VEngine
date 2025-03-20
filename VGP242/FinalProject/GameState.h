@@ -19,16 +19,15 @@ private:
 	VEngine::Graphics::Camera mCamera;
 	VEngine::Graphics::Camera mRenderTargetCamera;
 	VEngine::Graphics::DirectionalLight mDirectionalLight;
+	VEngine::Graphics::PointLight mPointLight;
 	VEngine::Graphics::RenderObject mRenderObject;
 	VEngine::Graphics::StandardEffect mStandardEffect;
 
 	VEngine::Graphics::RenderTarget mRenderTarget;
 
-	VEngine::Graphics::PointLight mSunLight;
-
-	int mCurrentSelection = -1;
+	int mCurrentSelection = 0;
 	bool showOrbitRings = true;
 	bool mShowGrid = false;
 	int mFocusedPlanetIndex = 0;
-
+	bool mWireframeMode = false;
 };
