@@ -182,6 +182,10 @@ void GameState::Render()
 
 			SimpleDraw::AddSphere(16, 16, planet.planetSize, planet.renderObject.transform.position, wireframeColor);
 		}
+		else
+		{
+			mStandardEffect.Render(planet.renderObject);
+		}
 	}
 	mStandardEffect.End();
 
