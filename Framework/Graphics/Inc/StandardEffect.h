@@ -3,6 +3,7 @@
 #include "ConstantBuffer.h"
 #include "PixelShader.h"
 #include "VertexShader.h"
+#include "DirectionalLight.h"
 #include "Sampler.h"
 #include "Material.h"
 #include "LightTypes.h"
@@ -12,7 +13,7 @@ namespace VEngine::Graphics
 	class Camera;
 	struct RenderObject;
 
-	class StandardEffect
+	class StandardEffect final
 	{
 	public:
 		void Initialize(const std::filesystem::path& filePath);

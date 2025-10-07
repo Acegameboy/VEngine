@@ -77,6 +77,8 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 L = normalize(input.dirToLight);
     float3 v = normalize(input.dirToView);
     
+    //Emissive
+    float4 emissive = 0.0f;
     //ambient color
     float4 ambient = lightAmbient * materialAmbient;
     //diffuse color

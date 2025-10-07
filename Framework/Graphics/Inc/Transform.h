@@ -12,6 +12,7 @@ namespace VEngine::Graphics
 
 		Math::Matrix4 GetMatrix4() const
 		{
+			// s x r x p
 			return{
 				Math::Matrix4::Scaling(scale) *
 				Math::Matrix4::MatrixRotationQuaternion(rotation) *
