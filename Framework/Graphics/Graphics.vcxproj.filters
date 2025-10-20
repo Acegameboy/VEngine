@@ -81,6 +81,9 @@
     <ClInclude Include="Inc\DirectionalLight.h">
       <Filter>Inc</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\TextureManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -125,10 +128,10 @@
     <ClCompile Include="Src\RenderTarget.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\RenderObject.cpp">
+    <ClCompile Include="Src\DirectionalLight.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\DirectionalLight.cpp">
+    <ClCompile Include="Src\TextureManager.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

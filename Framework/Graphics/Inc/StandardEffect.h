@@ -38,9 +38,12 @@ namespace VEngine::Graphics
 
 		struct SettingsData
 		{
-			int useTexture = 1;
-			int useLighting = 1;
-			int padding[2] = { 0 };
+			int useDiffuseMap = 1;
+			int useSpecMap = 1;
+			int useNormalMap = 1;
+			int useBumpMap = 1;
+			float bumpIntensity = 0.1f;
+			float padding[3] = { 0.0f };
 		};
 
 		using TransformBuffer = TypeConstantBuffer<TransformData>;
