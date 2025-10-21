@@ -94,6 +94,6 @@ float4 PS(VS_OUTPUT input) : SV_Target
     s = smoothstep(0.005f, 0.1f, s);
     float4 specular = s * lightSpecular * materialSpecular;
     //final color
-    float4 finalColor = (materialEmissive + diffuse + ambient) * diffuseColor + specular;
+    float4 finalColor = (emissive + diffuse + ambient) * diffuseColor + specular;
     return finalColor;
 }

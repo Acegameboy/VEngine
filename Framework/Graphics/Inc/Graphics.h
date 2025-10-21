@@ -14,6 +14,8 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "MeshBuilder.h"
+#include "MeshTypes.h"
+#include "Model.h"
 #include "DebugUI.h"
 #include "SimpleDraw.h"
 #include "StandardEffect.h"
