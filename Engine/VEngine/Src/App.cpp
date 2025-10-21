@@ -25,6 +25,7 @@ void App::Run(const AppConfig& config)
 	InputSystem::StaticInitialize(window);
 	DebugUI::StaticInitialize(window, false, true);
 	SimpleDraw::StaticInitialize(config.maxVertexCount);
+	TextureManager::StaticInitialize(L"../../Assets/Textures");
 
 	//Initialize current state
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");

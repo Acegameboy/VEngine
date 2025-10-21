@@ -24,7 +24,7 @@ void GameState::Initialize()
     mRenderObject.normalMapId = tm->LoadTexture(L"earth_normal.jpg");
     mRenderObject.bumpMapId = tm->LoadTexture(L"earth_bump.jpg");
 
-    std::filesystem::path shaderFile = L"Assets/Shaders/Standard.fx";
+    std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
     mStandardEffect.Initialize(shaderFile);
     mStandardEffect.SetCamera(mCamera);
     mStandardEffect.SetDirectionalLight(mDirectionalLight);
