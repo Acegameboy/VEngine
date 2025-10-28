@@ -26,6 +26,7 @@ void App::Run(const AppConfig& config)
 	DebugUI::StaticInitialize(window, false, true);
 	SimpleDraw::StaticInitialize(config.maxVertexCount);
 	TextureManager::StaticInitialize(L"../../Assets/Textures");
+	ModelManager::StaticInitialize(L"../../Assets/Models");
 
 	//Initialize current state
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");
@@ -71,10 +72,13 @@ void App::Run(const AppConfig& config)
 	mCurrentState->Terminate();
 
 	//call all static terminates
+	TextureManager::StaticTerminate();
+	ModelManager::StaticTerminate();
 	SimpleDraw::StaticTerminate();
 	DebugUI::StaticTerminate();
 	InputSystem::StaticTerminate();
 	GraphicsSystem::StaticTerminate();
+
 
 	//destroy window
 	myWindow.Terminate();

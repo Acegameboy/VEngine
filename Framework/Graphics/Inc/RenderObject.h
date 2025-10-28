@@ -1,34 +1,35 @@
 #pragma once
 
 #include "MeshBuffer.h"
-#include "Texture.h"
 #include "Transform.h"
 #include "Material.h"
 #include "TextureManager.h"
+#include "ModelManager.h"
 
 namespace VEngine::Graphics
 {
     class RenderObject
     {
     public:
-        void Terminate()
-        {
-            meshBuffer.Terminate();
-            TextureManager* tm = TextureManager::Get();
-            tm->ReleaseTexture(diffuseMapId);
-            tm->ReleaseTexture(specMapId);
-            tm->ReleaseTexture(normalMapId);
-            tm->ReleaseTexture(bumpMapId);
-        }
+        void Terminate();
 
-        Transform transform;   // Location/ Orientation
-        MeshBuffer meshBuffer; // Shape
+        Transform transform;  // location/orientation
+        MeshBuffer meshBuffer;// shape
+        Material material;    // light data
+        TextureId diffuseMapId; //diffuse texture for an object
+        TextureId specMapId;  //specular map for an object
+        TextureId normalMapId; //normal texture for an object
+        TextureId bumpMapId;   //bump texture for an object
+    };
 
-        Material material; // Light data
+    class RenderGroup
+    {
+    public:
+        void Initialize(const std::filesystem::path& modelFilePath);
+        void Terminate();
 
-        TextureId diffuseMapId = 0; // Diffuse texture for an object
-        TextureId specMapId = 0;    // Specular map for an object
-        TextureId normalMapId = 0;  // Normal texture for an object
-        TextureId bumpMapId = 0;    // Height texture for an object
+        ModelId modelId;
+        Transform transform;
+        std::vector<RenderObject> renderObjects;
     };
 }

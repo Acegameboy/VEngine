@@ -24,3 +24,5 @@
 #include "Material.h"
 #include "LightTypes.h"
 #include "RenderTarget.h"
+#include "ModelIO.h"
+#include "ModelManager.h"

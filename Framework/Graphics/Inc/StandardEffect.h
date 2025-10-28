@@ -12,6 +12,7 @@ namespace VEngine::Graphics
 {
 	class Camera;
 	struct RenderObject;
+	class RenderGroup;
 
 	class StandardEffect final
 	{
@@ -22,6 +23,7 @@ namespace VEngine::Graphics
 		void Begin();
 		void End();
 		void Render(const RenderObject& renderObject);
+		void Render(const RenderGroup& renderGroup);
 		void SetCamera(const Camera& camera);
 		void SetDirectionalLight(const DirectionalLight& directionalLight);
 		void SetPointLight(const PointLight& pointLight);
