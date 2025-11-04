@@ -9,76 +9,69 @@
 using namespace VEngine;
 using namespace VEngine::Graphics;
 
-void StandardEffect::Initialize(const std::filesystem::path& filePath)
+void StandardEffect::Initialize(const std::filesystem::path& path)
 {
-	mVertexShader.Initialize<Vertex>(filePath);
-	mPixelShader.Initialize(filePath);
-	mSampler.Initialize(Sampler::Filter::Linear, Sampler::AddressMode::Wrap);
+	// buffers
 	mTransformBuffer.Initialize();
-	mSettingsBuffer.Initialize();
-	mMaterialBuffer.Initialize();
 	mDirectionalLightBuffer.Initialize();
-	mPointLightBuffer.Initialize();
-}
+	mMaterialBuffer.Initialize();
+	mSettingsBuffer.Initialize();
 
+	// other stuff
+	mVertexShader.Initialize<Vertex>(path);
+	mPixelShader.Initialize(path);
+	mSampler.Initialize(Sampler::Filter::Linear, Sampler::AddressMode::Wrap);
+}
 void StandardEffect::Terminate()
 {
-	mPointLightBuffer.Terminate();
-	mDirectionalLightBuffer.Terminate();
-	mMaterialBuffer.Terminate();
-	mSettingsBuffer.Terminate();
-	mTransformBuffer.Terminate();
 	mSampler.Terminate();
 	mPixelShader.Terminate();
 	mVertexShader.Terminate();
+	mSettingsBuffer.Terminate();
+	mMaterialBuffer.Terminate();
+	mDirectionalLightBuffer.Terminate();
+	mTransformBuffer.Terminate();
 }
-
 void StandardEffect::Begin()
 {
-	ASSERT(mCamera != nullptr, "StandardEffect: No camera set!");
 	mVertexShader.Bind();
 	mPixelShader.Bind();
-
+	mSampler.BindVS(0);
 	mSampler.BindPS(0);
 
 	mTransformBuffer.BindVS(0);
-	mSettingsBuffer.BindPS(1);
+	mDirectionalLightBuffer.BindVS(1);
+	mDirectionalLightBuffer.BindPS(1);
 	mMaterialBuffer.BindPS(2);
-	mDirectionalLightBuffer.BindVS(3);
-	mDirectionalLightBuffer.BindPS(3);
-	mPointLightBuffer.BindVS(4);
-	mPointLightBuffer.BindPS(4);
+	mSettingsBuffer.BindVS(3);
+	mSettingsBuffer.BindPS(3);
 }
-
 void StandardEffect::End()
 {
-}
 
+}
 void StandardEffect::Render(const RenderObject& renderObject)
 {
 	const Math::Matrix4 matWorld = renderObject.transform.GetMatrix4();
 	const Math::Matrix4 matView = mCamera->GetViewMatrix();
 	const Math::Matrix4 matProj = mCamera->GetProjectionMatrix();
 	const Math::Matrix4 matFinal = matWorld * matView * matProj;
-	const Math::Matrix4 wvp = Transpose(matFinal);
 
 	TransformData data;
-	data.wvp = Transpose(matFinal);
-	data.world = Transpose(matWorld);
+	data.wvp = Math::Transpose(matFinal);
+	data.world = Math::Transpose(matWorld);
 	data.viewPosition = mCamera->GetPosition();
 	mTransformBuffer.Update(data);
+
 	SettingsData settings;
-	settings.useDiffuseMap =
-		(renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
+	settings.useDiffuseMap = (renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
 	settings.useSpecMap = (renderObject.specMapId > 0 && mSettingsData.useSpecMap > 0) ? 1 : 0;
-	settings.useNormalMap =
-		(renderObject.normalMapId > 0 && mSettingsData.useNormalMap > 0) ? 1 : 0;
+	settings.useNormalMap = (renderObject.normalMapId > 0 && mSettingsData.useNormalMap > 0) ? 1 : 0;
 	settings.useBumpMap = (renderObject.bumpMapId > 0 && mSettingsData.useBumpMap > 0) ? 1 : 0;
-	settings.bumpIntensity = mSettingsData.bumpIntensity;
+	settings.bumpWeight = mSettingsData.bumpWeight;
 	mSettingsBuffer.Update(settings);
 
 	mDirectionalLightBuffer.Update(*mDirectionalLight);
-
 	mMaterialBuffer.Update(renderObject.material);
 
 	TextureManager* tm = TextureManager::Get();
@@ -89,18 +82,16 @@ void StandardEffect::Render(const RenderObject& renderObject)
 
 	renderObject.meshBuffer.Render();
 }
-
-void VEngine::Graphics::StandardEffect::Render(const RenderGroup& renderGroup)
+void StandardEffect::Render(const RenderGroup& renderGroup)
 {
 	const Math::Matrix4 matWorld = renderGroup.transform.GetMatrix4();
 	const Math::Matrix4 matView = mCamera->GetViewMatrix();
 	const Math::Matrix4 matProj = mCamera->GetProjectionMatrix();
 	const Math::Matrix4 matFinal = matWorld * matView * matProj;
-	const Math::Matrix4 wvp = Transpose(matFinal);
 
 	TransformData data;
-	data.wvp = Transpose(matFinal);
-	data.world = Transpose(matWorld);
+	data.wvp = Math::Transpose(matFinal);
+	data.world = Math::Transpose(matWorld);
 	data.viewPosition = mCamera->GetPosition();
 	mTransformBuffer.Update(data);
 
@@ -108,44 +99,32 @@ void VEngine::Graphics::StandardEffect::Render(const RenderGroup& renderGroup)
 
 	TextureManager* tm = TextureManager::Get();
 	SettingsData settings;
-
 	for (const RenderObject& renderObject : renderGroup.renderObjects)
 	{
-		settings.useDiffuseMap =
-			(renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
+		settings.useDiffuseMap = (renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
 		settings.useSpecMap = (renderObject.specMapId > 0 && mSettingsData.useSpecMap > 0) ? 1 : 0;
-		settings.useNormalMap =
-			(renderObject.normalMapId > 0 && mSettingsData.useNormalMap > 0) ? 1 : 0;
+		settings.useNormalMap = (renderObject.normalMapId > 0 && mSettingsData.useNormalMap > 0) ? 1 : 0;
 		settings.useBumpMap = (renderObject.bumpMapId > 0 && mSettingsData.useBumpMap > 0) ? 1 : 0;
-		settings.bumpIntensity = mSettingsData.bumpIntensity;
+		settings.bumpWeight = mSettingsData.bumpWeight;
 		mSettingsBuffer.Update(settings);
 		mMaterialBuffer.Update(renderObject.material);
 
 		tm->BindPS(renderObject.diffuseMapId, 0);
 		tm->BindPS(renderObject.specMapId, 1);
 		tm->BindPS(renderObject.normalMapId, 2);
-		tm->BindVS(renderObject.bumpMapId, 3);
+		tm->BindPS(renderObject.bumpMapId, 3);
 
 		renderObject.meshBuffer.Render();
 	}
-	
 }
-
 void StandardEffect::SetCamera(const Camera& camera)
 {
 	mCamera = &camera;
 }
-
 void StandardEffect::SetDirectionalLight(const DirectionalLight& directionalLight)
 {
 	mDirectionalLight = &directionalLight;
 }
-
-void VEngine::Graphics::StandardEffect::SetPointLight(const PointLight& pointLight)
-{
-	mPointLight = &pointLight;
-}
-
 void StandardEffect::DebugUI()
 {
 	if (ImGui::CollapsingHeader("StandardEffect", ImGuiTreeNodeFlags_DefaultOpen))
@@ -170,6 +149,6 @@ void StandardEffect::DebugUI()
 		{
 			mSettingsData.useBumpMap = (useBumpMap) ? 1 : 0;
 		}
-		ImGui::DragFloat("BumpIntensity", &mSettingsData.bumpIntensity, 0.1f, 0.0f, 100.0f);
+		ImGui::DragFloat("BumpWeight", &mSettingsData.bumpWeight, 0.01f, 0.0f, 100.0f);
 	}
 }

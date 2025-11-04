@@ -15,7 +15,19 @@ void GameState::Initialize()
     mDirectionalLight.diffuse = { 0.8f, 0.8f, 0.8f, 1.0f };
     mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
 
-    mCharacter.Initialize("Character01/Character01.model");
+    mCharacter01.Initialize("Character01/Character01.model");
+    mCharacter02.Initialize("Character02/Character02.model");
+    mCharacter03.Initialize("Character03/Character03.model");
+
+    auto SetGroupPosition = [](RenderGroup& group, const Math::Vector3& p)
+        {
+            for (auto& ro : group.renderObjects)
+                ro.transform.position = p;
+        };
+
+    SetGroupPosition(mCharacter01, { 0.0f, 0.0f, 0.0f });
+    SetGroupPosition(mCharacter02, { -50.0f, 0.0f, 0.0f });
+    SetGroupPosition(mCharacter03, { 50.0f, 0.0f, 0.0f }); 
 
     TextureManager* tm = TextureManager::Get();
 
@@ -27,7 +39,9 @@ void GameState::Initialize()
 
 void GameState::Terminate()
 {
-    mCharacter.Terminate();
+    mCharacter01.Terminate();
+    mCharacter02.Terminate();
+    mCharacter03.Terminate();
     mStandardEffect.Terminate();
 }
 
@@ -42,7 +56,9 @@ void GameState::Render()
     SimpleDraw::Render(mCamera);
 
     mStandardEffect.Begin();
-    mStandardEffect.Render(mCharacter);
+    mStandardEffect.Render(mCharacter01);
+    mStandardEffect.Render(mCharacter02);
+    mStandardEffect.Render(mCharacter03);
     mStandardEffect.End();
 }
 
@@ -62,9 +78,9 @@ void GameState::DebugUI()
     }
     if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        for (uint32_t i = 0; i < mCharacter.renderObjects.size(); ++i)
+        for (uint32_t i = 0; i < mCharacter01.renderObjects.size(); ++i)
         {
-            Material& material = mCharacter.renderObjects[i].material;
+            Material& material = mCharacter01.renderObjects[i].material;
             std::string renderObjectId = "RenderObject" + std::to_string(i);
             ImGui::PushID(renderObjectId.c_str());
             if(ImGui::CollapsingHeader(renderObjectId.c_str()))

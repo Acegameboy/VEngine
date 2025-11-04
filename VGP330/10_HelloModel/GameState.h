@@ -20,7 +20,9 @@ private:
 	VEngine::Graphics::Camera mCamera;
 	VEngine::Graphics::Camera mRenderTargetCamera;
 	VEngine::Graphics::DirectionalLight mDirectionalLight;
-	VEngine::Graphics::RenderGroup mCharacter;
+	VEngine::Graphics::RenderGroup mCharacter01;
+	VEngine::Graphics::RenderGroup mCharacter02;
+	VEngine::Graphics::RenderGroup mCharacter03;
 	VEngine::Graphics::StandardEffect mStandardEffect;
 
 	VEngine::Graphics::RenderTarget mRenderTarget;

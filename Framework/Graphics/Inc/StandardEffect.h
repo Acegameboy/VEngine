@@ -44,7 +44,7 @@ namespace VEngine::Graphics
 			int useSpecMap = 1;
 			int useNormalMap = 1;
 			int useBumpMap = 1;
-			float bumpIntensity = 0.1f;
+			float bumpWeight = 0.1f;
 			float padding[3] = { 0.0f };
 		};
 
