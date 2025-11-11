@@ -443,3 +443,51 @@ Mesh VEngine::Graphics::MeshBuilder::CreateSkySphere(uint32_t slices, uint32_t r
 
 	return mesh;
 }
+
+MeshPX MeshBuilder::CreateScreenQuadPX()
+{
+	MeshPX mesh;
+	mesh.vertices.push_back({ {-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f} });
+	mesh.vertices.push_back({ {-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f} });
+	mesh.vertices.push_back({ {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f} });
+	mesh.vertices.push_back({ {1.0f, -1.0f, 0.0f}, {1.0f, 1.0f} });
+	mesh.indices = { 0, 1, 2, 0, 2, 3 };
+	return mesh;
+}
+
+Mesh MeshBuilder::CreatePlane(int numRows, int numColums, float spacing, bool horizontal)
+{
+	Mesh mesh;
+
+	const float hpw = static_cast<float>(numColums) * spacing * 0.5f;
+	const float hph = static_cast<float>(numRows) * spacing * 0.5f;
+	const float uInc = 1.0f / static_cast<float>(numColums);
+	const float vInc = -1.0f / static_cast<float>(numRows);
+
+	float w = -hpw;
+	float h = -hph;
+	float u = 0.0f;
+	float v = 1.0f;
+
+	Math::Vector3 norm = (horizontal) ? Math::Vector3::YAxis : -Math::Vector3::ZAxis;
+	Math::Vector3 tan = Math::Vector3::XAxis;
+
+	for (int r = 0; r <= numRows; ++r)
+	{
+		for (int c = 0; c <= numColums; ++c)
+		{
+			Math::Vector3 pos = (horizontal) ? Math::Vector3(w, 0.0f, h) : Math::Vector3(w, h, 0.0f);
+			mesh.vertices.push_back({ pos, norm, tan, { u, v } });
+			w += spacing;
+			u += uInc;
+		}
+		w = -hpw;
+		h += spacing;
+		u = 0.0f;
+		v += vInc;
+	}
+
+	CreatePlaneIndices(mesh.indices, numRows, numColums);
+
+	return mesh;
+}
