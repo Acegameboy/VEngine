@@ -17,17 +17,9 @@ void GameState::Initialize()
 
     mCharacter01.Initialize("Character01/Character01.model");
     mCharacter02.Initialize("Character02/Character02.model");
+    mCharacter02.transform.position = { -2.0f, 0.0f, 0.0f };
     mCharacter03.Initialize("Character03/Character03.model");
-
-    auto SetGroupPosition = [](RenderGroup& group, const Math::Vector3& p)
-        {
-            for (auto& ro : group.renderObjects)
-                ro.transform.position = p;
-        };
-
-    SetGroupPosition(mCharacter01, { 0.0f, 0.0f, 0.0f });
-    SetGroupPosition(mCharacter02, { -50.0f, 0.0f, 0.0f });
-    SetGroupPosition(mCharacter03, { 50.0f, 0.0f, 0.0f }); 
+    mCharacter03.transform.position = { 2.0f, 0.0f, 0.0f };
 
     TextureManager* tm = TextureManager::Get();
 
