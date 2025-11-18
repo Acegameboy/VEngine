@@ -7,12 +7,14 @@
 #include "Sampler.h"
 #include "Material.h"
 #include "LightTypes.h"
+#include "Camera.h"
 
 namespace VEngine::Graphics
 {
 	class Camera;
 	struct RenderObject;
 	class RenderGroup;
+	class Texture;
 
 	class StandardEffect final
 	{
@@ -26,7 +28,8 @@ namespace VEngine::Graphics
 		void Render(const RenderGroup& renderGroup);
 		void SetCamera(const Camera& camera);
 		void SetDirectionalLight(const DirectionalLight& directionalLight);
-		void SetPointLight(const PointLight& pointLight);
+		void SetLightCamera(const Camera& camera);
+		void SetShadowMap(const Texture& shadowMap);
 		void DebugUI();
 
 	private:
@@ -34,6 +37,7 @@ namespace VEngine::Graphics
 		{
 			Math::Matrix4 wvp;
 			Math::Matrix4 world;
+			Math::Matrix4 lwvp; // word view projection of the light object for shadows
 			Math::Vector3 viewPosition;
 			float padding = 0.0f;
 		};
@@ -44,8 +48,10 @@ namespace VEngine::Graphics
 			int useSpecMap = 1;
 			int useNormalMap = 1;
 			int useBumpMap = 1;
+			int useShadowMap = 1;
 			float bumpWeight = 0.1f;
-			float padding[3] = { 0.0f };
+			float depthBias = 0.000003f;
+			float padding = 0.0f;
 		};
 
 		using TransformBuffer = TypeConstantBuffer<TransformData>;
@@ -67,5 +73,7 @@ namespace VEngine::Graphics
 		SettingsData mSettingsData;
 		const DirectionalLight* mDirectionalLight = nullptr;
 		const PointLight* mPointLight = nullptr;
+		const Camera* mLightCamera = nullptr;
+		const Texture* mShadowMap = nullptr;
 	};
 }
