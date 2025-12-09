@@ -37,6 +37,10 @@ void GameState::Initialize()
     mStandardEffect.SetLightCamera(mShadowEffect.GetLightCamera());
     mStandardEffect.SetShadowMap(mShadowEffect.GetDepthMap());
 
+    // Thermal: enable for now, for everything using StandardEffect
+    mStandardEffect.SetThermalEnabled(true);
+    mStandardEffect.SetThermalBaseHeat(0.5f);
+    mStandardEffect.SetThermalVariation(0.5f);
 
     mShadowEffect.Initialize();
     mShadowEffect.SetDirectionalLight(mDirectionalLight);

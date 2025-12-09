@@ -27,13 +27,19 @@ cbuffer MaterialBuffer : register(b2)
 
 cbuffer SettingsBuffer : register(b3)
 {
-    bool useDiffuseMap;
-    bool useSpecMap;
-    bool useNormalMap;
-    bool useBumpMap;
-    bool useShadowMap;
-    float bumpMapWeight;
+    int useDiffuseMap;
+    int useSpecMap;
+    int useNormalMap;
+    int useBumpMap;
+    int useShadowMap;
+    float bumpWeight;
     float depthBias;
+    float padding; // matches SettingsData::padding
+
+    int useThermal; // matches SettingsData::useThermal
+    float baseHeat; // matches SettingsData::baseHeat
+    float heatVariation; // matches SettingsData::heatVariation
+    float padding2; // matches SettingsData::padding2
 }
 
 SamplerState textureSampler : register(s0);
@@ -66,13 +72,13 @@ struct VS_OUTPUT
 VS_OUTPUT VS(VS_INPUT input)
 {
     float3 localPosition = input.position;
-    if (useBumpMap)
+    if (useBumpMap != 0)
     {
         float4 bumpMapColor = bumpMap.SampleLevel(textureSampler, input.texCoord, 0.0f);
         float bumpHeight = (bumpMapColor.r * 2.0f) - 1.0f;
-        localPosition += (input.normal * bumpHeight * bumpMapWeight);
+        localPosition += (input.normal * bumpHeight * bumpWeight);
     }
-    
+
     VS_OUTPUT output;
     output.position = mul(float4(localPosition, 1.0f), wvp);
     output.worldNormal = mul(input.normal, (float3x3) world);
@@ -82,12 +88,47 @@ VS_OUTPUT VS(VS_INPUT input)
 
     float4 worldPosition = mul(float4(localPosition, 1.0f), world);
     output.dirToView = normalize(viewPosition - worldPosition.xyz);
+
     if (useShadowMap)
     {
         output.lightNDCPosition = mul(float4(localPosition, 1.0f), lwvp);
-
     }
-        return output;
+
+    return output;
+}
+
+// ======================
+// Thermal helpers
+// ======================
+
+float3 HeatToColor(float heat)
+{
+    heat = saturate(heat);
+
+    float3 color = 0.0;
+
+    if (heat < 0.25)
+    {
+        float t = heat / 0.25;
+        color = lerp(float3(0.0, 0.0, 0.2), float3(0.0, 1.0, 0.5), t);
+    }
+    else if (heat < 0.5)
+    {
+        float t = (heat - 0.25) / 0.25;
+        color = lerp(float3(0.0, 1.0, 0.5), float3(1.0, 1.0, 0.0), t);
+    }
+    else if (heat < 0.75)
+    {
+        float t = (heat - 0.5) / 0.25;
+        color = lerp(float3(1.0, 1.0, 0.0), float3(1.0, 0.3, 0.0), t);
+    }
+    else
+    {
+        float t = (heat - 0.75) / 0.25;
+        color = lerp(float3(1.0, 0.3, 0.0), float3(1.0, 1.0, 1.0), t);
+    }
+
+    return color;
 }
 
 float4 PS(VS_OUTPUT input) : SV_Target
@@ -95,9 +136,9 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 n = normalize(input.worldNormal);
     float3 light = normalize(input.dirToLight);
     float3 view = normalize(input.dirToView);
-    
+
     // update normal value
-    if (useNormalMap)
+    if (useNormalMap != 0)
     {
         float3 t = normalize(input.worldTangent);
         float3 b = normalize(cross(n, t));
@@ -106,35 +147,37 @@ float4 PS(VS_OUTPUT input) : SV_Target
         float3 unpackedNormalMap = normalize(float3((normalMapColor.xy * 2.0f) - 1.0f, normalMapColor.z));
         n = normalize(mul(unpackedNormalMap, tbnw));
     }
-    
+
     // Emissive
     float4 emissive = materialEmissive;
-    
+
     // Ambient
     float4 ambient = lightAmbient * materialAmbient;
-    
+
     // Diffuse
     float d = saturate(dot(light, n));
     float4 diffuse = d * lightDiffuse * materialDiffuse;
-    
+
     // Specular
     float3 r = reflect(-light, n);
     float base = saturate(dot(r, view));
     float s = pow(base, materialShininess);
     float4 specular = s * lightSpecular * materialSpecular;
-    
-    // colors
-    float4 diffuseMapColor = (useDiffuseMap) ? diffuseMap.Sample(textureSampler, input.texCoord) : 1.0f;
-    float4 specMapColor = (useSpecMap) ? specMap.Sample(textureSampler, input.texCoord).r : 1.0f;
-    
+
+    // textures
+    float4 diffuseMapColor = (useDiffuseMap != 0) ? diffuseMap.Sample(textureSampler, input.texCoord) : 1.0f;
+    float4 specMapColor = (useSpecMap != 0) ? specMap.Sample(textureSampler, input.texCoord).r : 1.0f;
+
     float4 finalColor = (emissive + ambient + diffuse) * diffuseMapColor + (specular * specMapColor);
-    if (useShadowMap)
+
+    // Shadowing
+    if (useShadowMap != 0)
     {
         float actualDepth = 1.0f - (input.lightNDCPosition.z / input.lightNDCPosition.w);
         float2 shadowUV = input.lightNDCPosition.xy / input.lightNDCPosition.w;
         float u = (shadowUV.x + 1.0f) * 0.5f;
         float v = 1.0f - (shadowUV.y + 1.0f) * 0.5f;
-        if (saturate(u) == u & saturate(v) == v)
+        if (saturate(u) == u && saturate(v) == v)
         {
             float4 savedColor = shadowMap.Sample(textureSampler, float2(u, v));
             float savedDepth = savedColor.r;
@@ -142,10 +185,26 @@ float4 PS(VS_OUTPUT input) : SV_Target
             {
                 finalColor = (emissive + ambient) * diffuseMapColor;
             }
-
         }
+    }
 
+// ---- Thermal override ----
+    if (useThermal != 0)
+    {
+    // n and view already computed at the top of PS
+    // (you have: float3 n = normalize(input.worldNormal); float3 view = normalize(input.dirToView);)
+
+        float heat = baseHeat; // e.g. 0.8 from C++
+
+    // add variation based on view angle so edges are hotter
+        float nDotV = saturate(dot(n, view));
+        heat += heatVariation * (1.0f - nDotV); // when looking at grazing angles, heat goes up
+
+        heat = saturate(heat);
+        float3 thermalColor = HeatToColor(heat);
+        finalColor.rgb = thermalColor;
     }
     
-        return finalColor;
+    return finalColor;
+
 }

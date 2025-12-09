@@ -186,5 +186,28 @@ void StandardEffect::DebugUI()
 			mSettingsData.useShadowMap = (useShadowMap) ? 1 : 0;
 		}
 		ImGui::DragFloat("DepthBias", &mSettingsData.depthBias, 0.000001f, 0.0f, 1.0f, "%0.6f");
+		bool useThermal = mSettingsData.useThermal > 0;
+		if (ImGui::Checkbox("UseThermal", &useThermal))
+		{
+			mSettingsData.useThermal = (useThermal) ? 1 : 0;
+		}
+		ImGui::DragFloat("Base Heat", &mSettingsData.baseHeat, 0.0f, 1.0f);
+		ImGui::DragFloat("Heat Variation", &mSettingsData.heatVariation, 0.0f, 1.0f);
+
 	}
+}
+
+void VEngine::Graphics::StandardEffect::SetThermalEnabled(bool enabled)
+{
+	mSettingsData.useThermal = enabled ? 1 : 0;
+}
+
+void VEngine::Graphics::StandardEffect::SetThermalBaseHeat(float value)
+{
+	mSettingsData.baseHeat = value;
+}
+
+void VEngine::Graphics::StandardEffect::SetThermalVariation(float value)
+{
+	mSettingsData.heatVariation = value;
 }

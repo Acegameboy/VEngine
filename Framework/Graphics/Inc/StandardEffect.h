@@ -31,6 +31,10 @@ namespace VEngine::Graphics
 		void SetLightCamera(const Camera& camera);
 		void SetShadowMap(const Texture& shadowMap);
 		void DebugUI();
+		//Thermal
+		void SetThermalEnabled(bool enabled);
+		void SetThermalBaseHeat(float value);
+		void SetThermalVariation(float value);
 
 	private:
 		struct TransformData
@@ -52,6 +56,12 @@ namespace VEngine::Graphics
 			float bumpWeight = 0.1f;
 			float depthBias = 0.000003f;
 			float padding = 0.0f;
+
+			//For thermal fields
+			int   useThermal = 1;      // set to 1 for now
+			float baseHeat = 0.5f;   // try 0.5 to see more colors
+			float heatVariation = 0.5f;   // big variation to exaggerate effect
+			float padding2 = 0.0f;
 		};
 
 		using TransformBuffer = TypeConstantBuffer<TransformData>;
