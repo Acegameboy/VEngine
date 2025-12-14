@@ -73,7 +73,7 @@ void StandardEffect::Render(const RenderObject& renderObject)
 	}
 	mTransformBuffer.Update(data);
 
-	SettingsData settings;
+	SettingsData settings = mSettingsData;
 	settings.useDiffuseMap = (renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
 	settings.useSpecMap = (renderObject.specMapId > 0 && mSettingsData.useSpecMap > 0) ? 1 : 0;
 	settings.useNormalMap = (renderObject.normalMapId > 0 && mSettingsData.useNormalMap > 0) ? 1 : 0;
@@ -81,6 +81,7 @@ void StandardEffect::Render(const RenderObject& renderObject)
 	settings.bumpWeight = mSettingsData.bumpWeight;
 	settings.useShadowMap = (mShadowMap != nullptr && mSettingsData.useShadowMap > 0) ? 1 : 0;
 	settings.depthBias = mSettingsData.depthBias;
+	settings.useThermal = mSettingsData.useThermal;
 	mSettingsBuffer.Update(settings);
 
 	mDirectionalLightBuffer.Update(*mDirectionalLight);
@@ -118,7 +119,7 @@ void StandardEffect::Render(const RenderGroup& renderGroup)
 
 	TextureManager* tm = TextureManager::Get();
 
-	SettingsData settings;
+	SettingsData settings = mSettingsData;
 	settings.useShadowMap = (mShadowMap != nullptr && mSettingsData.useShadowMap > 0) ? 1 : 0;
 	settings.depthBias = mSettingsData.depthBias;
 	settings.bumpWeight = mSettingsData.bumpWeight;
@@ -191,8 +192,8 @@ void StandardEffect::DebugUI()
 		{
 			mSettingsData.useThermal = (useThermal) ? 1 : 0;
 		}
-		ImGui::DragFloat("Base Heat", &mSettingsData.baseHeat, 0.0f, 1.0f);
-		ImGui::DragFloat("Heat Variation", &mSettingsData.heatVariation, 0.0f, 1.0f);
+		ImGui::SliderFloat("Base Heat", &mSettingsData.baseHeat, 0.0f, 1.0f);
+		ImGui::SliderFloat("Heat Variation", &mSettingsData.heatVariation, 0.0f, 1.0f);
 
 	}
 }

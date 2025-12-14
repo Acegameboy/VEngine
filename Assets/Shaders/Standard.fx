@@ -191,14 +191,10 @@ float4 PS(VS_OUTPUT input) : SV_Target
 // ---- Thermal override ----
     if (useThermal != 0)
     {
-    // n and view already computed at the top of PS
-    // (you have: float3 n = normalize(input.worldNormal); float3 view = normalize(input.dirToView);)
+        float heat = baseHeat;
 
-        float heat = baseHeat; // e.g. 0.8 from C++
-
-    // add variation based on view angle so edges are hotter
         float nDotV = saturate(dot(n, view));
-        heat += heatVariation * (1.0f - nDotV); // when looking at grazing angles, heat goes up
+        heat += heatVariation * (1.0f - nDotV);
 
         heat = saturate(heat);
         float3 thermalColor = HeatToColor(heat);
