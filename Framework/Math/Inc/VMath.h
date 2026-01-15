@@ -32,7 +32,7 @@ namespace VEngine::Math
 	template<class T>
 	constexpr T Lerp(T a, T b, float t)
 	{
-		return a + ((b - a) + t);
+		return a + ((b - a) * t);
 	}
 
 	template<class T>
