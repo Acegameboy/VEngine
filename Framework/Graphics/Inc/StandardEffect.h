@@ -53,9 +53,9 @@ namespace VEngine::Graphics
 			int useNormalMap = 1;
 			int useBumpMap = 1;
 			int useShadowMap = 1;
+			int useSkinning = 1;
 			float bumpWeight = 0.1f;
 			float depthBias = 0.000003f;
-			float padding = 0.0f;
 
 			//For thermal fields
 			int   useThermal = 1;      // set to 1 for now
@@ -69,6 +69,8 @@ namespace VEngine::Graphics
 		using MaterialBuffer = TypeConstantBuffer<Material>;
 		using DirectionalLightBuffer = TypeConstantBuffer<DirectionalLight>;
 		using PointLightBuffer = TypeConstantBuffer<PointLight>;
+		using BoneTransformBuffer = ConstantBuffer;
+		BoneTransformBuffer mBoneTransformBuffer;
 		TransformBuffer mTransformBuffer;
 		SettingsBuffer mSettingsBuffer;
 		MaterialBuffer mMaterialBuffer;

@@ -7,6 +7,7 @@
 using namespace VEngine;
 using namespace VEngine::Graphics;
 
+
 void VEngine::Graphics::ShadowEffect::Initialize()
 {
 	std::filesystem::path shaderFile = L"../../Assets/Shaders/Shadow.fx";

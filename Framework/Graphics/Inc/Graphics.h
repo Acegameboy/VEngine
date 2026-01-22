@@ -35,3 +35,4 @@
 #include "AnimationBuilder.h"
 #include "Bone.h"
 #include "Skeleton.h"
+#include "AnimationUtil.h"

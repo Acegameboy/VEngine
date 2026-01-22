@@ -269,6 +269,32 @@ int main(int argc, char* argv[])
 		//Build skeleton
 		BuildSkeleton(scene->mRootNode, nullptr, *model.skeleton.get(), boneIndexMap);
 
+		for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
+		{
+			const auto& aiMesh = scene->mMeshes[meshIndex];
+			if (aiMesh->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
+			{
+				continue;
+			}
+			if (aiMesh->HasBones())
+			{
+				for (uint32_t b = 0; b < aiMesh->mNumBones; ++b)
+				{
+					const auto& aiBone = aiMesh->mBones[b];
+					SetBoneOffesetTransform(aiBone, *model.skeleton, boneIndexMap);
+				}
+			}
+		}
+
+		for (auto& bone : model.skeleton->bones)
+		{
+			bone->offsettTransform._41 *= args.scale;
+			bone->offsettTransform._42 *= args.scale;
+			bone->offsettTransform._43 *= args.scale;
+			bone->toParentTransform._41 *= args.scale;
+			bone->toParentTransform._42 *= args.scale;
+			bone->toParentTransform._43 *= args.scale;
+		}
 
 		printf("Reading Mesh Data...\n");
 		for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
@@ -316,6 +342,31 @@ int main(int argc, char* argv[])
 					mesh.indices.push_back(aiFace.mIndices[i]);
 				}
 			}
+			//Get bone weight from mesh bones and apply to vertex data
+			if (aiMesh->HasBones())
+			{
+				printf("Reading bone weight...\n");
+				std::vector<int> numWeightAdded(mesh.vertices.size());
+				for (uint32_t b = 0; b < aiMesh->mNumBones; ++b)
+				{
+					const auto& aiBone = aiMesh->mBones[b];
+					uint32_t boneIndex = GetBoneIndex(aiBone, boneIndexMap);
+					for (uint32_t w = 0; w < aiBone->mNumWeights; ++w)
+					{
+						const aiVertexWeight& weight = aiBone->mWeights[w];
+						//Get the vertex that the  bone is influencing
+						Vertex& v = mesh.vertices[weight.mVertexId];
+						//Get the number of bones already affecting this vertex
+						int& count = numWeightAdded[weight.mVertexId];
+						if (count < Vertex::MaxBoneWeights)
+						{
+							v.boneIndices[count] = boneIndex;
+							v.boneWeights[count] = weight.mWeight;
+							++count;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -356,6 +407,9 @@ int main(int argc, char* argv[])
 
 	printf("Saving Material...\n");
 	ModelIO::SaveMaterial(args.outputFileName, model);
+
+	printf("Saving Skeleton...\n");
+	ModelIO::SaveSkeleton(args.outputFileName, model);
 
 	printf("Import Complete!\n");
 

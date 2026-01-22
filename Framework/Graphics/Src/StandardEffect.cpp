@@ -5,9 +5,12 @@
 #include "VertexTypes.h"
 #include "RenderObject.h"
 #include "TextureManager.h"
+#include "AnimationUtil.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;
+
+static constexpr size_t MaxBoneCount = 256;
 
 void StandardEffect::Initialize(const std::filesystem::path& path)
 {
@@ -16,6 +19,7 @@ void StandardEffect::Initialize(const std::filesystem::path& path)
 	mDirectionalLightBuffer.Initialize();
 	mMaterialBuffer.Initialize();
 	mSettingsBuffer.Initialize();
+	mBoneTransformBuffer.Initialize(MaxBoneCount * sizeof(Math::Matrix4));
 
 	// other stuff
 	mVertexShader.Initialize<Vertex>(path);
@@ -31,6 +35,7 @@ void StandardEffect::Terminate()
 	mMaterialBuffer.Terminate();
 	mDirectionalLightBuffer.Terminate();
 	mTransformBuffer.Terminate();
+	mBoneTransformBuffer.Terminate();
 }
 void StandardEffect::Begin()
 {
@@ -45,6 +50,7 @@ void StandardEffect::Begin()
 	mMaterialBuffer.BindPS(2);
 	mSettingsBuffer.BindVS(3);
 	mSettingsBuffer.BindPS(3);
+	mBoneTransformBuffer.BindVS(4);
 }
 void StandardEffect::End()
 {
@@ -80,6 +86,7 @@ void StandardEffect::Render(const RenderObject& renderObject)
 	settings.useBumpMap = (renderObject.bumpMapId > 0 && mSettingsData.useBumpMap > 0) ? 1 : 0;
 	settings.bumpWeight = mSettingsData.bumpWeight;
 	settings.useShadowMap = (mShadowMap != nullptr && mSettingsData.useShadowMap > 0) ? 1 : 0;
+	settings.useSkinning = 0;
 	settings.depthBias = mSettingsData.depthBias;
 	settings.useThermal = mSettingsData.useThermal;
 	mSettingsBuffer.Update(settings);
@@ -123,6 +130,21 @@ void StandardEffect::Render(const RenderGroup& renderGroup)
 	settings.useShadowMap = (mShadowMap != nullptr && mSettingsData.useShadowMap > 0) ? 1 : 0;
 	settings.depthBias = mSettingsData.depthBias;
 	settings.bumpWeight = mSettingsData.bumpWeight;
+	settings.useSkinning = mSettingsData.useSkinning > 0 && renderGroup.skeleton != nullptr;
+
+	if (settings.useSkinning > 0)
+	{
+		AnimationUtil::BoneTransforms boneTransforms;
+		AnimationUtil::ComputeBoneTransforms(renderGroup.modelId, boneTransforms);
+
+		for (Math::Matrix4& transform : boneTransforms)
+		{
+			transform = Math::Transpose(transform);
+		}
+		boneTransforms.resize(MaxBoneCount);
+		mBoneTransformBuffer.Update(boneTransforms.data());
+	}
+
 	for (const RenderObject& renderObject : renderGroup.renderObjects)
 	{
 		settings.useDiffuseMap = (renderObject.diffuseMapId > 0 && mSettingsData.useDiffuseMap > 0) ? 1 : 0;
@@ -194,6 +216,11 @@ void StandardEffect::DebugUI()
 		}
 		ImGui::SliderFloat("Base Heat", &mSettingsData.baseHeat, 0.0f, 1.0f);
 		ImGui::SliderFloat("Heat Variation", &mSettingsData.heatVariation, 0.0f, 1.0f);
+		bool useSkinning = mSettingsData.useSkinning > 0;
+		if (ImGui::Checkbox("UseSkinning", &useSkinning))
+		{
+			mSettingsData.useSkinning = (useSkinning) ? 1 : 0;
+		}
 
 	}
 }

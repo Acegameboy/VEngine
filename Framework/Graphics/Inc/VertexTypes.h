@@ -10,6 +10,8 @@ namespace VEngine::Graphics
 	constexpr uint32_t VE_Tangent = 0x1 << 2;
 	constexpr uint32_t VE_Color = 0x1 << 3;
 	constexpr uint32_t VE_TexCoord = 0x1 << 4;
+	constexpr uint32_t VE_BlendIndex = 0x1 << 5;
+	constexpr uint32_t VE_BlendWeight = 0x1 << 6;
 
 #define VERTEX_FORMAT(fmt)\
 		static constexpr uint32_t Format = fmt;
@@ -36,10 +38,16 @@ namespace VEngine::Graphics
 
 	struct Vertex
 	{
-		VERTEX_FORMAT(VE_Position | VE_Normal | VE_Tangent | VE_TexCoord);
+		//Sets the vertex input data expected to be passed to the shader (position, normal, tangent, texcoord, blendIndices and blendWeight)
+		//Must match infor in the shader
+		VERTEX_FORMAT(VE_Position | VE_Normal | VE_Tangent | VE_TexCoord | VE_BlendIndex | VE_BlendWeight);
+		static constexpr int MaxBoneWeights = 4;
+
 		Math::Vector3 position;
 		Math::Vector3 normal;
 		Math::Vector3 tangent;
 		Math::Vector2 uvCoord;
+		int boneIndices[MaxBoneWeights] = { 0 };
+		float boneWeights[MaxBoneWeights] = { 0.0f };
 	};
 }
