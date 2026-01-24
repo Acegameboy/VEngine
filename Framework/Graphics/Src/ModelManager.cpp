@@ -54,6 +54,13 @@ ModelId VEngine::Graphics::ModelManager::LoadModel(const std::filesystem::path& 
 	return modelId;
 }
 
+void VEngine::Graphics::ModelManager::AddAnimation(ModelId id, const std::filesystem::path& filePath)
+{
+	auto model = mInventory.find(id);
+	ASSERT(model != mInventory.end(), "ModelManager: Model not found for animation");
+	ModelIO::LoadAnimation(filePath, *model->second);
+}
+
 const Model* VEngine::Graphics::ModelManager::GetModel(ModelId id)
 {
 	auto model = mInventory.find(id);

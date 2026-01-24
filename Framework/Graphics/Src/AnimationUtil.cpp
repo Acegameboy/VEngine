@@ -10,10 +10,16 @@ using namespace VEngine::Graphics;
 //empty namespace for global functions isolated to the cpp file
 namespace
 {
-	void ComputeBoneTransformsRecursive(const Bone* bone, AnimationUtil::BoneTransforms& boneTransforms)
+	void ComputeBoneTransformsRecursive(const Bone* bone, AnimationUtil::BoneTransforms& boneTransforms, const Animator* animator)
 	{
 		if (bone != nullptr)
 		{
+			//Set the bone transform to the array of matrices
+			//If no animator or the bonbe does not have any animations, use the regular toparenttransform, otherwise use the animation
+			if (animator == nullptr || animator->GetToParentTransform(bone, boneTransforms[bone->index]))
+			{
+				boneTransforms[bone->index] = bone->toParentTransform;
+			}
 			//Set the bone transform to the array of matrices
 			boneTransforms[bone->index] = bone->toParentTransform;
 			//If there is a parent, apply the parent's transform as well
@@ -24,13 +30,13 @@ namespace
 			//Go through the children and apply their transforms
 			for (const Bone* child : bone->children)
 			{
-				ComputeBoneTransformsRecursive(child, boneTransforms);
+				ComputeBoneTransformsRecursive(child, boneTransforms, animator);
 			}
 		}
 	}
 }
 
-void VEngine::Graphics::AnimationUtil::ComputeBoneTransforms(ModelId modelId, BoneTransforms& boneTransforms)
+void VEngine::Graphics::AnimationUtil::ComputeBoneTransforms(ModelId modelId, BoneTransforms& boneTransforms, const Animator* animator)
 {
 	const Model* model = ModelManager::Get()->GetModel(modelId);
 	if (model != nullptr && model->skeleton != nullptr)
@@ -38,7 +44,7 @@ void VEngine::Graphics::AnimationUtil::ComputeBoneTransforms(ModelId modelId, Bo
 		//resize to sync the number of bones with the matrices
 		boneTransforms.resize(model->skeleton->bones.size());
 		//Generate the matrices
-		ComputeBoneTransformsRecursive(model->skeleton->root, boneTransforms);
+		ComputeBoneTransformsRecursive(model->skeleton->root, boneTransforms, animator);
 	}
 }
 
