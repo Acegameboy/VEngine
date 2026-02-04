@@ -18,7 +18,7 @@ void GameState::Initialize()
     ModelManager* mm = ModelManager::Get();
     mCharacter01.Initialize("Character01/Character01.model");
     mCharacter01.animator = &mAnimator;
-    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/SillyDacing.animset");
+    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/SillyDancing.animset");
 
     mAnimator.Initialize(mCharacter01.modelId);
 

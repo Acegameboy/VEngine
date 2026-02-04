@@ -61,6 +61,7 @@ namespace VEngine::Graphics
 			int   useThermal = 1;      // set to 1 for now
 			float baseHeat = 0.5f;   // try 0.5 to see more colors
 			float heatVariation = 0.5f;   // big variation to exaggerate effect
+			float padding = 0.0f;
 			float padding2 = 0.0f;
 		};
 

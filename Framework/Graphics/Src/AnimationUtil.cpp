@@ -16,12 +16,10 @@ namespace
 		{
 			//Set the bone transform to the array of matrices
 			//If no animator or the bonbe does not have any animations, use the regular toparenttransform, otherwise use the animation
-			if (animator == nullptr || animator->GetToParentTransform(bone, boneTransforms[bone->index]))
+			if (animator == nullptr || !animator->GetToParentTransform(bone, boneTransforms[bone->index]))
 			{
 				boneTransforms[bone->index] = bone->toParentTransform;
 			}
-			//Set the bone transform to the array of matrices
-			boneTransforms[bone->index] = bone->toParentTransform;
 			//If there is a parent, apply the parent's transform as well
 			if (bone->parent != nullptr)
 			{

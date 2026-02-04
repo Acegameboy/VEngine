@@ -9,7 +9,7 @@ using namespace VEngine::Graphics;
 void VEngine::Graphics::AnimationIO::Write(FILE* file, const Animation& animation)
 {
     uint32_t keyCount = animation.mPositionKeys.size();
-    fprintf_s(file, "PositionKeyCounbt: %d\n", keyCount);
+    fprintf_s(file, "PositionKeyCount: %d\n", keyCount);
     for (auto& key : animation.mPositionKeys)
     {
         fprintf_s(file, "%f %f %f %f\n", key.time, key.key.x, key.key.y, key.key.z);
@@ -357,8 +357,8 @@ void VEngine::Graphics::ModelIO::SaveAnimation(std::filesystem::path filePath, c
     {
         const AnimationClip& animClipData = model.animationClips[i];
         fprintf_s(file, "AnimClipName %s\n", animClipData.name.c_str());
-        fprintf_s(file, "TickDuration %d\n", animClipData.tickDuration);
-        fprintf_s(file, "TicksPerSecond %d\n", animClipData.ticksPerSecond);
+        fprintf_s(file, "TickDuration %f\n", animClipData.tickDuration);
+        fprintf_s(file, "TicksPerSecond %f\n", animClipData.ticksPerSecond);
 
         uint32_t boneAnimCount = animClipData.boneAnimations.size();
         fprintf_s(file, "BoneAnimCount: %d\n", boneAnimCount);
