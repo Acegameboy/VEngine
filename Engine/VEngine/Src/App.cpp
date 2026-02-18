@@ -6,6 +6,7 @@ using namespace VEngine;
 using namespace VEngine::Core;
 using namespace VEngine::Graphics;
 using namespace VEngine::Input;
+using namespace VEngine::Physics;
 
 void App::Run(const AppConfig& config)
 {
@@ -27,6 +28,9 @@ void App::Run(const AppConfig& config)
 	SimpleDraw::StaticInitialize(config.maxVertexCount);
 	TextureManager::StaticInitialize(L"../../Assets/Textures");
 	ModelManager::StaticInitialize(L"../../Assets/Models");
+
+	PhysicsWorld::Settings settings;
+	PhysicsWorld::StaticInitialize(settings);
 
 	//Initialize current state
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");
@@ -54,9 +58,14 @@ void App::Run(const AppConfig& config)
 			mCurrentState->Initialize();
 		}
 
-		//update current state
 		float deltaTime = TimeUtil::GetDeltaTime();
-		mCurrentState->Update(deltaTime);
+#if defined(_DEBUG)
+		if (deltaTime < 0.5f) //Primarily for hadling breakpoints
+#endif
+		{
+			mCurrentState->Update(deltaTime);
+			PhysicsWorld::Get()->Update(deltaTime);
+		}
 
 		//render everything
 		GraphicsSystem* gs = GraphicsSystem::Get();
@@ -72,6 +81,7 @@ void App::Run(const AppConfig& config)
 	mCurrentState->Terminate();
 
 	//call all static terminates
+	PhysicsWorld::StaticTerminate();
 	TextureManager::StaticTerminate();
 	ModelManager::StaticTerminate();
 	SimpleDraw::StaticTerminate();
