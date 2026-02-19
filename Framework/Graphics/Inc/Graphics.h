@@ -38,3 +38,5 @@
 #include "AnimationUtil.h"
 #include "AnimationClip.h"
 #include "Animator.h"
+#include "BlendState.h"
+#include "ParticleSystemEffect.h"

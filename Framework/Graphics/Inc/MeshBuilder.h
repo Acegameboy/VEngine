@@ -28,6 +28,10 @@ namespace VEngine::Graphics
 		static Mesh CreateSkySphere(uint32_t slices, uint32_t rings, float radius);
 		static Mesh CreatePlane(int numRows, int numColums, float spacing, bool horizontal);
 
+		//Screen Quad
 		static MeshPX CreateScreenQuadPX();
+
+		//Sprite Quad
+		static MeshPX CreateSpriteQuadPX(float width, float height);
 	};
 }

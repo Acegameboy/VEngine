@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{6FB4
 		Assets\Shaders\DoSomething.fx = Assets\Shaders\DoSomething.fx
 		Assets\Shaders\DoTransformColor.fx = Assets\Shaders\DoTransformColor.fx
 		Assets\Shaders\DoTransformTexture.fx = Assets\Shaders\DoTransformTexture.fx
+		Assets\Shaders\Particle.fx = Assets\Shaders\Particle.fx
 		Assets\Shaders\PointLight.fx = Assets\Shaders\PointLight.fx
 		Assets\Shaders\PostProcessing.fx = Assets\Shaders\PostProcessing.fx
 		Assets\Shaders\Shadow.fx = Assets\Shaders\Shadow.fx
@@ -91,6 +92,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physics", "Framework\Physics\Physics.vcxproj", "{5004B408-53D4-4232-BF78-C75D3133B06A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "18_HelloPhysics", "VGP334\18_HelloPhysics\18_HelloPhysics.vcxproj", "{9248498B-9CD4-4221-82FA-F73F028F76E3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "19_HelloParticleSystem", "VGP334\19_HelloParticleSystem\19_HelloParticleSystem.vcxproj", "{2E35E518-75F8-4FF4-B57A-F383E8C1404A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -332,6 +335,14 @@ Global
 		{9248498B-9CD4-4221-82FA-F73F028F76E3}.Release|x64.Build.0 = Release|x64
 		{9248498B-9CD4-4221-82FA-F73F028F76E3}.Release|x86.ActiveCfg = Release|Win32
 		{9248498B-9CD4-4221-82FA-F73F028F76E3}.Release|x86.Build.0 = Release|Win32
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Debug|x64.ActiveCfg = Debug|x64
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Debug|x64.Build.0 = Debug|x64
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Debug|x86.ActiveCfg = Debug|Win32
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Debug|x86.Build.0 = Debug|Win32
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Release|x64.ActiveCfg = Release|x64
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Release|x64.Build.0 = Release|x64
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Release|x86.ActiveCfg = Release|Win32
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -367,6 +378,7 @@ Global
 		{516192EB-788A-4FE7-B2B7-2EF9AC036B12} = {5D604CD6-B0E7-4858-88A5-B03CC18284FD}
 		{5004B408-53D4-4232-BF78-C75D3133B06A} = {181D58D7-C504-4ADA-9E36-29BF3824BE24}
 		{9248498B-9CD4-4221-82FA-F73F028F76E3} = {46FBE519-E806-47FB-B482-9238C7DF91AD}
+		{2E35E518-75F8-4FF4-B57A-F383E8C1404A} = {46FBE519-E806-47FB-B482-9238C7DF91AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {151E541E-A049-4143-97F5-B688C5336070}
