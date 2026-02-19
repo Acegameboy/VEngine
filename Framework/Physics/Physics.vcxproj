@@ -163,7 +163,9 @@
     <ClCompile Include="Src\CollisionShape.cpp" />
     <ClCompile Include="Src\PhysicsDebugDraw.cpp" />
     <ClCompile Include="Src\PhysicsWorld.cpp" />
-    <ClCompile Include="Src\Precompiled.cpp" />
+    <ClCompile Include="Src\Precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Src\RigidBody.cpp" />
     <ClCompile Include="Src\SoftBody.cpp" />
   </ItemGroup>

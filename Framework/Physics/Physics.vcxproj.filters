@@ -9,6 +9,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Inc\CollisionShape.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Common.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Physics.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
     <ClInclude Include="Inc\PhysicsDebugDraw.h">
       <Filter>Inc</Filter>
     </ClInclude>
@@ -24,29 +33,11 @@
     <ClInclude Include="Inc\SoftBody.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\CollisionShape.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="Inc\Common.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="Inc\Physics.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Precompiled.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Precompiled.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\RigidBody.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\SoftBody.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="Src\CollisionShape.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -54,6 +45,15 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\PhysicsWorld.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Precompiled.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\RigidBody.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SoftBody.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>

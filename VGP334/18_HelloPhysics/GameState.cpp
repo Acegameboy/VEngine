@@ -26,7 +26,7 @@ void GameState::Initialize()
     mBallRigidBody.Initialize(mFootball.transform, mBallShape, 5.0f);
 
     TextureManager* tm_basket = TextureManager::Get();
-    mFootball.diffuseMapId = tm_basket->LoadTexture(L"../../Assets/Textures/misc/Brazuca.jpg");
+    mFootball.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
     // Ground
     Mesh plane = MeshBuilder::CreatePlane(20, 20, 1.0f, true);
@@ -34,7 +34,7 @@ void GameState::Initialize()
     mGroundShape.InitializeHull({ 5.0f, 0.5f, 5.0f }, { 0.0f, -0.5f, 0.0f });
     mGroundRigidBody.Initialize(mGroundObject.transform, mGroundShape, 0.0f);
 
-    mGroundObject.diffuseMapId = tm_basket->LoadTexture(L"../../Assets/Textures/misc/concrete.jpg");
+    mGroundObject.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
     std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
     mStandardEffect.Initialize(shaderFile);
@@ -42,41 +42,41 @@ void GameState::Initialize()
     mStandardEffect.SetDirectionalLight(mDirectionalLight);
 
     // Boxes
-    Mesh boxShape = MeshBuilder::CreateCube(1.0f);
-    TextureId boxTextureId = tm_basket->LoadTexture(L"../../Assets/Textures/misc/cardboard.jpg");
+    Mesh boxShape;// = MeshBuilder::CreateCube(1.0f);
+    TextureId boxTextureId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
     float yOffset = 4.5f;
     float xOffset = 0.0f;
     int rowCount = 1;
     int boxIndex = 0;
-    mBoxes.resize(10);
-    while (boxIndex < mBoxes.size())
-    {
-        xOffset = -((static_cast<float>(rowCount) - 1.0f) * 0.5f);
-        for (int r = 0; r < rowCount; ++r)
-        {
-            BoxData& box = mBoxes[boxIndex];
-            box.box.meshBuffer.Initialize(boxShape);
-            box.box.diffuseMapId = boxTextureId;
-            box.box.transform.position.x = xOffset;
-            box.box.transform.position.y = yOffset;
-            box.box.transform.position.z = 4.0f;
-            box.shape.InitializeBox({ 0.5f, 0.5f, 0.5f });
-            xOffset += 1.0f;
-            ++boxIndex;
-        }
-        yOffset -= 1.0f;
-        rowCount += 1;
-    }
-    for (int i = mBoxes.size() - 1; i >= 0; --i)
-    {
-        mBoxes[i].rigidBody.Initialize(mBoxes[i].box.transform, mBoxes[i].shape, 1.0f);
-    }
+    //mBoxes.resize(10);
+    //while (boxIndex < mBoxes.size())
+    //{
+    //    xOffset = -((static_cast<float>(rowCount) - 1.0f) * 0.5f);
+    //    for (int r = 0; r < rowCount; ++r)
+    //    {
+    //        BoxData& box = mBoxes[boxIndex];
+    //        box.box.meshBuffer.Initialize(boxShape);
+    //        box.box.diffuseMapId = boxTextureId;
+    //        box.box.transform.position.x = xOffset;
+    //        box.box.transform.position.y = yOffset;
+    //        box.box.transform.position.z = 4.0f;
+    //        box.shape.InitializeBox({ 0.5f, 0.5f, 0.5f });
+    //        xOffset += 1.0f;
+    //        ++boxIndex;
+    //    }
+    //    yOffset -= 1.0f;
+    //    rowCount += 1;
+    //}
+    //for (int i = mBoxes.size() - 1; i >= 0; --i)
+    //{
+    //    mBoxes[i].rigidBody.Initialize(mBoxes[i].box.transform, mBoxes[i].shape, 1.0f);
+    //}
 
     // Cloth
     int rows = 20;
     int cols = 20;
-    mClothMesh = MeshBuilder::CreatePlane(rows, cols, 0.5f);
+    mClothMesh = MeshBuilder::CreatePlane(rows, cols, 0.5f, true);
     for (Graphics::Vertex& v : mClothMesh.vertices)
     {
         v.position.y += 10.0f;
@@ -88,7 +88,7 @@ void GameState::Initialize()
     mClothSoftBody.Initialize(mClothMesh, 1.0f, { lastVertex, lastVertexOS });
     mCloth.meshBuffer.Initialize(nullptr, sizeof(Vertex), mClothMesh.vertices.size(),
         mClothMesh.indices.data(), mClothMesh.indices.size());
-    mCloth.diffuseMapId = tm_basket->LoadTexture(L"../../Assets/Textures/misc/cloth.jpg");
+    mCloth.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 }
 
 void GameState::Terminate()

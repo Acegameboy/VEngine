@@ -30,12 +30,12 @@ inline void SafeDelete(T*& ptr)
     }
 }
 
-inline btVector3 ToBtVector3(const Math::Vector3& v)
+inline btVector3 ToBtVector3(const VEngine::Math::Vector3& v)
 {
     return btVector3(v.x, v.y, v.z);
 }
 
-inline Math::Vector3 ToVector3(const btVector3& v)
+inline VEngine::Math::Vector3 ToVector3(const btVector3& v)
 {
     return {
         static_cast<float>(v.getX()),
@@ -44,12 +44,12 @@ inline Math::Vector3 ToVector3(const btVector3& v)
     };
 }
 
-inline btQuaternion ToBtQuaternion(const Math::Quaternion& q)
+inline btQuaternion ToBtQuaternion(const VEngine::Math::Quaternion& q)
 {
     return btQuaternion(q.x, q.y, q.z, q.w);
 }
 
-inline Math::Quaternion ToQuaternion(const btQuaternion& q)
+inline VEngine::Math::Quaternion ToQuaternion(const btQuaternion& q)
 {
     return {
         static_cast<float>(q.getX()),
@@ -59,7 +59,7 @@ inline Math::Quaternion ToQuaternion(const btQuaternion& q)
     };
 }
 
-inline Graphics::Color ToColor(const btVector3& c)
+inline VEngine::Color ToColor(const btVector3& c)
 {
     return {
         static_cast<float>(c.getX()),
@@ -69,7 +69,7 @@ inline Graphics::Color ToColor(const btVector3& c)
     };
 }
 
-inline btTransform ConvertToBtTransform(const Graphics::Transform& t)
+inline btTransform ConvertToBtTransform(const VEngine::Graphics::Transform& t)
 {
     return btTransform(
         ToBtQuaternion(t.rotation),
