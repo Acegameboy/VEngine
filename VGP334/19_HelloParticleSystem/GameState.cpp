@@ -52,14 +52,17 @@ void GameState::Render()
     SimpleDraw::Render(mCamera);
 
     mParticleSystemEffect.Begin();
-    mParticleSystemEffect.Render();
+    mParticleSystem.Render(mParticleSystemEffect);
     mParticleSystemEffect.End();
 }
 
 void GameState::DebugUI()
 {
     ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    mParticleSystem
+    mParticleSystem.DebugUI();
+    PhysicsWorld::Get()->DebugUI();
+    ImGui::End();
+    SimpleDraw::Render(mCamera);
 }
 
 void GameState::UpdateCamera(float deltaTime)
