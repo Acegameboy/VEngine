@@ -149,6 +149,9 @@
     <ClCompile Include="Src\VEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Framework\Audio\Audio.vcxproj">
+      <Project>{7656da88-961d-434d-8ead-2dd62d288488}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\Core\Core.vcxproj">
       <Project>{7b9af0cf-95eb-4bab-a33d-828a422e7619}</Project>
     </ProjectReference>

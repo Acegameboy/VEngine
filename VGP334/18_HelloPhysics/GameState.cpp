@@ -19,36 +19,36 @@ void GameState::Initialize()
     // DragonBorn - Free Spline Animation Software
 
     // Football
-    Mesh football = MeshBuilder::CreateSphere(50, 50, 0.5f);
-    mFootball.meshBuffer.Initialize(football);
-    mFootball.transform.position.y = 5.0f;
-    mBallShape.InitializeSphere(0.5f);
-    mBallRigidBody.Initialize(mFootball.transform, mBallShape, 5.0f);
+    //Mesh football = MeshBuilder::CreateSphere(50, 50, 0.5f);
+    //mFootball.meshBuffer.Initialize(football);
+    //mFootball.transform.position.y = 5.0f;
+    //mBallShape.InitializeSphere(0.5f);
+    //mBallRigidBody.Initialize(mFootball.transform, mBallShape, 5.0f);
 
-    TextureManager* tm_basket = TextureManager::Get();
-    mFootball.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
+    //TextureManager* tm_basket = TextureManager::Get();
+    //mFootball.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
-    // Ground
-    Mesh plane = MeshBuilder::CreatePlane(20, 20, 1.0f, true);
-    mGroundObject.meshBuffer.Initialize(plane);
-    mGroundShape.InitializeHull({ 5.0f, 0.5f, 5.0f }, { 0.0f, -0.5f, 0.0f });
-    mGroundRigidBody.Initialize(mGroundObject.transform, mGroundShape, 0.0f);
+    //// Ground
+    //Mesh plane = MeshBuilder::CreatePlane(20, 20, 1.0f, true);
+    //mGroundObject.meshBuffer.Initialize(plane);
+    //mGroundShape.InitializeHull({ 5.0f, 0.5f, 5.0f }, { 0.0f, -0.5f, 0.0f });
+    //mGroundRigidBody.Initialize(mGroundObject.transform, mGroundShape, 0.0f);
 
-    mGroundObject.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
+    //mGroundObject.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
-    std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
-    mStandardEffect.Initialize(shaderFile);
-    mStandardEffect.SetCamera(mCamera);
-    mStandardEffect.SetDirectionalLight(mDirectionalLight);
+    //std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
+    //mStandardEffect.Initialize(shaderFile);
+    //mStandardEffect.SetCamera(mCamera);
+    //mStandardEffect.SetDirectionalLight(mDirectionalLight);
 
-    // Boxes
-    Mesh boxShape;// = MeshBuilder::CreateCube(1.0f);
-    TextureId boxTextureId = tm_basket->LoadTexture(L"misc/concrete.jpg");
+    //// Boxes
+    //Mesh boxShape;// = MeshBuilder::CreateCube(1.0f);
+    //TextureId boxTextureId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 
-    float yOffset = 4.5f;
-    float xOffset = 0.0f;
-    int rowCount = 1;
-    int boxIndex = 0;
+    //float yOffset = 4.5f;
+    //float xOffset = 0.0f;
+    //int rowCount = 1;
+    //int boxIndex = 0;
     //mBoxes.resize(10);
     //while (boxIndex < mBoxes.size())
     //{
@@ -74,21 +74,21 @@ void GameState::Initialize()
     //}
 
     // Cloth
-    int rows = 20;
-    int cols = 20;
-    mClothMesh = MeshBuilder::CreatePlane(rows, cols, 0.5f, true);
-    for (Graphics::Vertex& v : mClothMesh.vertices)
-    {
-        v.position.y += 10.0f;
-        v.position.z += 10.0f;
-    }
+    //int rows = 20;
+    //int cols = 20;
+    //mClothMesh = MeshBuilder::CreatePlane(rows, cols, 0.5f, true);
+    //for (Graphics::Vertex& v : mClothMesh.vertices)
+    //{
+    //    v.position.y += 10.0f;
+    //    v.position.z += 10.0f;
+    //}
 
-    uint32_t lastVertex = mClothMesh.vertices.size() - 1;
-    uint32_t lastVertexOS = lastVertex - cols; // Other Side
-    mClothSoftBody.Initialize(mClothMesh, 1.0f, { lastVertex, lastVertexOS });
-    mCloth.meshBuffer.Initialize(nullptr, sizeof(Vertex), mClothMesh.vertices.size(),
-        mClothMesh.indices.data(), mClothMesh.indices.size());
-    mCloth.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
+    //uint32_t lastVertex = mClothMesh.vertices.size() - 1;
+    //uint32_t lastVertexOS = lastVertex - cols; // Other Side
+    //mClothSoftBody.Initialize(mClothMesh, 1.0f, { lastVertex, lastVertexOS });
+    //mCloth.meshBuffer.Initialize(nullptr, sizeof(Vertex), mClothMesh.vertices.size(),
+    //    mClothMesh.indices.data(), mClothMesh.indices.size());
+    //mCloth.diffuseMapId = tm_basket->LoadTexture(L"misc/concrete.jpg");
 }
 
 void GameState::Terminate()

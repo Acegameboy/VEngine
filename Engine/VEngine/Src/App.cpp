@@ -7,6 +7,7 @@ using namespace VEngine::Core;
 using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Physics;
+using namespace VEngine::Audio;
 
 void App::Run(const AppConfig& config)
 {
@@ -31,6 +32,9 @@ void App::Run(const AppConfig& config)
 
 	PhysicsWorld::Settings settings;
 	PhysicsWorld::StaticInitialize(settings);
+	EventManager::StaticInitialize();
+	AudioSystem::StaticInitialize();
+	SoundEffectManager::StaticInitialize(L"../../Assets/Audio");
 
 	//Initialize current state
 	ASSERT(mCurrentState != nullptr, "App: need an app state to start");
@@ -58,6 +62,8 @@ void App::Run(const AppConfig& config)
 			mCurrentState->Initialize();
 		}
 
+		AudioSystem::Get()->Update();
+
 		float deltaTime = TimeUtil::GetDeltaTime();
 #if defined(_DEBUG)
 		if (deltaTime < 0.5f) //Primarily for hadling breakpoints
@@ -81,7 +87,10 @@ void App::Run(const AppConfig& config)
 	mCurrentState->Terminate();
 
 	//call all static terminates
+	SoundEffectManager::StaticTerminate();
+	AudioSystem::StaticTerminate();
 	PhysicsWorld::StaticTerminate();
+	EventManager::StaticTerminate();
 	TextureManager::StaticTerminate();
 	ModelManager::StaticTerminate();
 	SimpleDraw::StaticTerminate();

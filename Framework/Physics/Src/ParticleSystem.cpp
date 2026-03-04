@@ -72,9 +72,9 @@ void VEngine::Physics::ParticleSystem::DebugUI()
 		}
 		ImGui::DragIntRange2("PerEmit", &mInfo.particlesPerEmit.min, &mInfo.particlesPerEmit.max);
 		ImGui::DragFloatRange2("TimeBetweenEmit", &mInfo.timeBetweenEmit.min, &mInfo.timeBetweenEmit.max);
-		ImGui::DragFloatRange2("SpawnAngle", &mInfo.spaenAngle.min, &mInfo.spaenAngle.max);
+		ImGui::DragFloatRange2("SpawnAngle", &mInfo.spawnAngle.min, &mInfo.spawnAngle.max);
 		ImGui::DragFloatRange2("SpawnSpeed", &mInfo.spawnSpeed.min, &mInfo.spawnSpeed.max);
-		ImGui::DragFloatRange2("ParticleLifeTime", &mInfo.partilceLifeTime.min, &mInfo.partilceLifeTime.max);
+		ImGui::DragFloatRange2("ParticleLifeTime", &mInfo.particleLifeTime.min, &mInfo.particleLifeTime.max);
 		ImGui::DragFloat3("StartScaleMin", &mInfo.startScale.min.x);
 		ImGui::DragFloat3("StartScaleMax", &mInfo.startScale.max.x);
 		ImGui::DragFloat3("ENDScaleMin", &mInfo.endScale.min.x);
@@ -140,11 +140,11 @@ void VEngine::Physics::ParticleSystem::SpawnSingleParticle()
 	Math::Vector3 u = Math::Normalize(Math::Cross(mInfo.spawnDirection, r));
 
 	//Get random angle, rotate the look around the right axis
-	float rotAngle = mInfo.spaenAngle.GetRandom() * Math::Constants::DegToRad;
+	float rotAngle = mInfo.spawnAngle.GetRandom() * Math::Constants::DegToRad;
 	Math::Matrix4 matRotRight = Math::Matrix4::RotationAxis(r, rotAngle);
 
 	//Get a random angle, rotate the lok around the up axis
-	rotAngle = mInfo.spaenAngle.GetRandom() * Math::Constants::DegToRad;
+	rotAngle = mInfo.spawnAngle.GetRandom() * Math::Constants::DegToRad;
 	Math::Matrix4 matRotUp = Math::Matrix4::RotationAxis(u, rotAngle);
 
 	//Combine rotations to get a final rotation matrix
@@ -154,7 +154,7 @@ void VEngine::Physics::ParticleSystem::SpawnSingleParticle()
 
 	const float speed = mInfo.spawnSpeed.GetRandom();
 	ParticleInfo info;
-	info.lifeTime = mInfo.partilceLifeTime.GetRandom();
+	info.lifeTime = mInfo.particleLifeTime.GetRandom();
 	info.startColor = mInfo.startColor.GetRandom();
 	info.endColor = mInfo.endColor.GetRandom();
 	info.startScale = mInfo.startScale.GetRandom();

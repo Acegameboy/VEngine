@@ -12,9 +12,9 @@ namespace VEngine::Physics
 		float lifeTime = 0.0f;
 		Math::RangeInt particlesPerEmit = { 0,0 };
 		Math::Range<float> timeBetweenEmit = { 0.0f, 0.0f };
-		Math::Range<float> spaenAngle = { 0.0f, 0.0f };
+		Math::Range<float> spawnAngle = { 0.0f, 0.0f };
 		Math::Range<float> spawnSpeed = { 0.0f, 0.0f };
-		Math::Range<float> partilceLifeTime = { 0.0f, 0.0f };
+		Math::Range<float> particleLifeTime = { 0.0f, 0.0f };
 		Math::Vector3 spawnPosition = Math::Vector3::Zero;
 		Math::Vector3 spawnDirection = Math::Vector3::YAxis;
 		Math::Range<Math::Vector3> startScale = { Math::Vector3::One, Math::Vector3::One};

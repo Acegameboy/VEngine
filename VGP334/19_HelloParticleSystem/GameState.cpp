@@ -21,9 +21,9 @@ void GameState::Initialize()
     info.delay = 1.0f;
     info.lifeTime = FLT_MAX;
     info.timeBetweenEmit = { 0.2f, 0.4f };
-    info.spaenAngle = { -30.0f, 30.0f };
+    info.spawnAngle = { -30.0f, 30.0f };
     info.spawnSpeed = { 1.0f, 3.0f };
-    info.partilceLifeTime = { 0.5f, 2.0f };
+    info.particleLifeTime = { 0.5f, 2.0f };
     info.spawnDirection = Math::Vector3::YAxis;
     info.spawnPosition = Math::Vector3::Zero;
     info.startScale = { Math::Vector3::One, Math::Vector3::One };
