@@ -13,10 +13,10 @@
     <Filter Include="Inc\Componets">
       <UniqueIdentifier>{3c6f7cb7-fe01-45db-8136-3f77964bb85c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Inc\Componets\Service">
+    <Filter Include="Inc\Service">
       <UniqueIdentifier>{d4619b27-ebe7-445d-9a8a-4bb6cb952d16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Components\Service">
+    <Filter Include="Src\Service">
       <UniqueIdentifier>{1b13193f-1530-4e28-9769-c3b4a6f6a817}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -61,7 +61,37 @@
       <Filter>Inc\Componets</Filter>
     </ClInclude>
     <ClInclude Include="Inc\Service.h">
-      <Filter>Inc\Componets\Service</Filter>
+      <Filter>Inc\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\AnimatorComponent.h">
+      <Filter>Inc\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MeshCompoent.h">
+      <Filter>Inc\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ModelComponent.h">
+      <Filter>Inc\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\RenderObjectComponent.h">
+      <Filter>Inc\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\RigidBodyComponent.h">
+      <Filter>Inc\Componets</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\CameraService.h">
+      <Filter>Inc\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\PhysicsService.h">
+      <Filter>Inc\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\RenderService.h">
+      <Filter>Inc\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GameObjectFactory.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SaveUtil.h">
+      <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +118,36 @@
     </ClCompile>
     <ClCompile Include="Src\FPSCameraComponent.cpp">
       <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AnimatorComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MeshComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ModelComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\RenderObjectComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\RigidBodyComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CameraService.cpp">
+      <Filter>Src\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\PhysicsService.cpp">
+      <Filter>Src\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\RenderService.cpp">
+      <Filter>Src\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectFactory.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SaveUtil.cpp">
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

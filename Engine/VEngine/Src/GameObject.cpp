@@ -5,61 +5,78 @@ using namespace VEngine;
 
 static uint32_t gUniqueId = 0;
 
-void VEngine::GameObject::Initialize()
+void GameObject::Initialize()
 {
-	ASSERT(!mInitialized, "GameObject: is already initizlized");
-	for (auto& component : mComponents)
-	{
-		component->Initialize();
-	}
-	mId = ++gUniqueId;
-	mInitialized = true;
+    ASSERT(!mInitialized, "GameObject: Already initialized!");
+    for (auto& component : mComponents)
+    {
+        component->Initialize();
+    }
+
+    mId = ++gUniqueId;
+    mInitialized = true;
 }
 
-void VEngine::GameObject::Terminate()
+void GameObject::Terminate()
 {
-	for (auto& component : mComponents)
-	{
-		component->Terminate();
-		component.reset();
-	}
+    for (auto& component : mComponents)
+    {
+        component->Terminate();
+        component.reset();
+    }
+    mComponents.clear();
 }
 
-void VEngine::GameObject::Update(float deltaTime)
+void GameObject::Update(float deltaTime)
 {
-	component->Update(deltaTime);
+    for (auto& component : mComponents)
+    {
+        component->Update(deltaTime);
+    }
 }
 
-void VEngine::GameObject::DebugUI()
+void GameObject::DebugUI()
 {
-	ImGui::PushID(mId);
-	if (ImGui::CollapsingHeader(mName.c_str()))
-	{
-		//add stuff later
-	}
-	ImGui::PopID();
-	for (auto& component : mComponents)
-	{
-		component->DebugUI();
-	}
+    ImGui::PushID(mId);
+    if (ImGui::CollapsingHeader(mName.c_str()))
+    {
+        for (auto& component : mComponents)
+        {
+            component->DebugUI();
+        }
+    }
+    ImGui::PopID();
 }
 
-void VEngine::GameObject::SetName(std::string& name)
+void GameObject::SetName(std::string& name)
 {
-	mName = std::move(name);
+    mName = std::move(name);
 }
 
-const std::string& VEngine::GameObject::GetName() const
+const std::string& GameObject::GetName() const
 {
-	return mName;
+    // TODO: insert return statement here
+    return mName;
 }
 
-uint32_t VEngine::GameObject::GetId() const
+uint32_t GameObject::GetId() const
 {
-	return mId;
+    // TODO: insert return statement here
+    return mId;
 }
 
-const GameObjectHandle& VEngine::GameObject::GetHandle() const
+const GameObjectHandle& GameObject::GetHandle() const
 {
-	return mHandle;
+    // TODO: insert return statement here
+    return mHandle;
+}
+
+GameWorld& GameObject::GetWorld()
+{
+    return *mWorld;
+}
+
+const GameWorld& GameObject::GetWorld() const
+{
+    return *mWorld;
 }

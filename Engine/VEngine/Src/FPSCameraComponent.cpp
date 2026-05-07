@@ -2,26 +2,27 @@
 #include "FPSCameraComponent.h"
 #include "CameraComponent.h"
 #include "GameObject.h"
+#include "SaveUtil.h"
 
 using namespace VEngine;
 using namespace VEngine::Input;
 
-void VEngine::FPSCameraComponent::Initialize()
+void FPSCameraComponent::Initialize()
 {
 	mCameraComponent = GetOwner().GetComponent<CameraComponent>();
-	ASSERT(mCameraComponent != nullptr, "FPSCameraComponent: camera was not found");
+	ASSERT(mCameraComponent != nullptr, "FPSCameraComponent: Camera was not found!");
 }
 
-void VEngine::FPSCameraComponent::Terminate()
+void FPSCameraComponent::Terminate()
 {
 	mCameraComponent = nullptr;
 }
 
-void VEngine::FPSCameraComponent::Update(float deltaTime)
+void FPSCameraComponent::Update(float deltaTime)
 {
 	Graphics::Camera& camera = mCameraComponent->GetCamera();
 	auto input = InputSystem::Get();
-	const float moveSpeed = ((input->IsKeyDown(KeyCode::LSHIFT)) ? mShiftSpeed : mMoveSpeed)* deltaTime;
+	const float moveSpeed = ((input->IsKeyDown(KeyCode::LSHIFT)) ? mShiftSpeed : mMoveSpeed) * deltaTime;
 	const float turnSpeed = mTurnSpeed * deltaTime;
 	if (input->IsKeyDown(KeyCode::W))
 	{
@@ -51,13 +52,19 @@ void VEngine::FPSCameraComponent::Update(float deltaTime)
 	{
 		camera.Yaw(input->GetMouseMoveX() * turnSpeed);
 		camera.Pitch(input->GetMouseMoveY() * turnSpeed);
-
 	}
 }
 
-void VEngine::FPSCameraComponent::DebugUI()
+void FPSCameraComponent::DebugUI()
 {
-	ImGui::DragFloat("MoveSpeed", &mMoveSpeed, 0.1f, 0.1f, 100.0f);
-	ImGui::DragFloat("ShiftSpeed", &mShiftSpeed, 0.1f, 0.1f, 1000.0f);
-	ImGui::DragFloat("TurnSpeed", &mTurnSpeed, 0.001f, 0.01f, 1.0f);
+	ImGui::DragFloat("Move Speed", &mMoveSpeed, 0.1f, 0.1f, 100.0f);
+	ImGui::DragFloat("Shift Speed", &mShiftSpeed, 0.1f, 0.1f, 1000.0f);
+	ImGui::DragFloat("Turn Speed", &mTurnSpeed, 0.001f, 0.01f, 1.0f);
+}
+
+void FPSCameraComponent::Deserialize(const rapidjson::Value& value)
+{
+	SaveUtil::ReadFloat("MoveSpeed", mMoveSpeed, value);
+	SaveUtil::ReadFloat("ShiftSpeed", mShiftSpeed, value);
+	SaveUtil::ReadFloat("TurnSpeed", mTurnSpeed, value);
 }

@@ -15,6 +15,7 @@ namespace VEngine
 		void Terminate() override;
 		void Update(float deltaTime) override;
 		void DebugUI() override;
+		void Deserialize(const rapidjson::Value& value) override;
 	private:
 		CameraComponent* mCameraComponent = nullptr;
 		float mShiftSpeed = 10.0f;
