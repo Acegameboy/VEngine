@@ -107,7 +107,7 @@ void SaveUtil::WriteQuaternion(const char* key, const Math::Quaternion& q, rapid
 }
 
 // Color --------------
-bool SaveUtil::ReadColor(const char* key, Graphics::Color& c, const rapidjson::Value& value)
+bool SaveUtil::ReadColor(const char* key, Color& c, const rapidjson::Value& value)
 {
     if (value.HasMember(key))
     {
@@ -122,7 +122,7 @@ bool SaveUtil::ReadColor(const char* key, Graphics::Color& c, const rapidjson::V
     return false;
 }
 
-void SaveUtil::WriteColor(const char* key, const Graphics::Color& c, rapidjson::Document& doc, rapidjson::Value& member)
+void SaveUtil::WriteColor(const char* key, const Color& c, rapidjson::Document& doc, rapidjson::Value& member)
 {
     rapidjson::GenericStringRef<char> keyStr(key);
     rapidjson::Value colorArray(rapidjson::kArrayType);
