@@ -17,8 +17,8 @@ namespace VEngine::SaveUtil
     bool ReadQuaternion(const char* key, Math::Quaternion& q, const rapidjson::Value& value);
     void WriteQuaternion(const char* key, const Math::Quaternion& q, rapidjson::Document& doc, rapidjson::Value& member);
 
-    bool ReadColor(const char* key, Graphics::Color& c, const rapidjson::Value& value);
-    void WriteColor(const char* key, const Graphics::Color& c, rapidjson::Document& doc, rapidjson::Value& member);
+    bool ReadColor(const char* key, Color& c, const rapidjson::Value& value);
+    void WriteColor(const char* key, const Color& c, rapidjson::Document& doc, rapidjson::Value& member);
 
     bool ReadString(const char* key, std::string& str, const rapidjson::Value& value);
     void WriteString(const char* key, const char* str, rapidjson::Document& doc, rapidjson::Value& member);
