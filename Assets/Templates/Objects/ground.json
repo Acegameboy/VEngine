@@ -21,7 +21,7 @@
         "Shininess": 10.0
       },
       "Textures": {
-        "DiffuseMap": "../../Assets/Textures/paper.jpg"
+        "DiffuseMap": "../../Assets/Textures/Images/blue.jpg"
       }
     },
     "RigidBodyComponent": {

@@ -5,9 +5,12 @@
 
 namespace VEngine
 {
+    using CustomService = std::function<Service* (const std::string&, GameWorld&)>;
     class GameWorld final
     {
     public:
+        static void SetCustomService(CustomService customService);
+
         void Initialize(uint32_t capacity = 10);
         void Terminate();
         void Update(float deltaTime);
@@ -16,6 +19,8 @@ namespace VEngine
 
         GameObject* CreateGameObject(std::string name, const std::filesystem::path& templatePath = "");
         void DestroyGameObject(const GameObjectHandle& handle);
+
+        void LoadLevel(const std::filesystem::path& levelFile);
 
         template<class ServiceType>
         ServiceType* AddService()

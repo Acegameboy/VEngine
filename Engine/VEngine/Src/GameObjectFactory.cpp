@@ -15,6 +15,9 @@ using namespace VEngine;
 
 namespace
 {
+    CustomComponent TryMakeComponent;
+    CustomComponent TryGetComponent;
+
     // Helper funcitons in here only stay in this specific .cpp file
     Component* AddComponent(const std::string& componentName, GameObject& gameObject)
     {
@@ -47,11 +50,82 @@ namespace
         {
             newComponent = gameObject.AddComponent<RigidBodyComponent>();
         }
+        else if (componentName == "SoundEffectComponent")
+        {
+            newComponent = gameObject.AddComponent<RigidBodyComponent>();
+        }
+        else if (componentName == "SoundBankComponent")
+        {
+            newComponent = gameObject.AddComponent<RigidBodyComponent>();
+        }
+        else
+        {
+            newComponent = TryMakeComponent(componentName, gameObject);
+        }
 
         ASSERT(newComponent != nullptr, "GameObjectFactory: Component type [%s] not found!", componentName.c_str());
 
         return newComponent;
     }
+}
+
+Component* GetComponent(const std::string& componentName, GameObject& gameObject)
+{
+    Component* newComponent = nullptr;
+    if (componentName == "TransformComponent")
+    {
+        newComponent = gameObject.GetComponent<TransformComponent>();
+    }
+    else if (componentName == "CameraComponent")
+    {
+        newComponent = gameObject.GetComponent<CameraComponent>();
+    }
+    else if (componentName == "FPSCameraComponent")
+    {
+        newComponent = gameObject.GetComponent<FPSCameraComponent>();
+    }
+    else if (componentName == "MeshComponent")
+    {
+        newComponent = gameObject.GetComponent<MeshComponent>();
+    }
+    else if (componentName == "ModelComponent")
+    {
+        newComponent = gameObject.GetComponent<ModelComponent>();
+    }
+    else if (componentName == "AnimatorComponent")
+    {
+        newComponent = gameObject.GetComponent<AnimatorComponent>();
+    }
+    else if (componentName == "RigidBodyComponent")
+    {
+        newComponent = gameObject.GetComponent<RigidBodyComponent>();
+    }
+    else if (componentName == "SoundEffectComponent")
+    {
+        newComponent = gameObject.GetComponent<SoundEffectComponent>();
+    }
+    else if (componentName == "SoundBankComponent")
+    {
+        newComponent = gameObject.GetComponent<SoundBankComponent>();
+    }
+    else
+    {
+        newComponent = TryGetComponent(componentName, gameObject);
+    }
+
+    ASSERT(newComponent != nullptr, "GameObjectFactory: Component type [%s] not found!", componentName.c_str());
+
+    return newComponent;
+}
+
+void VEngine::GameObjectFactory::SetCustomMake(CustomComponent callback)
+{
+    TryMakeComponent = callback;
+}
+
+void VEngine::GameObjectFactory::SetCustomGet(CustomComponent callback)
+{
+    TryGetComponent = callback;
 }
 
 void GameObjectFactory::Make(const std::filesystem::path& templatePath, GameObject& gameObject, GameWorld& gameWorld)
@@ -76,6 +150,22 @@ void GameObjectFactory::Make(const std::filesystem::path& templatePath, GameObje
         {
             // Apply the jason value data
             newComponent->Deserialize(component.value);
+        }
+    }
+}
+
+void VEngine::GameObjectFactory::OverrideDeserialize(const rapidjson::Value& value, GameObject& gameObject)
+{
+    if (value.HasMember("Components"))
+    {
+        auto components = value["Component"].GetObj();
+        for (auto& component : components)
+        {
+            Component* ownedComponent = GetComponent(component.name.GetString(), gameObject);
+            if (ownedComponent != nullptr)
+            {
+                ownedComponent->Deserialize(component.value);
+            }
         }
     }
 }

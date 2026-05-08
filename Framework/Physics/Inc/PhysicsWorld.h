@@ -32,6 +32,8 @@ namespace VEngine::Physics
         void Update(float deltaTime);
         void DebugUI();
 
+        void UpdateSettings();
+
         void SetGravity(const Math::Vector3& gravity);
 
         void Register(PhysicsObject* physicsObject);

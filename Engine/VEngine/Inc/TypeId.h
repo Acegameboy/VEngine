@@ -13,6 +13,8 @@ namespace VEngine
         Model,      // Add a model to the game object to render
         Animator,   // Adds an animation controller to the game object
         RigidBody,  // Adds a physics object to the game object
+        SoundEffect,// Adds a sound effect to an object
+        SoundBank,  //Adds a group of sounds to an object
         Count       // last value, can be used to chain custom components
     };
 

@@ -19,6 +19,8 @@ namespace VEngine
         void Render() override;
         void DebugUI() override;
 
+        void Deserialize(const rapidjson::Value& value);
+
         void Register(const RenderObjectComponent* renderObjectComponent);
         void Unregister(const RenderObjectComponent* renderObjectComponent);
 

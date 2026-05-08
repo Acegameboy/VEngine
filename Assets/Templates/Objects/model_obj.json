@@ -7,9 +7,9 @@
     },
     "ModelComponent": {
       "CastShadow": true,
-      "FileName": "../../Assets/Models/parasite/parasite.model",
+      "FileName": "../../Assets/Models/Character01/Character01.model",
       "Animations": [
-        "../../Assets/Models/parasite/samba.animset"
+        "../../Assets/Models/Character01/SillyDancing.animset"
       ]
     },
     "AnimatorComponent": {
@@ -22,6 +22,13 @@
         "HalfExtents": [ 0.5, 1.0, 0.5 ],
         "Origin": [ 0.0, 1.0, 0.0 ]
       }
+    },
+    "CustomDebugDrawComponent": {
+      "Slices": 30,
+      "Rings": 30,
+      "Radius": 0.7,
+      "Position": [ 0.0, 1.0, 0.0 ],
+      "Color": [ 0.3, 1.0, 0.3, 1.0 ]
     }
   }
 }

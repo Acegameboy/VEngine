@@ -71,7 +71,7 @@ matrix GetBoneTransform(int4 indices, float4 weights)
         return Identity;
     }
     
-    matrix transform = boneTransforms[indices[0] * weights[0]];
+    matrix transform = boneTransforms[indices[0]] * weights[0];
     transform += boneTransforms[indices[1]] * weights[1];
     transform += boneTransforms[indices[2]] * weights[2];
     transform += boneTransforms[indices[3]] * weights[3];
@@ -234,14 +234,14 @@ float4 PS(VS_OUTPUT input) : SV_Target
 // ---- Thermal override ----
     if (useThermal != 0)
     {
-        float heat = baseHeat;
+        //float heat = baseHeat;
 
-        float nDotV = saturate(dot(n, view));
-        heat += heatVariation * (1.0f - nDotV);
+        //float nDotV = saturate(dot(n, view));
+        //heat += heatVariation * (1.0f - nDotV);
 
-        heat = saturate(heat);
-        float3 thermalColor = HeatToColor(heat);
-        finalColor.rgb = thermalColor;
+        //heat = saturate(heat);
+        //float3 thermalColor = HeatToColor(heat);
+        //finalColor.rgb = thermalColor;
     }
     
     return finalColor;

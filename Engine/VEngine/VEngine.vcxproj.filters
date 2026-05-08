@@ -10,14 +10,14 @@
     <Filter Include="Src\Components">
       <UniqueIdentifier>{0d45d3a2-4c26-4e03-9159-1b4cde21a28b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Inc\Componets">
-      <UniqueIdentifier>{3c6f7cb7-fe01-45db-8136-3f77964bb85c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Inc\Service">
       <UniqueIdentifier>{d4619b27-ebe7-445d-9a8a-4bb6cb952d16}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Service">
       <UniqueIdentifier>{1b13193f-1530-4e28-9769-c3b4a6f6a817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc\Component">
+      <UniqueIdentifier>{3c6f7cb7-fe01-45db-8136-3f77964bb85c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -46,37 +46,37 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Inc\Component.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\TypeId.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="Inc\TransformComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\CameraComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\FPSCameraComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\Service.h">
       <Filter>Inc\Service</Filter>
     </ClInclude>
     <ClInclude Include="Inc\AnimatorComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\MeshCompoent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\ModelComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\RenderObjectComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\RigidBodyComponent.h">
-      <Filter>Inc\Componets</Filter>
+      <Filter>Inc\Component</Filter>
     </ClInclude>
     <ClInclude Include="Inc\CameraService.h">
       <Filter>Inc\Service</Filter>
@@ -92,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="Inc\SaveUtil.h">
       <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SoundEventComponent.h">
+      <Filter>Inc\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SoundBankComponent.h">
+      <Filter>Inc\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="Src\SaveUtil.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SoundEventComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SoundBankComponent.cpp">
+      <Filter>Src\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
