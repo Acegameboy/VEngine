@@ -106,5 +106,6 @@ namespace VEngine
 
         using Children = std::vector<GameObject*>;
         Children mChildren;
+        GameObject* mParent = nullptr;
     };
 }

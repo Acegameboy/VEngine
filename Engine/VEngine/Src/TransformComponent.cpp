@@ -1,11 +1,12 @@
 #include "Precompiled.h"
 #include "TransformComponent.h"
 #include "SaveUtil.h"
+#include "GameObject.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;
 
-void VEngine::TransformComponent::DebugUI()
+void TransformComponent::DebugUI()
 {
 	ImGui::DragFloat3("Position", &position.x, 0.1f);
 	ImGui::DragFloat4("Rotation", &rotation.x, 0.0001f);
@@ -14,14 +15,14 @@ void VEngine::TransformComponent::DebugUI()
 	SimpleDraw::AddTransform(GetMatrix4());
 }
 
-void VEngine::TransformComponent::Deserialize(const rapidjson::Value& value)
+void TransformComponent::Deserialize(const rapidjson::Value& value)
 {
 	SaveUtil::ReadVector3("Position", position, value);
 	SaveUtil::ReadQuaternion("Rotation", rotation, value);
 	SaveUtil::ReadVector3("Scale", scale, value);
 }
 
-Transform VEngine::TransformComponent::GetWorldTransform() const
+Transform TransformComponent::GetWorldTransform() const
 {
 	Transform worldTransform = *this;
 	const GameObject* parent = GetOwner().GetParent();
@@ -31,7 +32,7 @@ Transform VEngine::TransformComponent::GetWorldTransform() const
 		while (parent != nullptr)
 		{
 			const TransformComponent* transformComponent = parent->GetComponent<TransformComponent>();
-			ASSERT(transformComponent != nullptr, "TransformComponent: parent doesnt have a transform");
+			ASSERT(transformComponent != nullptr, "TransformComponent: Parent doesn't have a transform component!");
 			matWorld = matWorld * transformComponent->GetMatrix4();
 			parent = parent->GetParent();
 		}

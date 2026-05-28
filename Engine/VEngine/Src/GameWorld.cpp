@@ -1,9 +1,11 @@
 #include "Precompiled.h"
 #include "GameWorld.h"
 #include "GameObjectFactory.h"
+
 #include "CameraService.h"
 #include "RenderService.h"
 #include "PhysicsService.h"
+#include "UIRenderService.h"
 
 using namespace VEngine;
 
@@ -12,7 +14,7 @@ namespace
     CustomService TryAddService;
 }
 
-void VEngine::GameWorld::SetCustomService(CustomService customService)
+void GameWorld::SetCustomService(CustomService customService)
 {
     TryAddService = customService;
 }
@@ -137,11 +139,11 @@ void GameWorld::DestroyGameObject(const GameObjectHandle& handle)
     mToBeDestroyed.push_back(handle.mIndex);
 }
 
-void VEngine::GameWorld::LoadLevel(const std::filesystem::path& levelFile)
+void GameWorld::LoadLevel(const std::filesystem::path& levelFile)
 {
     FILE* file = nullptr;
     auto err = fopen_s(&file, levelFile.u8string().c_str(), "r");
-    ASSERT(err = 0 && file != nullptr, "GameWorld: Failed to open %s!", levelFile.u8string().c_str());
+    ASSERT(err == 0 && file != nullptr, "GameWorld: Failed to open %s!", levelFile.u8string().c_str());
 
     char readBuffer[65536];
     rapidjson::FileReadStream readStream(file, readBuffer, sizeof(readBuffer));
@@ -167,20 +169,25 @@ void VEngine::GameWorld::LoadLevel(const std::filesystem::path& levelFile)
         {
             newService = AddService<PhysicsService>();
         }
+        else if (serviceName == "UIRenderService")
+        {
+            newService = AddService<UIRenderService>();
+        }
         else
         {
+            // Check if its a custom service
             newService = TryAddService(serviceName, *this);
         }
 
-        ASSERT(newService != nullptr, "GameWorld: Failed to add service %s", serviceName.c_str());
+        ASSERT(newService != nullptr, "GameWorld: Failed to add service %s!", serviceName.c_str());
         newService->Deserialize(service.value);
     }
 
     uint32_t capacity = static_cast<uint32_t>(doc["Capacity"].GetInt());
     Initialize(capacity);
 
-    auto gameObject = doc["GameObject"].GetObj();
-    for (auto& gameObject : gameObject)
+    auto gameObjects = doc["GameObjects"].GetObj();
+    for (auto& gameObject : gameObjects)
     {
         std::string name = gameObject.name.GetString();
         std::string templateFile = gameObject.value["Template"].GetString();

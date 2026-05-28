@@ -1,14 +1,14 @@
 #include "Precompiled.h"
 #include "UIButtonComponent.h"
 #include "GameWorld.h"
-#include"UIRenderService.h"
+#include "UIRenderService.h"
 #include "UISpriteComponent.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 
-void VEngine::UIButtonComponent::Initialize()
+void UIButtonComponent::Initialize()
 {
 	for (ButtonStateEntry& buttonState : mButtonStates)
 	{
@@ -18,37 +18,50 @@ void VEngine::UIButtonComponent::Initialize()
 		}
 	}
 
-	UIRenderService* uiRenderService = GetOwner().GetWorld.GetService<UIRenderService>();
+	UIRenderService* uiRenderService = GetOwner().GetWorld().GetService<UIRenderService>();
 	uiRenderService->Register(this);
 }
 
-void VEngine::UIButtonComponent::Terminate()
+void UIButtonComponent::Terminate()
 {
-	UIRenderService* uiRenderService = GetOwner().GetWorld.GetService<UIRenderService>();
+	UIRenderService* uiRenderService = GetOwner().GetWorld().GetService<UIRenderService>();
 	uiRenderService->Unregister(this);
+
+	for (ButtonStateEntry& buttonState : mButtonStates)
+	{
+		buttonState.sprite.Terminate();
+	}
 }
 
-void VEngine::UIButtonComponent::Update(float deltaTime)
+void UIButtonComponent::Update(float deltaTime)
 {
-	if (mCurrentState == ButtonState::Default)
+	if (mCurrentState == ButtonState::Disabled)
 	{
 		return;
 	}
+
 	mCurrentState = ButtonState::Default;
 	InputSystem* input = InputSystem::Get();
 	const int mouseX = input->GetMouseScreenX();
 	const int mouseY = input->GetMouseScreenY();
-	if (mButtonState[0].sprite.IsInSprite(mouseX, mouseY))
+	if (mButtonStates[0].sprite.IsInSprite(mouseX, mouseY))
 	{
-		mCurrentState = ButtonState::Click;
+		mCurrentState = ButtonState::Hover;
+		if (input->IsMouseDown(MouseButton::LBUTTON))
+		{
+			mCurrentState = ButtonState::Click;
+		}
+		if (input->IsMousePressed(MouseButton::LBUTTON))
+		{
+			OnClick();
+		}
 	}
-	if()
 }
 
-void VEngine::UIButtonComponent::Render()
+void UIButtonComponent::Render()
 {
 	uint32_t buttonStateIndex = static_cast<uint32_t>(mCurrentState);
-	if (mButtonState[buttonStateIndex].texture.empty())
+	if (mButtonStates[buttonStateIndex].texture.empty())
 	{
 		buttonStateIndex = 0;
 	}
@@ -56,22 +69,33 @@ void VEngine::UIButtonComponent::Render()
 	GameObject* parent = GetOwner().GetParent();
 	while (parent != nullptr)
 	{
-		UISpriteComponent* spriteComponent = parent->GetComponent<UIButtonComponent>();
+		UISpriteComponent* spriteComponent = parent->GetComponent<UISpriteComponent>();
 		if (spriteComponent != nullptr)
 		{
 			worldPosition += spriteComponent->GetPosition();
 		}
+		else
+		{
+			UIButtonComponent* buttonComponent = parent->GetComponent<UIButtonComponent>();
+			if (buttonComponent != nullptr)
+			{
+				worldPosition += buttonComponent->GetPosition();
+			}
+		}
+		parent = parent->GetParent();
 	}
+	mButtonStates[buttonStateIndex].sprite.SetPosition({ worldPosition.x, worldPosition.y });
+	UISpriteRenderer::Get()->Render(mButtonStates[buttonStateIndex].sprite);
 }
 
-void VEngine::UIButtonComponent::Deserialize(const rapidjson::Value& value)
+void UIButtonComponent::Deserialize(const rapidjson::Value& value)
 {
 	const uint32_t buttonStateCount = static_cast<uint32_t>(ButtonState::Count);
 	if (value.HasMember("Position"))
 	{
 		auto pos = value["Position"].GetArray();
 		mPosition.x = pos[0].GetFloat();
-		mPosition.y = pos[0].GetFloat();
+		mPosition.y = pos[1].GetFloat();
 	}
 	if (value.HasMember("Rotation"))
 	{
@@ -80,23 +104,98 @@ void VEngine::UIButtonComponent::Deserialize(const rapidjson::Value& value)
 		{
 			buttonState.sprite.SetRotation(rotation);
 		}
-		if (value.HasMember("Pivot"))
+	}
+	if (value.HasMember("Pivot"))
+	{
+		Pivot buttonPivot = Pivot::TopLeft;
+		std::string pivot = value["Pivot"].GetString();
+		if (pivot == "TopLeft") { buttonPivot = Pivot::TopLeft; }
+		else if (pivot == "Top") { buttonPivot = Pivot::Top; }
+		else if (pivot == "TopRight") { buttonPivot = Pivot::TopRight; }
+		else if (pivot == "CenterLeft") { buttonPivot = Pivot::Left; }
+		else if (pivot == "Center") { buttonPivot = Pivot::Centre; }
+		else if (pivot == "CenterRight") { buttonPivot = Pivot::Right; }
+		else if (pivot == "BottomLeft") { buttonPivot = Pivot::BottomLeft; }
+		else if (pivot == "Bottom") { buttonPivot = Pivot::Bottom; }
+		else if (pivot == "BottomRight") { buttonPivot = Pivot::BottomRight; }
+		else { ASSERT(false, "UISpriteComponent: invalid pivot %s", pivot.c_str()); }
+		for (ButtonStateEntry& buttonState : mButtonStates)
 		{
-			Pivot buttonPivot = Pivot::TopLeft;
+			buttonState.sprite.SetPivot(buttonPivot);
+		}
+	}
 
+	for (uint32_t i = 0; i < buttonStateCount; ++i)
+	{
+		std::string buttonStateStr = "";
+		ButtonState state = static_cast<ButtonState>(i);
+		switch (state)
+		{
+		case ButtonState::Default:	buttonStateStr = "Default"; break;
+		case ButtonState::Hover:	buttonStateStr = "Hover"; break;
+		case ButtonState::Click:	buttonStateStr = "Click"; break;
+		case ButtonState::Disabled: buttonStateStr = "Disabled"; break;
+		default:
+			break;
+		}
+		if (!value.HasMember(buttonStateStr.c_str()))
+		{
+			continue;
+		}
+		auto buttonStateObj = value[buttonStateStr.c_str()].GetObj();
+		if (buttonStateObj.HasMember("Texture"))
+		{
+			mButtonStates[i].texture = buttonStateObj["Texture"].GetString();
+		}
+		if (buttonStateObj.HasMember("Scale"))
+		{
+			auto scale = buttonStateObj["Scale"].GetArray();
+			const float x = scale[0].GetFloat();
+			const float y = scale[1].GetFloat();
+			mButtonStates[i].sprite.SetScale({ x, y });
+		}
+		if (buttonStateObj.HasMember("Color"))
+		{
+			auto color = buttonStateObj["Color"].GetArray();
+			const float r = color[0].GetFloat();
+			const float g = color[1].GetFloat();
+			const float b = color[2].GetFloat();
+			const float a = color[3].GetFloat();
+			mButtonStates[i].sprite.SetColor({ r, g, b, a });
+		}
+		if (buttonStateObj.HasMember("Flip"))
+		{
+			std::string flip = value["Flip"].GetString();
+			if (flip == "None") { mButtonStates[i].sprite.SetFlip(Flip::None); }
+			else if (flip == "Horizontal") { mButtonStates[i].sprite.SetFlip(Flip::Horizontal); }
+			else if (flip == "Vertical") { mButtonStates[i].sprite.SetFlip(Flip::Vertical); }
+			else if (flip == "Both") { mButtonStates[i].sprite.SetFlip(Flip::Both); }
+			else { ASSERT(false, "UISpriteComponent: invalid flip %s", flip.c_str()); }
 		}
 	}
 }
 
-Math::Vector2 VEngine::UIButtonComponent::GetPosition(bool includeOrigin)
+Math::Vector2 UIButtonComponent::GetPosition(bool includeOrigin)
 {
-	return Math::Vector2();
+	float x = 0.0f;
+	float y = 0.0f;
+	if (includeOrigin)
+	{
+		mButtonStates[0].sprite.GetOrigin(x, y);
+	}
+	return { mPosition.x - x, mPosition.y - y };
 }
 
-void VEngine::UIButtonComponent::SetCallback(ButtonCallback cb)
+void UIButtonComponent::SetCallback(ButtonCallback cb)
 {
+	mCallback = cb;
 }
 
-void VEngine::UIButtonComponent::OnClick()
+void UIButtonComponent::OnClick()
 {
+	LOG("UI Button was CLICKED!");
+	if (mCallback != nullptr)
+	{
+		mCallback();
+	}
 }

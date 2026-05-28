@@ -91,47 +91,45 @@ const GameWorld& GameObject::GetWorld() const
     return *mWorld;
 }
 
-void VEngine::GameObject::AddChild(GameObject* child)
+void GameObject::AddChild(GameObject* child)
 {
     mChildren.push_back(child);
 }
 
-uint32_t VEngine::GameObject::GetChildCount() const
+uint32_t GameObject::GetChildCount() const
 {
     return mChildren.size();
 }
 
-GameObject* VEngine::GameObject::GetChild(uint32_t index)
+GameObject* GameObject::GetChild(uint32_t index)
 {
     if (index < GetChildCount())
     {
         return mChildren[index];
     }
-
     return nullptr;
 }
 
-const GameObject* VEngine::GameObject::GetChild(uint32_t index) const
+const GameObject* GameObject::GetChild(uint32_t index) const
 {
     if (index < GetChildCount())
     {
         return mChildren[index];
     }
-
     return nullptr;
 }
 
-void VEngine::GameObject::SetParent(GameObject* parent)
+void GameObject::SetParent(GameObject* parent)
 {
     mParent = parent;
 }
 
-GameObject* VEngine::GameObject::GetParent()
+GameObject* GameObject::GetParent()
 {
-    return parent;
+    return mParent;
 }
 
-const GameObject* VEngine::GameObject::GetParent() const
+const GameObject* GameObject::GetParent() const
 {
     return mParent;
 }

@@ -7,14 +7,15 @@ using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Physics;
 
+// "Hey IExeEngine, I made something custom, so you need to acknowledge it..."
 Service* MakeCustomService(const std::string& serviceName, GameWorld& gameWorld)
 {
 	if (serviceName == "CustomDebugDrawService")
 	{
 		return gameWorld.AddService<CustomDebugDrawService>();
 	}
-	//add anoither
-	//add next...
+	// Add another service
+	// Add next...
 	return nullptr;
 }
 
@@ -26,6 +27,9 @@ Component* MakeCustomComponent(const std::string& componentName, GameObject& gam
 	}
 	return nullptr;
 }
+// Pass the input to the engine -> Engine tries to find it in the engine
+// If it cant find it -> Go back to the gameState -> Try to find it...
+// Ooh found it! -> Gets added.
 
 Component* GetCustomComponent(const std::string& componentName, GameObject& gameObject)
 {
@@ -36,18 +40,18 @@ Component* GetCustomComponent(const std::string& componentName, GameObject& game
 	return nullptr;
 }
 
+
 void GameState::Initialize()
 {
 	mLevelFile = L"../../Assets/Templates/Levels/level.json";
-	
-	//Set a callback to try make a custom service(any service that is NOT part of the engine and unique to the project)
+
+	// Set a callback to try make a custom service (any service that is NOT part of the engine and unique to the project)
 	GameWorld::SetCustomService(MakeCustomService);
-	//Set callbacks to try make/get a custom component (any component that is NOT part of the engine)
+	// Sets callbacks to try make/ get a custom component (any component that is NOT part of the engine)
 	GameObjectFactory::SetCustomMake(MakeCustomComponent);
 	GameObjectFactory::SetCustomGet(GetCustomComponent);
 
 	mGameWorld.LoadLevel(mLevelFile);
-
 }
 
 void GameState::Terminate()
@@ -69,10 +73,12 @@ void GameState::DebugUI()
 {
 	ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 	mGameWorld.DebugUI();
+
 	if (ImGui::Button("ReloadLevel"))
 	{
 		mGameWorld.Terminate();
 		mGameWorld.LoadLevel(mLevelFile);
 	}
+
 	ImGui::End();
 }

@@ -60,3 +60,13 @@ void* Texture::GetRawData() const
 {
 	return mShaderResourceView;
 }
+
+uint32_t Texture::GetWidth() const
+{
+	return mWidth;
+}
+
+uint32_t Texture::GetHeight() const
+{
+	return mHeight;
+}
