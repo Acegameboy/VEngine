@@ -4,7 +4,7 @@
 
 namespace VEngine
 {
-	class SoundEffectComponent : public Component
+	class SoundEventComponent : public Component
 	{
 	public:
 		SET_TYPE_ID(ComponentId::SoundEffect);
@@ -15,11 +15,12 @@ namespace VEngine
 		void Deserialize(const rapidjson::Value& value) override;
 
 		void Play();
+
 		void Stop();
+
 	private:
 		std::string mFileName;
 		bool mLooping = false;
-
+		Audio::SoundId mSoundId;
 	};
-
 }

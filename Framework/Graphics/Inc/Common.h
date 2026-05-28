@@ -6,6 +6,13 @@
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 
+#include <DirectXTK/Inc/CommonStates.h>
+#include <DirectXTK/Inc/SpriteBatch.h>
+
+// Fonts
+#include <FW1FontWrapper/Inc/FW1FontWrapper.h>
+
+
 #include <../External/ImGui/Inc/imgui.h>
 
 #pragma comment(lib, "d3d11.lib")

@@ -159,6 +159,7 @@
     <ClInclude Include="Inc\SoundEventComponent.h" />
     <ClInclude Include="Inc\TransformComponent.h" />
     <ClInclude Include="Inc\TypeId.h" />
+    <ClInclude Include="Inc\UIButtonComponent.h" />
     <ClInclude Include="Inc\VEngine.h" />
     <ClInclude Include="Src\Precompiled.h" />
   </ItemGroup>
@@ -184,6 +185,7 @@
     <ClCompile Include="Src\SoundBankComponent.cpp" />
     <ClCompile Include="Src\SoundEventComponent.cpp" />
     <ClCompile Include="Src\TransformComponent.cpp" />
+    <ClCompile Include="Src\UIButtonComponent.cpp" />
     <ClCompile Include="Src\VEngine.cpp" />
   </ItemGroup>
   <ItemGroup>

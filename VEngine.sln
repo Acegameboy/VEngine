@@ -115,11 +115,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Objects", "Objects", "{C6853961-8312-45E5-931C-141A311EC906}"
 	ProjectSection(SolutionItems) = preProject
+		Assets\Templates\Objects\compound_mesh.json = Assets\Templates\Objects\compound_mesh.json
 		Assets\Templates\Objects\custom_obj.json = Assets\Templates\Objects\custom_obj.json
 		Assets\Templates\Objects\fps_camera.json = Assets\Templates\Objects\fps_camera.json
 		Assets\Templates\Objects\ground.json = Assets\Templates\Objects\ground.json
 		Assets\Templates\Objects\mesh_obj.json = Assets\Templates\Objects\mesh_obj.json
 		Assets\Templates\Objects\model_obj.json = Assets\Templates\Objects\model_obj.json
+		Assets\Templates\Objects\simple_mesh.json = Assets\Templates\Objects\simple_mesh.json
 		Assets\Templates\Objects\transform_obj.json = Assets\Templates\Objects\transform_obj.json
 	EndProjectSection
 EndProject
@@ -128,6 +130,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Levels", "Levels", "{817AAC0C-024B-4EB5-8B12-F9951F6FB3B2}"
 	ProjectSection(SolutionItems) = preProject
 		Assets\Templates\Levels\level.json = Assets\Templates\Levels\level.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{BA06340E-7084-4448-88C7-69C942DEF368}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\Templates\UI\hud_screen.json = Assets\Templates\UI\hud_screen.json
+		Assets\Templates\UI\ui_sprite.json = Assets\Templates\UI\ui_sprite.json
 	EndProjectSection
 EndProject
 Global
@@ -489,6 +497,7 @@ Global
 		{C6853961-8312-45E5-931C-141A311EC906} = {3ADB7033-8012-4E70-9C1C-BC2DF96A1DED}
 		{911D16A7-6EAB-49C1-8647-4F514F5D126A} = {9D4726DA-9407-4F29-AEED-503BEBFDBE29}
 		{817AAC0C-024B-4EB5-8B12-F9951F6FB3B2} = {3ADB7033-8012-4E70-9C1C-BC2DF96A1DED}
+		{BA06340E-7084-4448-88C7-69C942DEF368} = {3ADB7033-8012-4E70-9C1C-BC2DF96A1DED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {151E541E-A049-4143-97F5-B688C5336070}

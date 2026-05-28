@@ -99,6 +99,9 @@
     <ClInclude Include="Inc\SoundBankComponent.h">
       <Filter>Inc\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\UIButtonComponent.h">
+      <Filter>Inc\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Precompiled.cpp">
@@ -159,6 +162,9 @@
       <Filter>Src\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\SoundBankComponent.cpp">
+      <Filter>Src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UIButtonComponent.cpp">
       <Filter>Src\Components</Filter>
     </ClCompile>
   </ItemGroup>

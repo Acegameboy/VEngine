@@ -25,6 +25,7 @@
 #include "RigidBodyComponent.h"
 #include "SoundEventComponent.h"
 #include "SoundBankComponent.h"
+#include "UIButtonComponent.h"
 
 
 //Service

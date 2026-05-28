@@ -13,5 +13,7 @@ namespace VEngine
 
 		void Deserialize(const rapidjson::Value& value) override;
 		void Serialize();
+
+		Transform GetWorldTransform() const;
 	};
 }

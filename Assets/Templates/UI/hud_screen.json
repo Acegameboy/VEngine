@@ -1,0 +1,22 @@
+{
+  "Components": {
+    "UISpriteComponent": {
+      "Texture": "Images/cyan.jpg",
+      "Position": [ 40.0, 40.0 ],
+      "Pivot": "TopLeft",
+      "Rect": [0, 0, 200, 400]
+    }
+  },
+  "Children": {
+    "Icon0": {
+      "Template": "../../Assets/Templates/UI/ui_sprite.json",
+      "Components": {
+        "UISpriteComponent": {
+          "Texture": "Images/green.jpg",
+          "Position": [ 20.0, 20.0 ]
+        }
+      }
+    },
+    "Icon1"
+  }
+}

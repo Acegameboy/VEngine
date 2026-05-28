@@ -2,6 +2,7 @@
 #include "GameObjectFactory.h"
 #include "Component.h"
 #include "GameObject.h"
+#include "GameWorld.h"
 // components includes we've made 
 #include "TransformComponent.h"
 #include "CameraComponent.h"
@@ -10,6 +11,9 @@
 #include "ModelComponent.h"
 #include "AnimatorComponent.h"
 #include "RigidBodyComponent.h"
+#include "SoundBankComponent.h"
+#include "SoundEventComponent.h"
+#include "UIButtonComponent.h"
 
 using namespace VEngine;
 
@@ -108,6 +112,10 @@ Component* GetComponent(const std::string& componentName, GameObject& gameObject
     {
         newComponent = gameObject.GetComponent<SoundBankComponent>();
     }
+    else if (componentName == "UIButtonComponent")
+    {
+        newComponent = gameObject.GetComponent<UIButtonComponent>();
+    }
     else
     {
         newComponent = TryGetComponent(componentName, gameObject);
@@ -150,6 +158,20 @@ void GameObjectFactory::Make(const std::filesystem::path& templatePath, GameObje
         {
             // Apply the jason value data
             newComponent->Deserialize(component.value);
+        }
+    }
+    if (doc.HasMember("Children"))
+    {
+        auto children = doc["Children"].GetObj();
+        for (auto& child : children)
+        {
+            std::string name = child.name.GetString();
+            std::filesystem::path childTemplate = child.value["Template"].GetString();
+            GameObject* childGO = gameWorld.CreateGameObject(name, childTemplate);
+
+            OverrideDeserialize(child.value, *childGO);
+            gameObject.AddChild(childGO);
+            childGO->SetParent(&gameObject);
         }
     }
 }

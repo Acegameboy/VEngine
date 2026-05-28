@@ -15,10 +15,20 @@ void GameObject::Initialize()
 
     mId = ++gUniqueId;
     mInitialized = true;
+
+    for (GameObject* child : mChildren)
+    {
+        child->Initialize();
+    }
 }
 
 void GameObject::Terminate()
 {
+    for (GameObject* child : mChildren)
+    {
+        child->Terminate();
+    }
+
     for (auto& component : mComponents)
     {
         component->Terminate();
@@ -79,4 +89,49 @@ GameWorld& GameObject::GetWorld()
 const GameWorld& GameObject::GetWorld() const
 {
     return *mWorld;
+}
+
+void VEngine::GameObject::AddChild(GameObject* child)
+{
+    mChildren.push_back(child);
+}
+
+uint32_t VEngine::GameObject::GetChildCount() const
+{
+    return mChildren.size();
+}
+
+GameObject* VEngine::GameObject::GetChild(uint32_t index)
+{
+    if (index < GetChildCount())
+    {
+        return mChildren[index];
+    }
+
+    return nullptr;
+}
+
+const GameObject* VEngine::GameObject::GetChild(uint32_t index) const
+{
+    if (index < GetChildCount())
+    {
+        return mChildren[index];
+    }
+
+    return nullptr;
+}
+
+void VEngine::GameObject::SetParent(GameObject* parent)
+{
+    mParent = parent;
+}
+
+GameObject* VEngine::GameObject::GetParent()
+{
+    return parent;
+}
+
+const GameObject* VEngine::GameObject::GetParent() const
+{
+    return mParent;
 }
