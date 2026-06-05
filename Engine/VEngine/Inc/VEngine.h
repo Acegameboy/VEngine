@@ -29,6 +29,7 @@
 #include "UITextComponent.h"
 #include "UISpriteComponent.h"
 #include "UIButtonComponent.h"
+#include "TPSCameraComponent.h"
 
 
 //Service

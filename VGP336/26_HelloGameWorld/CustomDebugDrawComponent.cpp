@@ -8,12 +8,20 @@ using namespace VEngine::Math;
 void CustomDebugDrawComponent::Initialize()
 {
 	mTransformComponent = GetOwner().GetComponent<TransformComponent>();
+	CustomDebugDrawService* debugDrawService = GetOwner().GetWorld().GetService<CustomDebugDrawService>();
+	if (debugDrawService != nullptr)
+	{
+		debugDrawService->Register(this);
+	}
 }
 
 void CustomDebugDrawComponent::Terminate()
 {
-	mTransformComponent = GetOwner().GetComponent<TransformComponent>();
-	CustomDebugDrawService* debugDrawService = GetOwner.GetWorld()
+	CustomDebugDrawService* debugDrawService = GetOwner().GetWorld().GetService<CustomDebugDrawService>();
+	if (debugDrawService != nullptr)
+	{
+		debugDrawService->Unregister(this);
+	}
 }
 
 void CustomDebugDrawComponent::DebugUI()

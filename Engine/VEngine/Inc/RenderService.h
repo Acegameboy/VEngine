@@ -24,6 +24,8 @@ namespace VEngine
         void Register(const RenderObjectComponent* renderObjectComponent);
         void Unregister(const RenderObjectComponent* renderObjectComponent);
 
+        void Serialize(rapidjson::Document& doc, rapidjson::Value& value);
+
     private:
         const CameraService* mCameraService = nullptr;
         Graphics::DirectionalLight mDirectionalLight;

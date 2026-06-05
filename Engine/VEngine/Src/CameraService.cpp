@@ -52,3 +52,8 @@ void CameraService::Unregister(const CameraComponent* cameraComponent)
         }
     }
 }
+
+void VEngine::CameraService::Serialize(rapidjson::Document& doc, rapidjson::Value& value)
+{
+
+}

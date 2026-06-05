@@ -138,3 +138,13 @@ void RenderService::Unregister(const RenderObjectComponent* renderObjectComponen
         mRenderEntries.erase(iter);
     }
 }
+
+void VEngine::RenderService::Serialize(rapidjson::Document& doc, rapidjson::Value& value)
+{
+    rapidjson::Value serviceValue(rapidjson::kObjectType);
+    SaveUtil::WriteVector3("Direction", mDirectionalLight.direction, doc, serviceValue);
+    SaveUtil::WriteColor("Diffuse", mDirectionalLight.diffuse, doc, serviceValue);
+    SaveUtil::WriteColor("Ambient", mDirectionalLight.ambient, doc, serviceValue);
+    SaveUtil::WriteColor("Specular", mDirectionalLight.specular, doc, serviceValue);
+
+}

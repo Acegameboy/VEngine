@@ -20,6 +20,7 @@ namespace VEngine
         GameObject* CreateGameObject(std::string name, const std::filesystem::path& templatePath = "");
         void DestroyGameObject(const GameObjectHandle& handle);
 
+        void SaveLevel(const std::filesystem::path& levelFile);
         void LoadLevel(const std::filesystem::path& levelFile);
 
         template<class ServiceType>
@@ -69,6 +70,7 @@ namespace VEngine
         std::vector<uint32_t> mFreeSlots;
         std::vector<uint32_t> mToBeDestroyed;
         bool mInitialized = false;
+        std::filesystem::path mLevelFiles;
 
         using Services = std::vector<std::unique_ptr<Service>>;
         Services mServices;

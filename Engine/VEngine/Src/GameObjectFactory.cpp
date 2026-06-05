@@ -16,6 +16,7 @@
 #include "UITextComponent.h"
 #include "UISpriteComponent.h"
 #include "UIButtonComponent.h"
+#include "TPSCameraComponent.h"
 
 using namespace VEngine;
 
@@ -76,6 +77,10 @@ namespace
         else if (componentName == "UIButtonComponent")
         {
             newComponent = gameObject.AddComponent<UIButtonComponent>();
+        }
+        else if (componentName == "TPSCameraComponent")
+        {
+            newComponent = gameObject.AddComponent<TPSCameraComponent>();
         }
         else
         {
