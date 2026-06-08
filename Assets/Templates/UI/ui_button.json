@@ -1,22 +1,23 @@
 {
-  "Components": {
-    "UISpriteComponent": {
-      "Texture": "Images/cyan.jpg",
-      "Position": [ 40.0, 40.0 ],
-      "Pivot": "TopLeft",
-      "Rect": [0, 0, 200, 400]
-    }
-  },
-  "Children": {
-    "Icon0": {
-      "Template": "../../Assets/Templates/UI/ui_sprite.json",
-      "Components": {
-        "UISpriteComponent": {
-          "Texture": "Images/green.jpg",
-          "Position": [ 20.0, 20.0 ]
+    "Components": {
+        "UIButtonComponent": {
+            "Position": [ 0.0, 0.0 ],
+            "Pivot": "Centre",
+            "Default": {
+                "Texture": "Images/blue.jpg"
+            },
+            "Hover": {
+                "Texture": "Images/cyan.jpg",
+                "Scale": [ 1.25, 1.25 ]
+            },
+            "Click": {
+                "Texture": "Images/white.jpg",
+                "Scale": [ 0.8, 0.8 ]
+            },
+            "Disabled": {
+                "Texture": "Images/black.jpg",
+                "Color": [ 0.3, 0.3, 0.3, 0.5 ]
+            }
         }
-      }
-    },
-    "Icon1"
-  }
+    }
 }

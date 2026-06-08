@@ -46,15 +46,22 @@
                     }
                 }
             },
-            "RightArm": {
+            "Left": {
+                "Template": "../../Assets/Templates/Objects/simple_mesh.json",
+                "Components": {
+                    "TransformComponent": {
+                        "Position": [ -1.0, 1.0, 0.0 ]
+                    }
+                }
+            },
+            "Right": {
                 "Template": "../../Assets/Templates/Objects/simple_mesh.json",
                 "Components": {
                     "TransformComponent": {
                         "Position": [ 1.0, 1.0, 0.0 ]
                     }
                 }
-            },
-            "LeftArm":
+            }
         }
     }
 }

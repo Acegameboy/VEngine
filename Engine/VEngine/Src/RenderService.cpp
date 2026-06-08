@@ -84,7 +84,7 @@ void RenderService::DebugUI()
 
 void RenderService::Deserialize(const rapidjson::Value& value)
 {
-    SaveUtil::ReadVector3("Direction", mDirectionalLight.direction);
+    SaveUtil::ReadVector3("Direction", mDirectionalLight.direction, value);
     mDirectionalLight.direction = Math::Normalize(mDirectionalLight.direction);
     SaveUtil::ReadColor("Ambient", mDirectionalLight.ambient, value);
     SaveUtil::ReadColor("Diffuse", mDirectionalLight.diffuse, value);

@@ -62,7 +62,7 @@ void GameWorld::Terminate()
 
 void GameWorld::Update(float deltaTime)
 {
-    //game object updates
+    // Game Objects Update
     for (Slot& slot : mGameObjectSlots)
     {
         if (slot.gameObject != nullptr)
@@ -70,12 +70,12 @@ void GameWorld::Update(float deltaTime)
             slot.gameObject->Update(deltaTime);
         }
     }
-    //services update (eg: physics)
+    // Services Update (i.e. Physics)
     for (auto& service : mServices)
     {
         service->Update(deltaTime);
     }
-    //game Objcets last update (react to physics update before rendering)
+    // Game Objects Late Update (React to the physiscs update before rendering)
     for (Slot& slot : mGameObjectSlots)
     {
         if (slot.gameObject != nullptr)
@@ -147,13 +147,6 @@ void GameWorld::DestroyGameObject(const GameObjectHandle& handle)
     Slot& slot = mGameObjectSlots[handle.mIndex]; // we already know where its located, despite having made and deleted ~100000s of game objects
     ++slot.generation;
     mToBeDestroyed.push_back(handle.mIndex);
-}
-
-void GameWorld::SaveLevel(const std::filesystem::path& levelFile)
-{
-    FILE* file = nullptr;
-    auto err = fopen_s(&file, levelFile.u8string().c_str(), "w");
-    ASSERT(err == 0 && != nullptr, "");
 }
 
 void GameWorld::LoadLevel(const std::filesystem::path& levelFile)
