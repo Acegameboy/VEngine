@@ -2,7 +2,7 @@
     "Components": {
         "UIButtonComponent": {
             "Position": [ 0.0, 0.0 ],
-            "Pivot": "Centre",
+            "Pivot": "Center",
             "Default": {
                 "Texture": "Images/blue.jpg"
             },

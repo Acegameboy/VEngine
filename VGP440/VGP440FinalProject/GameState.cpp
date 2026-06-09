@@ -21,10 +21,6 @@ namespace
     }
 }
 
-// ============================================================================
-// ThreadPool
-// ============================================================================
-
 GameState::ThreadPool::~ThreadPool()
 {
     Stop();
@@ -125,10 +121,6 @@ void GameState::ThreadPool::WorkerLoop()
         mWaitCondition.notify_one();
     }
 }
-
-// ============================================================================
-// GameState
-// ============================================================================
 
 void GameState::Initialize()
 {
@@ -341,14 +333,12 @@ void GameState::DebugUI()
     ImGui::Text("A / Left Arrow  = Move Left");
     ImGui::Text("D / Right Arrow = Move Right");
     ImGui::Text("R = Restart");
-    ImGui::Text("Space = Toggle Parallel Update");
 
     ImGui::Separator();
 
     ImGui::Text("Score: %d", mScore.load());
     ImGui::Text("Asteroid Count: %d", static_cast<int>(mAsteroids.size()));
     ImGui::Text("Worker Threads: %u", mThreadPool.GetThreadCount());
-    ImGui::Text("Update Mode: %s", mUseParallelUpdate ? "Parallel" : "Single Thread");
 
     if (mGameOver)
     {
@@ -366,7 +356,7 @@ void GameState::DebugUI()
 
     ImGui::Checkbox("Use Parallel Update", &mUseParallelUpdate);
 
-    if (ImGui::SliderInt("Asteroid Count", &mAsteroidCount, 100, 3000))
+    if (ImGui::SliderInt("Asteroid Count", &mAsteroidCount, 10, 10000))
     {
         ResetGame();
     }
@@ -381,15 +371,7 @@ void GameState::UpdateCamera(float deltaTime)
     const float moveSpeed = input->IsKeyDown(KeyCode::LSHIFT) ? 10.0f : 4.0f;
     const float turnSpeed = 0.5f;
 
-    if (input->IsKeyDown(KeyCode::W))
-    {
-        mCamera.Walk(moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::S))
-    {
-        mCamera.Walk(-moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::E))
+    if (input->IsKeyDown(KeyCode::E))
     {
         mCamera.Rise(moveSpeed * deltaTime);
     }

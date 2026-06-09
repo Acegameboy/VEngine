@@ -7,7 +7,7 @@ using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Physics;
 
-// "Hey IExeEngine, I made something custom, so you need to acknowledge it..."
+// "Hey VEngine, I made something custom, so you need to acknowledge it..."
 Service* MakeCustomService(const std::string& serviceName, GameWorld& gameWorld)
 {
 	if (serviceName == "CustomDebugDrawService")
