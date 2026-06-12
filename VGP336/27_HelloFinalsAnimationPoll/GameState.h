@@ -18,20 +18,12 @@ private:
 
 
 	VEngine::Graphics::Camera mCamera;
-	VEngine::Graphics::Camera mRenderTargetCamera;
 	VEngine::Graphics::DirectionalLight mDirectionalLight;
+	VEngine::Graphics::RenderObject mRenderObject;
+	VEngine::Graphics::StandardEffect mStandardEffect;
 	VEngine::Graphics::RenderGroup mCharacter01;
 	VEngine::Graphics::RenderGroup mCharacter02;
-	VEngine::Graphics::Animator mAnimator;
 
-	VEngine::Graphics::StandardEffect mStandardEffect;
-
-	VEngine::Graphics::RenderTarget mRenderTarget;
-
-	float mAnimationSpeed = 1.0f;
-	int mClipIndex = -1;
-
-	int mCurrentSelection = -1;
-
-	bool mDrawSkeleton = false;
+	VEngine::Graphics::Animation mAnimation;
+	float mAnimationTime = 0.0f;
 };

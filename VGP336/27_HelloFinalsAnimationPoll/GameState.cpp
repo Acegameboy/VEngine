@@ -15,34 +15,36 @@ void GameState::Initialize()
     mDirectionalLight.diffuse = { 0.8f, 0.8f, 0.8f, 1.0f };
     mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
 
-    ModelManager* mm = ModelManager::Get();
-    mCharacter01.Initialize("Character01/Character01.model");
-    mCharacter01.animator = &mAnimator;
-    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/SillyDancing.animset");
-    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/Dying.animset");
-    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/Jump.animset");
-    mm->AddAnimation(mCharacter01.modelId, L"../../Assets/Models/Character01/Falling.animset");
-
-    mAnimator.Initialize(mCharacter01.modelId);
-
-    mCharacter02.Initialize("Character02/Character02.model");
-    mCharacter02.animator = &mAnimator;
-
-    mAnimator.Initialize(mCharacter02.modelId);
-
+    Mesh mesh = MeshBuilder::CreateSphere(30, 30, 0.25f);
+    mRenderObject.meshBuffer.Initialize(mesh);
 
     TextureManager* tm = TextureManager::Get();
+    mRenderObject.diffuseMapId = tm->LoadTexture(L"earth.jpg");
 
     std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
     mStandardEffect.Initialize(shaderFile);
     mStandardEffect.SetCamera(mCamera);
     mStandardEffect.SetDirectionalLight(mDirectionalLight);
+
+    mAnimationTime = 0.0f;
+    mAnimation = AnimationBuilder()
+        .AddPositionKeys({ 0.0f, 0.0f, 0.0f }, 0.0f)
+        .AddPositionKeys({ 0.0f, 2.0f, 0.0f }, 3.0f)
+        .AddPositionKeys({ 0.0f, 0.0f, 0.0f }, 5.0f)
+        .AddRotationKeys(Math::Quaternion::Identity, 0.0f)
+        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 90.0f * Math::Constants::DegToRad), 2.0f)
+        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 180.0f * Math::Constants::DegToRad), 3.0f)
+        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 270.0f * Math::Constants::DegToRad), 4.0f)
+        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 359.0f * Math::Constants::DegToRad), 5.0f)
+        .AddScaleKeys(Math::Vector3::One, 0.0f)
+        .AddScaleKeys(Math::Vector3::One * 0.1f, 3.0f)
+        .AddScaleKeys(Math::Vector3::One, 5.0f)
+        .Build();
 }
 
 void GameState::Terminate()
 {
-    mCharacter02.Terminate();
-    mCharacter01.Terminate();
+    mRenderObject.Terminate();
     mStandardEffect.Terminate();
 }
 
@@ -50,30 +52,22 @@ void GameState::Update(float deltaTime)
 {
     UpdateCamera(deltaTime);
 
-    mAnimator.Update(deltaTime * mAnimationSpeed);
+    mAnimationTime += deltaTime;
+    while (mAnimationTime > mAnimation.GetDuration())
+    {
+        mAnimationTime -= mAnimation.GetDuration();
+    }
 }
 
 void GameState::Render()
 {
+    mRenderObject.transform = mAnimation.GetTransform(mAnimationTime);
     SimpleDraw::AddGroundPlane(20.0f, Colors::Wheat);
     SimpleDraw::Render(mCamera);
 
-
-    if (mDrawSkeleton)
-    {
-        AnimationUtil::BoneTransforms boneTransforms;
-        AnimationUtil::ComputeBoneTransforms(mCharacter01.modelId, boneTransforms, &mAnimator);
-        AnimationUtil::DrawSkeleton(mCharacter01.modelId, boneTransforms);
-        SimpleDraw::AddGroundPlane(20.0f, Colors::White);
-        SimpleDraw::Render(mCamera);
-    }
-    else
-    {
-        mStandardEffect.Begin();
-        mStandardEffect.Render(mCharacter01);
-        mStandardEffect.Render(mCharacter02);
-        mStandardEffect.End();
-    }
+    mStandardEffect.Begin();
+    mStandardEffect.Render(mRenderObject);
+    mStandardEffect.End();
 }
 
 void GameState::DebugUI()
@@ -90,31 +84,15 @@ void GameState::DebugUI()
         ImGui::ColorEdit4("Diffuse#Light", &mDirectionalLight.diffuse.r);
         ImGui::ColorEdit4("Specular#Light", &mDirectionalLight.specular.r);
     }
+
     if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        for (uint32_t i = 0; i < mCharacter01.renderObjects.size(); ++i)
-        {
-            Material& material = mCharacter01.renderObjects[i].material;
-            std::string renderObjectId = "RenderObject" + std::to_string(i);
-            ImGui::PushID(renderObjectId.c_str());
-            if(ImGui::CollapsingHeader(renderObjectId.c_str()))
-            {
-                ImGui::ColorEdit4("Emissive#Material", &material.emissive.r);
-                ImGui::ColorEdit4("Ambient#Material", &material.ambient.r);
-                ImGui::ColorEdit4("Diffuse#Material", &material.diffuse.r);
-                ImGui::ColorEdit4("Specular#Material", &material.specular.r);
-                ImGui::DragFloat("Shiness#Material", &material.shininess, 0.1f, 0.1f, 1000.0f);
-            }
-            ImGui::PopID();
-        }
-    }
-
-    ImGui::Checkbox("DrawSkeleton", &mDrawSkeleton);
-    ImGui::DragFloat("AnimationSpeed", &mAnimationSpeed, 0.1f, 0.0f, 10.0f);
-    int maxAnimations = mAnimator.GetAnimationCount();
-    if (ImGui::DragInt("AnimationIndex", &mClipIndex, 1, -1, maxAnimations - 1))
-    {
-        mAnimator.PlayAnimation(mClipIndex, true);
+        ImGui::ColorEdit4("Emissive#Material", &mRenderObject.material.emissive.r);
+        ImGui::ColorEdit4("Ambient#Material", &mRenderObject.material.ambient.r);
+        ImGui::ColorEdit4("Diffuse#Material", &mRenderObject.material.diffuse.r);
+        ImGui::ColorEdit4("Specular#Material", &mRenderObject.material.specular.r);
+        ImGui::DragFloat(
+            "Shininess#Material", &mRenderObject.material.shininess, 0.01f, 0.0f, 10000.0f);
     }
 
     mStandardEffect.DebugUI();
