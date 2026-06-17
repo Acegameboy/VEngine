@@ -5,28 +5,27 @@
 using namespace VEngine;
 using namespace VEngine::Graphics;
 
-void VEngine::Graphics::Animator::Initialize(ModelId id)
+void Animator::Initialize(ModelId id)
 {
-	//Store model Id
+	// Store model id
 	mModelId = id;
 	mIsLooping = false;
 	mAnimationTick = 0.0f;
-	//-1 means not animating
+	// -1 means not animating
 	mClipIndex = -1;
-
 }
 
-//Reset animation, play new one
-void VEngine::Graphics::Animator::PlayAnimation(int clipIndex, bool looping)
+// Reset animation, play new one
+void Animator::PlayAnimation(int clipIndex, bool looping)
 {
 	mClipIndex = clipIndex;
 	mIsLooping = looping;
 	mAnimationTick = 0.0f;
 }
 
-void VEngine::Graphics::Animator::Update(float deltaTime)
+void Animator::Update(float deltaTime)
 {
-	//Not playing so dont update
+	// Not paying animation, so don't update
 	if (mClipIndex < 0)
 	{
 		return;
@@ -44,12 +43,12 @@ void VEngine::Graphics::Animator::Update(float deltaTime)
 	}
 	else
 	{
-		//If not looping, clamp the end of duration
+		// If not looping clamp to end of duration
 		mAnimationTick = Math::Min(mAnimationTick, animClip.tickDuration);
 	}
 }
 
-bool VEngine::Graphics::Animator::IsFinished() const
+bool Animator::IsFinished() const
 {
 	if (mClipIndex < 0 || mIsLooping)
 	{
@@ -61,13 +60,13 @@ bool VEngine::Graphics::Animator::IsFinished() const
 	return mAnimationTick >= animClip.tickDuration;
 }
 
-size_t VEngine::Graphics::Animator::GetAnimationCount() const
+size_t Animator::GetAnimationCount() const
 {
 	const Model* model = ModelManager::Get()->GetModel(mModelId);
 	return model->animationClips.size();
 }
 
-bool VEngine::Graphics::Animator::GetToParentTransform(const Bone* bone, Math::Matrix4& transform) const
+bool Animator::GetToParentTransform(const Bone* bone, Math::Matrix4& transform) const
 {
 	if (mClipIndex < 0)
 	{

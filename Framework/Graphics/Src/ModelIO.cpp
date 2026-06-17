@@ -400,7 +400,7 @@ void VEngine::Graphics::ModelIO::LoadAnimation(std::filesystem::path filePath, M
         animClipData.name = std::move(animClipName);
 
         uint32_t boneAnimCount = 0;
-        fprintf_s(file, "BoneAnimCount: %d\n", &boneAnimCount);
+        fscanf_s(file, "BoneAnimCount: %d\n", &boneAnimCount);
         animClipData.boneAnimations.resize(boneAnimCount);
         for (uint32_t b = 0; b < boneAnimCount; ++b)
         {
