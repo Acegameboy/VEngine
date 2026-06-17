@@ -47,16 +47,16 @@
     dcl_texcoord1 v1  // vin<4,5,6>
     dcl_texcoord2 v2  // vin<7,8>
 
-#line 82 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 82 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 oPos.z, v0, c11  // ::VSEnvMapPixelLightingBn<15>
     dp4 oT1.x, v0, c3  // ::VSEnvMapPixelLightingBn<2>
     dp4 oT1.y, v0, c4  // ::VSEnvMapPixelLightingBn<3>
     dp4 oT1.z, v0, c5  // ::VSEnvMapPixelLightingBn<4>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Utilities.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Utilities.fxh"
     mad r0.xyz, v1, c13.x, c13.y  // ::BiasX2<0,1,2>
 
-#line 84 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 84 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r1.x, r0, c6
     dp3 r1.y, r0, c7
     dp3 r1.z, r0, c8
@@ -64,17 +64,17 @@
     rsq r0.x, r0.x
     mul oT2.xyz, r0.x, r1  // ::VSEnvMapPixelLightingBn<6,7,8>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c2
     max r0.x, r0.x, c13.z
     min oT1.w, r0.x, c13.w  // ::VSEnvMapPixelLightingBn<5>
 
-#line 82 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 82 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 r0.x, v0, c9  // ::vout<0>
     dp4 r0.y, v0, c10  // ::vout<1>
     dp4 r0.z, v0, c12  // ::vout<3>
 
-#line 254 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 254 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSEnvMapPixelLightingBn<13,14>
     mov oPos.w, r0.z  // ::VSEnvMapPixelLightingBn<16>
 
@@ -119,10 +119,10 @@ ret
 
 const BYTE EnvironmentMapEffect_VSEnvMapPixelLightingBn[] =
 {
-     68,  88,  66,  67, 142, 133, 
-    182, 224, 117, 170, 123,  35, 
-    135, 112,  87,  41,   7, 184, 
-    132, 173,   1,   0,   0,   0, 
+     68,  88,  66,  67, 232, 251, 
+    153, 204, 208,  24, 100, 250, 
+    214,  65, 243, 124,  11,  28, 
+     52, 179,   1,   0,   0,   0, 
      32,  11,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      68,   7,   0,   0,   8,  10, 
@@ -151,7 +151,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapPixelLightingBn[] =
       0,   0, 160,   4,   0,   0, 
     132,   2,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -165,7 +165,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapPixelLightingBn[] =
     116, 105, 110, 103,  46, 102, 
     120, 104,   0,  67,  58,  92, 
      85, 115, 101, 114, 115,  92, 
-     85, 115, 101, 114,  92,  68, 
+    117, 115, 101, 114,  92,  68, 
     111,  99, 117, 109, 101, 110, 
     116, 115,  92,  71, 105, 116, 
      72, 117,  98,  92,  86,  69, 
@@ -179,7 +179,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapPixelLightingBn[] =
     116, 105, 101, 115,  46, 102, 
     120, 104,   0,  67,  58,  92, 
      85, 115, 101, 114, 115,  92, 
-     85, 115, 101, 114,  92,  68, 
+    117, 115, 101, 114,  92,  68, 
     111,  99, 117, 109, 101, 110, 
     116, 115,  92,  71, 105, 116, 
      72, 117,  98,  92,  86,  69, 
@@ -192,7 +192,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapPixelLightingBn[] =
      92,  67, 111, 109, 109, 111, 
     110,  46, 102, 120, 104,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

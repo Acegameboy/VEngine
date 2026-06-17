@@ -43,18 +43,18 @@
     dcl_texcoord1 v1  // vin<4,5>
     dcl_texcoord2 v2  // vin<6,7,8,9>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 oPos.z, v0, c4  // ::VSBasicTxVcNoFog<8>
 
-#line 143 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 143 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mul oT0, v2, c1  // ::VSBasicTxVcNoFog<0,1,2,3>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c2  // ::vout<0>
     dp4 r0.y, v0, c3  // ::vout<1>
     dp4 r0.z, v0, c5  // ::vout<3>
 
-#line 135 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 135 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSBasicTxVcNoFog<6,7>
     mov oPos.w, r0.z  // ::VSBasicTxVcNoFog<9>
 
@@ -82,10 +82,10 @@ ret
 
 const BYTE BasicEffect_VSBasicTxVcNoFog[] =
 {
-     68,  88,  66,  67, 131,  31, 
-    228, 205, 141,  67, 212,  75, 
-    215,  15, 207, 120,  95,  33, 
-    174,  92,   1,   0,   0,   0, 
+     68,  88,  66,  67,  41, 110, 
+    177, 188, 249, 169,  99,  22, 
+    182, 194,  37, 204,  29, 255, 
+    147, 131,   1,   0,   0,   0, 
     120,   6,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     108,   4,   0,   0, 144,   5, 
@@ -112,7 +112,7 @@ const BYTE BasicEffect_VSBasicTxVcNoFog[] =
       0,   0, 224,   2,   0,   0, 
      48,   1,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -125,7 +125,7 @@ const BYTE BasicEffect_VSBasicTxVcNoFog[] =
     115,  92,  67, 111, 109, 109, 
     111, 110,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

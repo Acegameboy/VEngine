@@ -7,7 +7,7 @@ using namespace VEngine::Graphics;
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
 	AppConfig config;
-	config.appName = L"Hello Animation";
+	config.appName = L"Hello Animation Poll";
 
 	App& myApp = MainApp();
 	myApp.AddState<GameState>("GameState");

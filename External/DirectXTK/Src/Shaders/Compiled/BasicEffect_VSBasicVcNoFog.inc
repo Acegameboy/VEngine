@@ -40,18 +40,18 @@
     dcl_texcoord v0  // vin<0,1,2,3>
     dcl_texcoord1 v1  // vin<4,5,6,7>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 oPos.z, v0, c4  // ::VSBasicVcNoFog<6>
 
-#line 85 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 85 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mul oT0, v1, c1  // ::VSBasicVcNoFog<0,1,2,3>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c2  // ::vout<0>
     dp4 r0.y, v0, c3  // ::vout<1>
     dp4 r0.z, v0, c5  // ::vout<3>
 
-#line 78 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 78 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSBasicVcNoFog<4,5>
     mov oPos.w, r0.z  // ::VSBasicVcNoFog<7>
 
@@ -73,10 +73,10 @@ ret
 
 const BYTE BasicEffect_VSBasicVcNoFog[] =
 {
-     68,  88,  66,  67,  51, 125, 
-    105,   6,  25,  40, 119, 186, 
-    227, 112, 183, 250, 213, 170, 
-     14, 182,   1,   0,   0,   0, 
+     68,  88,  66,  67, 233, 121, 
+    144, 232, 188, 251, 175,  13, 
+      4, 176,  32, 179, 177, 167, 
+     69,  88,   1,   0,   0,   0, 
     156,   5,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     252,   3,   0,   0, 244,   4, 
@@ -103,7 +103,7 @@ const BYTE BasicEffect_VSBasicVcNoFog[] =
       0,   0, 136,   2,   0,   0, 
      32,   1,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -116,7 +116,7 @@ const BYTE BasicEffect_VSBasicVcNoFog[] =
     115,  92,  67, 111, 109, 109, 
     111, 110,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

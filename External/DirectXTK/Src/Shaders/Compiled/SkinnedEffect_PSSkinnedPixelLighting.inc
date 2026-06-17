@@ -44,20 +44,20 @@
     dcl t3  // pin<9,10,11,12>
     dcl_2d s0
 
-#line 361 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 361 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     texld r0, t0, s0
     add r1.xyz, -t1, c12
     dp3 r1.w, r1, r1
     rsq r1.w, r1.w
 
-#line 30 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 30 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mad r2.xyz, r1, r1.w, -c3
     nrm r3.xyz, r2  // ::halfVectors<0,1,2>
 
-#line 364 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 364 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     nrm r2.xyz, t2  // ::worldNormal<0,1,2>
 
-#line 34 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 34 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r3.x, r3, r2  // ::dotH<0>
 
 #line 30
@@ -99,20 +99,20 @@
     mad r1.xyz, r1.z, c11, r3
     mul r1.xyz, r1, c2  // ::result<3,4,5>
 
-#line 361 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 361 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     mul r0, r0, t3  // ::color<0,1,2,3>
 
-#line 23 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 23 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     mul r1.xyz, r0.w, r1
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mul r3.xyz, r2.y, c7
     mad r3.xyz, r2.x, c6, r3
     mad r2.xyz, r2.z, c8, r3
     mov r3.xyz, c0  // Parameters::DiffuseColor<0,1,2>
     mad r2.xyz, r2, r3, c1  // ::result<0,1,2>
 
-#line 23 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 23 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     mad r1.xyz, r0, r2, r1  // AddSpecular::color<0,1,2>
 
 #line 17
@@ -185,10 +185,10 @@ ret
 
 const BYTE SkinnedEffect_PSSkinnedPixelLighting[] =
 {
-     68,  88,  66,  67, 238, 238, 
-      7, 214,  41, 114,  62, 149, 
-     96, 232, 239, 207,  56,   5, 
-    165,  19,   1,   0,   0,   0, 
+     68,  88,  66,  67, 251,  49, 
+     87, 204, 201,   5,   5, 236, 
+    105, 240,   1, 226,  70,  52, 
+    138,  33,   1,   0,   0,   0, 
      80,  17,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      44,  10,   0,   0, 156,  16, 
@@ -213,7 +213,7 @@ const BYTE SkinnedEffect_PSSkinnedPixelLighting[] =
       0,   0,  92,   5,   0,   0, 
     244,   2,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -227,7 +227,7 @@ const BYTE SkinnedEffect_PSSkinnedPixelLighting[] =
     110, 101, 100,  69, 102, 102, 
     101,  99, 116,  46, 102, 120, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 
@@ -241,7 +241,7 @@ const BYTE SkinnedEffect_PSSkinnedPixelLighting[] =
     105, 103, 104, 116, 105, 110, 
     103,  46, 102, 120, 104,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

@@ -24,7 +24,7 @@
     dcl t0  // pin<0,1,2,3>
     dcl t1  // pin<4,5,6,7>
 
-#line 23 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 23 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     mov r0, t0  // pin<0,1,2,3>
     mad r0.xyz, t1, r0.w, r0  // AddSpecular::color<0,1,2>
     mov r0.w, t0.w
@@ -43,10 +43,10 @@ ret
 
 const BYTE BasicEffect_PSBasicVertexLightingNoFog[] =
 {
-     68,  88,  66,  67, 153,  29, 
-     37, 253, 181, 126,  11, 149, 
-     96,  71, 196,  78,  95, 201, 
-    247, 234,   1,   0,   0,   0, 
+     68,  88,  66,  67, 108, 140, 
+    122, 210,   1, 237,   8, 223, 
+     42,  65, 158, 239,  84, 141, 
+    136,  68,   1,   0,   0,   0, 
     128,   3,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     148,   2,   0,   0,   4,   3, 
@@ -68,7 +68,7 @@ const BYTE BasicEffect_PSBasicVertexLightingNoFog[] =
       3,   0,   0,   0, 116,   1, 
       0,   0, 176,   0,   0,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

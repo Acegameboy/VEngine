@@ -48,7 +48,7 @@
     dcl_texcoord2 v2  // vin<7,8>
     dcl_texcoord3 v3  // vin<9,10,11,12>
 
-#line 54 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 54 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 r0.x, v0, c15  // ::pos_ws<0>
     dp4 r0.y, v0, c16  // ::pos_ws<1>
     dp4 r0.z, v0, c17  // ::pos_ws<2>
@@ -114,28 +114,28 @@
 #line 60
     dp4 oPos.z, v0, c23  // ::VSBasicVertexLightingTxVc<12>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c14
     max r0.x, r0.x, c25.x
     min oT1.w, r0.x, c25.y  // ::VSBasicVertexLightingTxVc<7>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mul r0.xyz, r2.y, c8
     mad r0.xyz, r2.x, c7, r0
     mad r0.xyz, r2.z, c9, r0
     mov r1.xyz, c1  // Parameters::DiffuseColor<0,1,2>
     mad r0.xyz, r0, r1, c2  // ::result<0,1,2>
 
-#line 238 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 238 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mul oT0.xyz, r0, v3  // ::VSBasicVertexLightingTxVc<0,1,2>
     mul oT0.w, v3.w, c1.w  // ::VSBasicVertexLightingTxVc<3>
 
-#line 60 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 60 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 r0.x, v0, c21  // ::vout<0>
     dp4 r0.y, v0, c22  // ::vout<1>
     dp4 r0.z, v0, c24  // ::vout<3>
 
-#line 230 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 230 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSBasicVertexLightingTxVc<10,11>
     mov oPos.w, r0.z  // ::VSBasicVertexLightingTxVc<13>
 
@@ -215,10 +215,10 @@ ret
 
 const BYTE BasicEffect_VSBasicVertexLightingTxVc[] =
 {
-     68,  88,  66,  67,  26, 255, 
-     23, 242, 191, 139, 238, 182, 
-    149, 117, 120, 231, 112, 226, 
-     67, 158,   1,   0,   0,   0, 
+     68,  88,  66,  67,  13, 211, 
+    121,  29, 176,  16, 200, 164, 
+     28, 149,  72, 178, 171, 254, 
+     24,  61,   1,   0,   0,   0, 
     100,  20,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     252,  11,   0,   0,  68,  19, 
@@ -247,7 +247,7 @@ const BYTE BasicEffect_VSBasicVertexLightingTxVc[] =
       0,   0, 160,   6,   0,   0, 
      60,   3,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -261,7 +261,7 @@ const BYTE BasicEffect_VSBasicVertexLightingTxVc[] =
     116, 105, 110, 103,  46, 102, 
     120, 104,   0,  67,  58,  92, 
      85, 115, 101, 114, 115,  92, 
-     85, 115, 101, 114,  92,  68, 
+    117, 115, 101, 114,  92,  68, 
     111,  99, 117, 109, 101, 110, 
     116, 115,  92,  71, 105, 116, 
      72, 117,  98,  92,  86,  69, 
@@ -274,7 +274,7 @@ const BYTE BasicEffect_VSBasicVertexLightingTxVc[] =
      92,  67, 111, 109, 109, 111, 
     110,  46, 102, 120, 104,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

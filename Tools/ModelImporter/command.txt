@@ -4,3 +4,30 @@
 -scale 0.01 ../../Assets/Models/Character01/SillyDancing.fbx ../../Assets/Models/Character01/SillyDancing.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character01/SillyDancing.fbx ../../Assets/Models/Character01/SillyDancing.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Jumping.fbx ../../Assets/Models/Character02/Jumping.model
+
+//Character01
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting01.fbx ../../Assets/Models/Character01/Greeting01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting02.fbx ../../Assets/Models/Character01/Greeting02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting03.fbx ../../Assets/Models/Character01/Greeting03.model
+
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Taunt01.fbx ../../Assets/Models/Character01/Taunt01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Taunt02.fbx ../../Assets/Models/Character01/Taunt02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Taunt03.fbx ../../Assets/Models/Character01/Taunt03.model
+
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Dance01.fbx ../../Assets/Models/Character01/Dance01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Dance02.fbx ../../Assets/Models/Character01/Dance02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Dance03.fbx ../../Assets/Models/Character01/Dance03.model
+
+
+//Character02
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting01.fbx ../../Assets/Models/Character02/Greeting01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting02.fbx ../../Assets/Models/Character02/Greeting02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting03.fbx ../../Assets/Models/Character02/Greeting03.model
+
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Dance01.fbx ../../Assets/Models/Character02/Dance01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Dance02.fbx ../../Assets/Models/Character02/Dance02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Dance03.fbx ../../Assets/Models/Character02/Dance03.model
+
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Threat01.fbx ../../Assets/Models/Character02/Threat01.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Threat02.fbx ../../Assets/Models/Character02/Threat02.model
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Threat03.fbx ../../Assets/Models/Character02/Threat03.model

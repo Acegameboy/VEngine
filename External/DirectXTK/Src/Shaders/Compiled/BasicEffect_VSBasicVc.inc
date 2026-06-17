@@ -43,7 +43,7 @@
     dcl_texcoord v0  // vin<0,1,2,3>
     dcl_texcoord1 v1  // vin<4,5,6,7>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 oPos.z, v0, c5  // ::VSBasicVc<10>
 
 #line 11
@@ -51,19 +51,19 @@
     max r0.x, r0.x, c7.x
     min oT1.w, r0.x, c7.y  // ::VSBasicVc<7>
 
-#line 71 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 71 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mul oT0, v1, c1  // ::VSBasicVc<0,1,2,3>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c3  // ::vout<0>
     dp4 r0.y, v0, c4  // ::vout<1>
     dp4 r0.z, v0, c6  // ::vout<3>
 
-#line 64 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 64 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSBasicVc<8,9>
     mov oPos.w, r0.z  // ::VSBasicVc<11>
 
-#line 42 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 42 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     mov oT1.xyz, c7.x  // ::VSBasicVc<4,5,6>
 
 // approximately 11 instruction slots used
@@ -87,10 +87,10 @@ ret
 
 const BYTE BasicEffect_VSBasicVc[] =
 {
-     68,  88,  66,  67, 218,  13, 
-    105, 250, 121,  99, 188,  56, 
-    145, 107, 175, 115, 144, 187, 
-     57, 189,   1,   0,   0,   0, 
+     68,  88,  66,  67,  37, 200, 
+     13,  47, 114, 120,   0, 195, 
+      6,  61, 187,  39,  24, 145, 
+     78, 243,   1,   0,   0,   0, 
     160,   6,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     156,   4,   0,   0, 224,   5, 
@@ -119,7 +119,7 @@ const BYTE BasicEffect_VSBasicVc[] =
       0,   0, 200,   2,   0,   0, 
      72,   1,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -132,7 +132,7 @@ const BYTE BasicEffect_VSBasicVc[] =
     115,  92,  67, 111, 109, 109, 
     111, 110,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

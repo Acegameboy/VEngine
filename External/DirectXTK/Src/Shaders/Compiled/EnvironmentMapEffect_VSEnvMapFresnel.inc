@@ -47,13 +47,13 @@
     dcl_texcoord1 v1  // vin<4,5,6>
     dcl_texcoord2 v2  // vin<7,8>
 
-#line 65 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 65 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp3 r0.x, v1, c15
     dp3 r0.y, v1, c16
     dp3 r0.z, v1, c17
     nrm r1.xyz, r0  // ::worldNormal<0,1,2>
 
-#line 33 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 33 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r0.x, -c4, r1  // ::dotL<0>
     dp3 r0.y, -c5, r1  // ::dotL<1>
     dp3 r0.z, -c6, r1  // ::dotL<2>
@@ -69,7 +69,7 @@
     mov r2.xyz, c2  // Parameters::DiffuseColor<0,1,2>
     mad oT0.xyz, r0, r2, c3  // ::VSEnvMapFresnel<0,1,2>
 
-#line 69 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 69 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp4 oPos.z, v0, c20  // ::VSEnvMapFresnel<15>
 
 #line 63
@@ -87,12 +87,12 @@
     pow r1.w, r0.x, c1.y
     mul oT1.xyz, r1.w, c1.x  // ::VSEnvMapFresnel<4,5,6>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c11
     max r0.x, r0.x, c22.x
     min oT1.w, r0.x, c22.y  // ::VSEnvMapFresnel<7>
 
-#line 79 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 79 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp3 r0.x, -r2, r1
     add r0.x, r0.x, r0.x
     mad oT3.xyz, r1, -r0.x, -r2  // ::VSEnvMapFresnel<10,11,12>
@@ -106,10 +106,10 @@
     mad oPos.xy, r0.z, c0, r0  // ::VSEnvMapFresnel<13,14>
     mov oPos.w, r0.z  // ::VSEnvMapFresnel<16>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mov oT0.w, c2.w  // ::VSEnvMapFresnel<3>
 
-#line 196 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 196 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     mov oT2.xy, v2  // ::VSEnvMapFresnel<8,9>
 
 // approximately 45 instruction slots used
@@ -170,10 +170,10 @@ ret
 
 const BYTE EnvironmentMapEffect_VSEnvMapFresnel[] =
 {
-     68,  88,  66,  67,  64, 231, 
-     53, 127,  30,  34,   1,  92, 
-    192, 186, 200, 150, 181, 205, 
-     95, 198,   1,   0,   0,   0, 
+     68,  88,  66,  67,  78,   8, 
+    213,  54,  79,  29, 234,  45, 
+     26, 147,  25,  44, 156, 103, 
+     62, 243,   1,   0,   0,   0, 
      24,  16,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     140,   9,   0,   0,   0,  15, 
@@ -202,7 +202,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapFresnel[] =
       0,   0,  80,   5,   0,   0, 
     196,   2,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -217,7 +217,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapFresnel[] =
     116,  77,  97, 112,  69, 102, 
     102, 101,  99, 116,  46, 102, 
     120,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -231,7 +231,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapFresnel[] =
      76, 105, 103, 104, 116, 105, 
     110, 103,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

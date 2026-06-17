@@ -49,13 +49,13 @@
     dcl_texcoord1 v1  // vin<4,5,6>
     dcl_texcoord2 v2  // vin<7,8>
 
-#line 65 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 65 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp3 r0.x, v1, c11
     dp3 r0.y, v1, c12
     dp3 r0.z, v1, c13
     nrm r1.xyz, r0  // ::worldNormal<0,1,2>
 
-#line 33 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 33 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r0.x, -c4, r1  // ::dotL<0>
 
 #line 36
@@ -67,15 +67,15 @@
     mov r2.xyz, c2  // Parameters::DiffuseColor<0,1,2>
     mad oT0.xyz, r0, r2, c3  // ::VSEnvMapOneLight<0,1,2>
 
-#line 69 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 69 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp4 oPos.z, v0, c16  // ::VSEnvMapOneLight<15>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c7
     max r0.x, r0.x, c18.x
     min oT1.w, r0.x, c18.y  // ::VSEnvMapOneLight<7>
 
-#line 63 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 63 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp4 r0.x, v0, c8  // ::pos_ws<0>
     dp4 r0.y, v0, c9  // ::pos_ws<1>
     dp4 r0.z, v0, c10  // ::pos_ws<2>
@@ -96,10 +96,10 @@
     mad oPos.xy, r0.z, c0, r0  // ::VSEnvMapOneLight<13,14>
     mov oPos.w, r0.z  // ::VSEnvMapOneLight<16>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mov oT0.w, c2.w  // ::VSEnvMapOneLight<3>
 
-#line 75 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 75 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     mov oT1.xyz, c1.x  // ::VSEnvMapOneLight<4,5,6>
 
 #line 210
@@ -153,10 +153,10 @@ ret
 
 const BYTE EnvironmentMapEffect_VSEnvMapOneLight[] =
 {
-     68,  88,  66,  67, 185, 131, 
-     53,  56, 233, 192, 164, 109, 
-     58,  45, 174, 156,  54, 222, 
-    255, 233,   1,   0,   0,   0, 
+     68,  88,  66,  67,  12, 241, 
+    147, 142,   3,  61,  59,  38, 
+    133, 231, 157, 234, 228, 220, 
+    177,  50,   1,   0,   0,   0, 
     168,  13,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     116,   8,   0,   0, 144,  12, 
@@ -189,7 +189,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLight[] =
       0,   0, 204,   4,   0,   0, 
     124,   2,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -204,7 +204,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLight[] =
     116,  77,  97, 112,  69, 102, 
     102, 101,  99, 116,  46, 102, 
     120,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -218,7 +218,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLight[] =
      76, 105, 103, 104, 116, 105, 
     110, 103,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <VEngine/Inc/VEngine.h>
+#include "AnimationReactionSystem.h"
 
 class GameState : public VEngine::AppState
 {
@@ -15,7 +16,12 @@ public:
 
 private:
 	void UpdateCamera(float deltaTime);
+	void UpdateAnimationInput();
 
+	VEngine::GameWorld mGameWorld;
+	VEngine::GameObject* mCameraObject = nullptr;
+	VEngine::GameObject* mPlayer = nullptr;
+	VEngine::GameObject* mNpc = nullptr;
 
 	VEngine::Graphics::Camera mCamera;
 	VEngine::Graphics::DirectionalLight mDirectionalLight;
@@ -26,4 +32,9 @@ private:
 
 	VEngine::Graphics::Animation mAnimation;
 	float mAnimationTime = 0.0f;
+
+	VEngine::GameObjectHandle mPlayerHandle;
+	VEngine::GameObjectHandle mNpcHandle;
+
+	AnimationReactionSystem mReactionSystem;
 };

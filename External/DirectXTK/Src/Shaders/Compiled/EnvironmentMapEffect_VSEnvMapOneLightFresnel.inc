@@ -49,13 +49,13 @@
     dcl_texcoord1 v1  // vin<4,5,6>
     dcl_texcoord2 v2  // vin<7,8>
 
-#line 65 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 65 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp3 r0.x, v1, c11
     dp3 r0.y, v1, c12
     dp3 r0.z, v1, c13
     nrm r1.xyz, r0  // ::worldNormal<0,1,2>
 
-#line 33 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 33 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r0.x, -c4, r1  // ::dotL<0>
 
 #line 36
@@ -67,7 +67,7 @@
     mov r2.xyz, c2  // Parameters::DiffuseColor<0,1,2>
     mad oT0.xyz, r0, r2, c3  // ::VSEnvMapOneLightFresnel<0,1,2>
 
-#line 69 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 69 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp4 oPos.z, v0, c16  // ::VSEnvMapOneLightFresnel<15>
 
 #line 63
@@ -85,12 +85,12 @@
     pow r1.w, r0.x, c1.y
     mul oT1.xyz, r1.w, c1.x  // ::VSEnvMapOneLightFresnel<4,5,6>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, v0, c7
     max r0.x, r0.x, c18.x
     min oT1.w, r0.x, c18.y  // ::VSEnvMapOneLightFresnel<7>
 
-#line 79 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 79 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     dp3 r0.x, -r2, r1
     add r0.x, r0.x, r0.x
     mad oT3.xyz, r1, -r0.x, -r2  // ::VSEnvMapOneLightFresnel<10,11,12>
@@ -104,10 +104,10 @@
     mad oPos.xy, r0.z, c0, r0  // ::VSEnvMapOneLightFresnel<13,14>
     mov oPos.w, r0.z  // ::VSEnvMapOneLightFresnel<16>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mov oT0.w, c2.w  // ::VSEnvMapOneLightFresnel<3>
 
-#line 224 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 224 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     mov oT2.xy, v2  // ::VSEnvMapOneLightFresnel<8,9>
 
 // approximately 41 instruction slots used
@@ -164,10 +164,10 @@ ret
 
 const BYTE EnvironmentMapEffect_VSEnvMapOneLightFresnel[] =
 {
-     68,  88,  66,  67, 180,  72, 
-    242,  42, 165,  41, 186, 172, 
-    114,  86, 212,  96, 112, 124, 
-      9, 105,   1,   0,   0,   0, 
+     68,  88,  66,  67,  58,  99, 
+    183, 241, 181, 232,  91, 207, 
+    233, 116,  72, 190, 246, 212, 
+     65, 167,   1,   0,   0,   0, 
       8,  15,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      44,   9,   0,   0, 240,  13, 
@@ -200,7 +200,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLightFresnel[] =
       0,   0,  32,   5,   0,   0, 
     164,   2,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -215,7 +215,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLightFresnel[] =
     116,  77,  97, 112,  69, 102, 
     102, 101,  99, 116,  46, 102, 
     120,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -229,7 +229,7 @@ const BYTE EnvironmentMapEffect_VSEnvMapOneLightFresnel[] =
      76, 105, 103, 104, 116, 105, 
     110, 103,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

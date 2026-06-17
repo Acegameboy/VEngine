@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "AnimationReactionSystem.h"
 
 using namespace VEngine;
 using namespace VEngine::Graphics;
@@ -7,132 +8,169 @@ using namespace VEngine::Math;
 
 void GameState::Initialize()
 {
-    mCamera.SetPosition({ 0.0f, 1.0f, -3.0f });
-    mCamera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+    mGameWorld.AddService<CameraService>();
+    mGameWorld.AddService<RenderService>();
 
-    mDirectionalLight.direction = Math::Normalize({ 1.0f, -1.0f, 1.0f });
-    mDirectionalLight.ambient = { 0.4f, 0.4f, 0.4f, 1.0f };
-    mDirectionalLight.diffuse = { 0.8f, 0.8f, 0.8f, 1.0f };
-    mDirectionalLight.specular = { 0.9f, 0.9f, 0.9f, 1.0f };
+    mGameWorld.Initialize(100);
 
-    Mesh mesh = MeshBuilder::CreateSphere(30, 30, 0.25f);
-    mRenderObject.meshBuffer.Initialize(mesh);
+    std::filesystem::path cameraPath =
+        "../../Assets/Templates/Objects/fps_camera.json";
 
-    TextureManager* tm = TextureManager::Get();
-    mRenderObject.diffuseMapId = tm->LoadTexture(L"earth.jpg");
+    std::filesystem::path playerPath =
+        "../../Assets/Templates/Objects/character01.json";
 
-    std::filesystem::path shaderFile = L"../../Assets/Shaders/Standard.fx";
-    mStandardEffect.Initialize(shaderFile);
-    mStandardEffect.SetCamera(mCamera);
-    mStandardEffect.SetDirectionalLight(mDirectionalLight);
+    std::filesystem::path npcPath =
+        "../../Assets/Templates/Objects/character02.json";
 
-    mAnimationTime = 0.0f;
-    mAnimation = AnimationBuilder()
-        .AddPositionKeys({ 0.0f, 0.0f, 0.0f }, 0.0f)
-        .AddPositionKeys({ 0.0f, 2.0f, 0.0f }, 3.0f)
-        .AddPositionKeys({ 0.0f, 0.0f, 0.0f }, 5.0f)
-        .AddRotationKeys(Math::Quaternion::Identity, 0.0f)
-        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 90.0f * Math::Constants::DegToRad), 2.0f)
-        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 180.0f * Math::Constants::DegToRad), 3.0f)
-        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 270.0f * Math::Constants::DegToRad), 4.0f)
-        .AddRotationKeys(Math::Quaternion::CreateFromAxisAngle(Math::Vector3::YAxis, 359.0f * Math::Constants::DegToRad), 5.0f)
-        .AddScaleKeys(Math::Vector3::One, 0.0f)
-        .AddScaleKeys(Math::Vector3::One * 0.1f, 3.0f)
-        .AddScaleKeys(Math::Vector3::One, 5.0f)
-        .Build();
+    ASSERT(std::filesystem::exists(cameraPath),
+        "Missing camera template file: %s",
+        cameraPath.u8string().c_str());
+
+    ASSERT(std::filesystem::exists(playerPath),
+        "Missing player template file: %s",
+        playerPath.u8string().c_str());
+
+    ASSERT(std::filesystem::exists(npcPath),
+        "Missing NPC template file: %s",
+        npcPath.u8string().c_str());
+
+    mCameraObject = mGameWorld.CreateGameObject(
+        "MainCamera",
+        cameraPath);
+
+    mPlayer = mGameWorld.CreateGameObject(
+        "Character1_Player",
+        playerPath);
+
+    mNpc = mGameWorld.CreateGameObject(
+        "Character2_NPC",
+        npcPath);
+
+    ASSERT(mCameraObject != nullptr, "Failed to create camera.");
+    ASSERT(mPlayer != nullptr, "Failed to create player.");
+    ASSERT(mNpc != nullptr, "Failed to create NPC.");
+
+    mCameraObject->Initialize();
+    mPlayer->Initialize();
+    mNpc->Initialize();
+
+    TransformComponent* playerTransform =
+        mPlayer->GetComponent<TransformComponent>();
+
+    TransformComponent* npcTransform =
+        mNpc->GetComponent<TransformComponent>();
+
+    if (playerTransform != nullptr)
+    {
+        playerTransform->position = { -1.5f, 0.0f, 0.0f };
+        playerTransform->scale = { 1.0f, 1.0f, 1.0f };
+    }
+
+    if (npcTransform != nullptr)
+    {
+        npcTransform->position = { 1.5f, 0.0f, 0.0f };
+        npcTransform->scale = { 1.0f, 1.0f, 1.0f };
+    }
+
+    mReactionSystem.Initialize(mPlayer, mNpc);
 }
 
 void GameState::Terminate()
 {
-    mRenderObject.Terminate();
-    mStandardEffect.Terminate();
+    mGameWorld.Terminate();
+
+    mCameraObject = nullptr;
+    mPlayer = nullptr;
+    mNpc = nullptr;
 }
 
 void GameState::Update(float deltaTime)
 {
-    UpdateCamera(deltaTime);
+    InputSystem* input = InputSystem::Get();
 
-    mAnimationTime += deltaTime;
-    while (mAnimationTime > mAnimation.GetDuration())
+    if (input->IsKeyPressed(KeyCode::ONE))
     {
-        mAnimationTime -= mAnimation.GetDuration();
+        mReactionSystem.TriggerTaunt();
     }
+
+    if (input->IsKeyPressed(KeyCode::TWO))
+    {
+        mReactionSystem.TriggerGreet();
+    }
+
+    mReactionSystem.Update(deltaTime);
+
+    mGameWorld.Update(deltaTime);
 }
 
 void GameState::Render()
 {
-    mRenderObject.transform = mAnimation.GetTransform(mAnimationTime);
-    SimpleDraw::AddGroundPlane(20.0f, Colors::Wheat);
-    SimpleDraw::Render(mCamera);
-
-    mStandardEffect.Begin();
-    mStandardEffect.Render(mRenderObject);
-    mStandardEffect.End();
+    mGameWorld.Render();
 }
 
 void GameState::DebugUI()
 {
-    ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    if (ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        if (ImGui::DragFloat3("Direction#Light", &mDirectionalLight.direction.x, 0.01f))
-        {
-            mDirectionalLight.direction = Math::Normalize(mDirectionalLight.direction);
-        }
+    ImGui::Begin("Animation Pool Demo", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
-        ImGui::ColorEdit4("Ambient#Light", &mDirectionalLight.ambient.r);
-        ImGui::ColorEdit4("Diffuse#Light", &mDirectionalLight.diffuse.r);
-        ImGui::ColorEdit4("Specular#Light", &mDirectionalLight.specular.r);
+    if (ImGui::Button("Reaction: Player Taunt / NPC Attack"))
+    {
+        mReactionSystem.TriggerTaunt();
     }
 
-    if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+    if (ImGui::Button("Reaction: Player Greet / NPC Greet"))
     {
-        ImGui::ColorEdit4("Emissive#Material", &mRenderObject.material.emissive.r);
-        ImGui::ColorEdit4("Ambient#Material", &mRenderObject.material.ambient.r);
-        ImGui::ColorEdit4("Diffuse#Material", &mRenderObject.material.diffuse.r);
-        ImGui::ColorEdit4("Specular#Material", &mRenderObject.material.specular.r);
-        ImGui::DragFloat(
-            "Shininess#Material", &mRenderObject.material.shininess, 0.01f, 0.0f, 10000.0f);
+        mReactionSystem.TriggerGreet();
     }
 
-    mStandardEffect.DebugUI();
+    ImGui::Separator();
+
+    AnimatorComponent* playerAnimator =
+        mPlayer->GetComponent<AnimatorComponent>();
+
+    AnimatorComponent* npcAnimator =
+        mNpc->GetComponent<AnimatorComponent>();
+
+    if (ImGui::Button("Direct Play Player Anim 0"))
+    {
+        bool result = playerAnimator->Play(0, true);
+        LOG("Direct Player Play(0) = %s", result ? "true" : "false");
+    }
+
+    if (ImGui::Button("Direct Play Player Anim 1"))
+    {
+        bool result = playerAnimator->Play(1, false);
+        LOG("Direct Player Play(1) = %s", result ? "true" : "false");
+    }
+
+    if (ImGui::Button("Direct Play NPC Anim 0"))
+    {
+        bool result = npcAnimator->Play(0, true);
+        LOG("Direct NPC Play(0) = %s", result ? "true" : "false");
+    }
+
+    if (ImGui::Button("Direct Play NPC Anim 1"))
+    {
+        bool result = npcAnimator->Play(1, false);
+        LOG("Direct NPC Play(1) = %s", result ? "true" : "false");
+    }
+
     ImGui::End();
+
+    mGameWorld.DebugUI();
 }
 
-void GameState::UpdateCamera(float deltaTime)
+void GameState::UpdateAnimationInput()
 {
-    InputSystem* input = InputSystem::Get();
-    const float moveSpeed = input->IsKeyDown(KeyCode::LSHIFT) ? 10.0f : 4.0f;
-    const float turnSpeed = 0.5f;
+    VEngine::Input::InputSystem* input =
+        VEngine::Input::InputSystem::Get();
 
-    if (input->IsKeyDown(KeyCode::W))
+    if (input->IsKeyPressed(VEngine::Input::KeyCode::ONE))
     {
-        mCamera.Walk(moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::S))
-    {
-        mCamera.Walk(-moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::D))
-    {
-        mCamera.Strafe(moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::A))
-    {
-        mCamera.Strafe(-moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::E))
-    {
-        mCamera.Rise(moveSpeed * deltaTime);
-    }
-    else if (input->IsKeyDown(KeyCode::Q))
-    {
-        mCamera.Rise(-moveSpeed * deltaTime);
+        mReactionSystem.TriggerTaunt();
     }
 
-    if (input->IsMouseDown(MouseButton::RBUTTON))
+    if (input->IsKeyPressed(VEngine::Input::KeyCode::TWO))
     {
-        mCamera.Yaw(input->GetMouseMoveX() * turnSpeed * deltaTime);
-        mCamera.Pitch(input->GetMouseMoveY() * turnSpeed * deltaTime);
+        mReactionSystem.TriggerGreet();
     }
 }

@@ -39,7 +39,7 @@
     dcl t1.xy  // pin<4,5>
     dcl_2d s0
 
-#line 123 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\AlphaTestEffect.fx"
+#line 123 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\AlphaTestEffect.fx"
     texld r0, t1, s0
     mad r1.w, r0.w, t0.w, -c0.x
     mul r0, r0, t0  // ::color<0,1,2,3>
@@ -72,10 +72,10 @@ ret
 
 const BYTE AlphaTestEffect_PSAlphaTestEqNeNoFog[] =
 {
-     68,  88,  66,  67, 212, 225, 
-    216, 217,  97,  67,  41, 128, 
-     27, 171, 135, 107, 143,   1, 
-     24,  66,   1,   0,   0,   0, 
+     68,  88,  66,  67, 242,  37, 
+    120, 111, 215, 119, 158,  93, 
+      1,  35, 141,  22, 114, 102, 
+      4,  68,   1,   0,   0,   0, 
     252,   4,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      20,   3,   0,   0, 120,   4, 
@@ -100,7 +100,7 @@ const BYTE AlphaTestEffect_PSAlphaTestEqNeNoFog[] =
       0,   0, 152,   1,   0,   0, 
     224,   0,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 

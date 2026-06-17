@@ -40,7 +40,7 @@
     dcl t0  // pixel<4,5,6,7>
     dcl t2.xyz  // pixel<10,11,12>
 
-#line 126 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\DGSLLambert.hlsl"
+#line 126 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\DGSLLambert.hlsl"
     mul r0.w, t0.w, t0.w
     cmp r0, -r0.w, c10.x, c10.y
     texkill r0
@@ -115,10 +115,10 @@ ret
 
 const BYTE DGSLLambert_mainTk[] =
 {
-     68,  88,  66,  67, 184,  96, 
-    149,  78, 211, 111, 132, 150, 
-    148,  36,  19, 170,  49, 237, 
-    107,  62,   1,   0,   0,   0, 
+     68,  88,  66,  67, 138, 128, 
+     62,   5,   1, 191, 146,  37, 
+     50,  48,  42,  73,  61, 224, 
+    122,  40,   1,   0,   0,   0, 
     156,   9,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     224,   5,   0,   0, 124,   8, 
@@ -146,7 +146,7 @@ const BYTE DGSLLambert_mainTk[] =
       7,   0,   0,   0,  48,   3, 
       0,   0,  36,   2,   0,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

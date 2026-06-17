@@ -46,7 +46,7 @@
     dcl_2d s0
     dcl_cube s1
 
-#line 92 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 92 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     nrm r0.xyz, t2  // ::worldNormal<0,1,2>
     add r1.xyz, -t1, c10
     nrm r2.xyz, r1  // ::eyeVector<0,1,2>
@@ -62,7 +62,7 @@
 #line 100
     texld r1, r1, s1
 
-#line 33 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 33 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r4.x, -c4, r0  // ::dotL<0>
     dp3 r4.y, -c5, r0  // ::dotL<1>
     dp3 r4.z, -c6, r0  // ::dotL<2>
@@ -78,7 +78,7 @@
     mov r5.xyz, c2  // Parameters::DiffuseColor<0,1,2>
     mad r4.xyz, r4, r5, c3  // ::result<0,1,2>
 
-#line 89 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
+#line 89 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\EnvironmentMapEffect.fx"
     mul r3, r3, t3  // ::color<0,1,2,3>
 
 #line 96
@@ -158,10 +158,10 @@ ret
 
 const BYTE EnvironmentMapEffect_PSEnvMapPixelLightingFresnelNoFog[] =
 {
-     68,  88,  66,  67, 248, 151, 
-      1, 210,  13, 113, 194,  26, 
-    155, 159, 214, 104,  88, 223, 
-    210,  82,   1,   0,   0,   0, 
+     68,  88,  66,  67, 131,  44, 
+     87, 253, 221,  51, 230, 242, 
+    168,  62,   4,   2,  92, 255, 
+      8, 223,   1,   0,   0,   0, 
     176,  14,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     224,   8,   0,   0, 252,  13, 
@@ -186,7 +186,7 @@ const BYTE EnvironmentMapEffect_PSEnvMapPixelLightingFresnelNoFog[] =
       0,   0,  14,   0,   0,   0, 
     196,   4,   0,   0, 124,   2, 
       0,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -202,7 +202,7 @@ const BYTE EnvironmentMapEffect_PSEnvMapPixelLightingFresnelNoFog[] =
      97, 112,  69, 102, 102, 101, 
      99, 116,  46, 102, 120,   0, 
      67,  58,  92,  85, 115, 101, 
-    114, 115,  92,  85, 115, 101, 
+    114, 115,  92, 117, 115, 101, 
     114,  92,  68, 111,  99, 117, 
     109, 101, 110, 116, 115,  92, 
      71, 105, 116,  72, 117,  98, 

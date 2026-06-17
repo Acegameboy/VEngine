@@ -48,7 +48,7 @@
     dcl_texcoord3 v3  // vin<9,10,11,12>
     dcl_texcoord4 v4  // vin<13,14,15,16>
 
-#line 15 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
+#line 15 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
     mul r0.x, v3.x, c243.x
     mova a0.x, r0.x
     mul r0, v4.x, c26[a0.x]  // ::skinning<0,3,6,9>
@@ -67,7 +67,7 @@
     dp3 r1.z, v1, r3  // ::Skin<2>
     dp4 r0.z, v0, r3  // Skin::vin<2>
 
-#line 56 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 56 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r2.x, r1, c19
     dp3 r2.y, r1, c20
     dp3 r2.z, r1, c21
@@ -139,24 +139,24 @@
 #line 60
     dp4 oPos.z, r0, c24  // ::VSSkinnedVertexLightingOneBone<12>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r1.x, r0, c14
     max r1.x, r1.x, c243.y
     min oT1.w, r1.x, c243.z  // ::VSSkinnedVertexLightingOneBone<7>
 
-#line 60 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 60 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 r1.x, r0, c22  // ::vout<0>
     dp4 r1.y, r0, c23  // ::vout<1>
     dp4 r0.x, r0, c25  // ::vout<3>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     mad oPos.xy, r0.x, c242, r1  // ::VSSkinnedVertexLightingOneBone<10,11>
     mov oPos.w, r0.x  // ::VSSkinnedVertexLightingOneBone<13>
 
-#line 43 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 43 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mov oT0.w, c0.w  // ::VSSkinnedVertexLightingOneBone<3>
 
-#line 47 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 47 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     mov oT2.xy, v2  // ::VSSkinnedVertexLightingOneBone<8,9>
 
 // approximately 75 instruction slots used
@@ -243,10 +243,10 @@ ret
 
 const BYTE SkinnedEffect_VSSkinnedVertexLightingOneBone[] =
 {
-     68,  88,  66,  67,  80, 122, 
-     24, 102, 221, 181, 102,  23, 
-     92,   1,  87, 173,  49, 109, 
-      4, 237,   1,   0,   0,   0, 
+     68,  88,  66,  67, 235, 253, 
+    247, 170, 247, 125, 112,   7, 
+    187,  48, 177,  62,  52, 194, 
+     55, 231,   1,   0,   0,   0, 
     236,  23,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      28,  14,   0,   0, 160,  22, 
@@ -271,7 +271,7 @@ const BYTE SkinnedEffect_VSSkinnedVertexLightingOneBone[] =
       0,   0, 244,   7,   0,   0, 
      48,   4,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -285,7 +285,7 @@ const BYTE SkinnedEffect_VSSkinnedVertexLightingOneBone[] =
     110, 105, 110, 103,  46, 102, 
     120, 104,   0,  67,  58,  92, 
      85, 115, 101, 114, 115,  92, 
-     85, 115, 101, 114,  92,  68, 
+    117, 115, 101, 114,  92,  68, 
     111,  99, 117, 109, 101, 110, 
     116, 115,  92,  71, 105, 116, 
      72, 117,  98,  92,  86,  69, 
@@ -298,7 +298,7 @@ const BYTE SkinnedEffect_VSSkinnedVertexLightingOneBone[] =
      92,  76, 105, 103, 104, 116, 
     105, 110, 103,  46, 102, 120, 
     104,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -312,7 +312,7 @@ const BYTE SkinnedEffect_VSSkinnedVertexLightingOneBone[] =
      67, 111, 109, 109, 111, 110, 
      46, 102, 120, 104,   0,  67, 
      58,  92,  85, 115, 101, 114, 
-    115,  92,  85, 115, 101, 114, 
+    115,  92, 117, 115, 101, 114, 
      92,  68, 111,  99, 117, 109, 
     101, 110, 116, 115,  92,  71, 
     105, 116,  72, 117,  98,  92, 

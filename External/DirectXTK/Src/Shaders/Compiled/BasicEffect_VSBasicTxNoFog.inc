@@ -41,20 +41,20 @@
     dcl_texcoord v0  // vin<0,1,2,3>
     dcl_texcoord1 v1  // vin<4,5>
 
-#line 40 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 40 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 oPos.z, v0, c4  // ::VSBasicTxNoFog<8>
     dp4 r0.x, v0, c2  // ::vout<0>
     dp4 r0.y, v0, c3  // ::vout<1>
     dp4 r0.z, v0, c5  // ::vout<3>
 
-#line 106 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 106 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mad oPos.xy, r0.z, c0, r0  // ::VSBasicTxNoFog<6,7>
     mov oPos.w, r0.z  // ::VSBasicTxNoFog<9>
 
-#line 41 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 41 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     mov oT0, c1  // ::VSBasicTxNoFog<0,1,2,3>
 
-#line 113 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
+#line 113 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\BasicEffect.fx"
     mov oT1.xy, v1  // ::VSBasicTxNoFog<4,5>
 
 // approximately 8 instruction slots used
@@ -77,10 +77,10 @@ ret
 
 const BYTE BasicEffect_VSBasicTxNoFog[] =
 {
-     68,  88,  66,  67, 195, 139, 
-    137,  22, 251, 198, 243, 118, 
-    170,  37, 146, 138, 112, 151, 
-    218,  14,   1,   0,   0,   0, 
+     68,  88,  66,  67, 255, 112, 
+     65, 129, 234, 155,  17, 129, 
+      0, 220, 118, 111, 253, 181, 
+    169, 242,   1,   0,   0,   0, 
      20,   6,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
      56,   4,   0,   0,  72,   5, 
@@ -107,7 +107,7 @@ const BYTE BasicEffect_VSBasicTxNoFog[] =
       0,   0, 188,   2,   0,   0, 
      40,   1,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -120,7 +120,7 @@ const BYTE BasicEffect_VSBasicTxNoFog[] =
     115,  92,  67, 111, 109, 109, 
     111, 110,  46, 102, 120, 104, 
       0,  67,  58,  92,  85, 115, 
-    101, 114, 115,  92,  85, 115, 
+    101, 114, 115,  92, 117, 115, 
     101, 114,  92,  68, 111,  99, 
     117, 109, 101, 110, 116, 115, 
      92,  71, 105, 116,  72, 117, 

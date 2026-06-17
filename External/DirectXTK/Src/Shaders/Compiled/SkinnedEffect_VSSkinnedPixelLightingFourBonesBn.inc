@@ -50,7 +50,7 @@
     dcl_texcoord3 v3  // vin<9,10,11,12>
     dcl_texcoord4 v4  // vin<13,14,15,16>
 
-#line 15 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
+#line 15 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
     mul r0, v3, c243.z
     mova a0, r0.yxzw
     mul r1, v4.y, c26[a0.x]
@@ -75,22 +75,22 @@
     dp4 r1.y, v0, r2  // Skin::vin<1>
     dp4 r1.z, v0, r3  // Skin::vin<2>
 
-#line 82 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 82 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     mov r1.w, v0.w
     dp4 oPos.z, r1, c24  // ::VSSkinnedPixelLightingFourBonesBn<15>
     dp4 oT1.x, r1, c15  // ::VSSkinnedPixelLightingFourBonesBn<2>
     dp4 oT1.y, r1, c16  // ::VSSkinnedPixelLightingFourBonesBn<3>
     dp4 oT1.z, r1, c17  // ::VSSkinnedPixelLightingFourBonesBn<4>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Utilities.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Utilities.fxh"
     mad r4.xyz, v1, c243.x, c243.y  // ::BiasX2<0,1,2>
 
-#line 19 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
+#line 19 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Skinning.fxh"
     dp3 r0.x, r4, r0  // ::Skin<0>
     dp3 r0.y, r4, r2  // ::Skin<1>
     dp3 r0.z, r4, r3  // ::Skin<2>
 
-#line 84 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 84 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp3 r2.x, r0, c19
     dp3 r2.y, r0, c20
     dp3 r2.z, r0, c21
@@ -98,17 +98,17 @@
     rsq r0.x, r0.x
     mul oT2.xyz, r0.x, r2  // ::VSSkinnedPixelLightingFourBonesBn<6,7,8>
 
-#line 11 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
+#line 11 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Common.fxh"
     dp4 r0.x, r1, c14
     max r0.x, r0.x, c243.w
     min oT1.w, r0.x, -c243.y  // ::VSSkinnedPixelLightingFourBonesBn<5>
 
-#line 82 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
+#line 82 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\Lighting.fxh"
     dp4 r0.x, r1, c22  // ::vout<0>
     dp4 r0.y, r1, c23  // ::vout<1>
     dp4 r0.z, r1, c25  // ::vout<3>
 
-#line 317 "C:\Users\User\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
+#line 317 "C:\Users\user\Documents\GitHub\VEngine\External\DirectXTK\Src\Shaders\SkinnedEffect.fx"
     mad oPos.xy, r0.z, c242, r0  // ::VSSkinnedPixelLightingFourBonesBn<13,14>
     mov oPos.w, r0.z  // ::VSSkinnedPixelLightingFourBonesBn<16>
 
@@ -177,10 +177,10 @@ ret
 
 const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
 {
-     68,  88,  66,  67,  11, 151, 
-     77, 161, 170, 239, 145, 209, 
-     48,  20, 173, 236, 222, 179, 
-    177, 194,   1,   0,   0,   0, 
+     68,  88,  66,  67, 254,   2, 
+    238, 201, 157,  15, 202, 115, 
+    117,  63,  28,  88, 124,  67, 
+    145,  82,   1,   0,   0,   0, 
     188,  18,   0,   0,   4,   0, 
       0,   0,  48,   0,   0,   0, 
     108,  11,   0,   0,  88,  17, 
@@ -205,7 +205,7 @@ const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
       0,   0, 216,   6,   0,   0, 
     192,   3,   0,   0,  67,  58, 
      92,  85, 115, 101, 114, 115, 
-     92,  85, 115, 101, 114,  92, 
+     92, 117, 115, 101, 114,  92, 
      68, 111,  99, 117, 109, 101, 
     110, 116, 115,  92,  71, 105, 
     116,  72, 117,  98,  92,  86, 
@@ -219,7 +219,7 @@ const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
     110, 105, 110, 103,  46, 102, 
     120, 104,   0,  67,  58,  92, 
      85, 115, 101, 114, 115,  92, 
-     85, 115, 101, 114,  92,  68, 
+    117, 115, 101, 114,  92,  68, 
     111,  99, 117, 109, 101, 110, 
     116, 115,  92,  71, 105, 116, 
      72, 117,  98,  92,  86,  69, 
@@ -232,7 +232,7 @@ const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
      92,  76, 105, 103, 104, 116, 
     105, 110, 103,  46, 102, 120, 
     104,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -246,7 +246,7 @@ const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
      85, 116, 105, 108, 105, 116, 
     105, 101, 115,  46, 102, 120, 
     104,   0,  67,  58,  92,  85, 
-    115, 101, 114, 115,  92,  85, 
+    115, 101, 114, 115,  92, 117, 
     115, 101, 114,  92,  68, 111, 
      99, 117, 109, 101, 110, 116, 
     115,  92,  71, 105, 116,  72, 
@@ -260,7 +260,7 @@ const BYTE SkinnedEffect_VSSkinnedPixelLightingFourBonesBn[] =
      67, 111, 109, 109, 111, 110, 
      46, 102, 120, 104,   0,  67, 
      58,  92,  85, 115, 101, 114, 
-    115,  92,  85, 115, 101, 114, 
+    115,  92, 117, 115, 101, 114, 
      92,  68, 111,  99, 117, 109, 
     101, 110, 116, 115,  92,  71, 
     105, 116,  72, 117,  98,  92, 
