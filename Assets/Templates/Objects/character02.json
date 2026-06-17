@@ -7,11 +7,12 @@
         },
 
         "ModelComponent": {
+            "CastShadow": true,
             "FileName": "../../Assets/Models/character02/character02.model",
             "Animations": [
-                "../../Assets/Models/character02/Taunt01.anim",
-                "../../Assets/Models/character02/Greeting01.anim",
-                "../../Assets/Models/character02/Dance01.anim"
+                "../../Assets/Models/character02/Taunt01.animset",
+                "../../Assets/Models/character02/Greeting01.animset",
+                "../../Assets/Models/character02/Dance01.animset"
             ]
         },
 
