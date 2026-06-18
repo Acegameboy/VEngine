@@ -42,6 +42,11 @@ void GameState::Update(float deltaTime)
         mReactionSystem.TriggerGreet();
     }
 
+    if (input->IsKeyPressed(VEngine::Input::KeyCode::THREE))
+    {
+        mReactionSystem.TriggerDance();
+    }
+
     mReactionSystem.Update(deltaTime);
 
     mGameWorld.Update(deltaTime);
@@ -58,6 +63,7 @@ void GameState::DebugUI()
 
     ImGui::Text("Press 1 = Random Player Taunt / Random NPC Attack");
     ImGui::Text("Press 2 = Random Player Greet / Random NPC Greet");
+    ImGui::Text("Press 3 = Random Player Dance / Random NPC Dance");
 
     ImGui::Separator();
 
@@ -69,6 +75,11 @@ void GameState::DebugUI()
     if (ImGui::Button("Random Greet Reaction"))
     {
         mReactionSystem.TriggerGreet();
+    }
+
+    if (ImGui::Button("Random Dance Reaction"))
+    {
+        mReactionSystem.TriggerDance();
     }
 
     ImGui::End();

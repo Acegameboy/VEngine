@@ -49,9 +49,9 @@ void AnimationReactionSystem::Initialize(
     };
 
     mPlayerAnimations.danceAnimations = {
-        4, //dance 1
-        5, //dance 2
-        6  //dance 3
+        7, //dance 1
+        8, //dance 2
+        9  //dance 3
     };
 
     //Character02
@@ -69,7 +69,7 @@ void AnimationReactionSystem::Initialize(
         6
     };
 
-    mPlayerAnimations.danceAnimations = {
+    mNpcAnimations.danceAnimations = {
         7, //greet 1
         8, //greet 2
         9  //greet 3
@@ -107,7 +107,7 @@ void AnimationReactionSystem::TriggerTaunt()
         PickRandomAnimation(mPlayerAnimations.tauntAnimations);
 
     const int npcAttack =
-        PickRandomAnimation(mNpcAnimations.attackAnimations);
+        PickRandomAnimation(mNpcAnimations.threatAnimations);
 
     PlayReaction(
         Action::Taunt,
@@ -136,6 +136,27 @@ void AnimationReactionSystem::TriggerGreet()
         Action::Greet,
         playerGreet,
         npcGreet,
+        3.0f);
+}
+
+void AnimationReactionSystem::TriggerDance()
+{
+    if (IsPlayingReaction())
+    {
+        LOG("TriggerDance ignored because another reaction is playing.");
+        return;
+    }
+
+    const int playerDance =
+        PickRandomAnimation(mPlayerAnimations.danceAnimations);
+
+    const int npcDance =
+        PickRandomAnimation(mNpcAnimations.danceAnimations);
+
+    PlayReaction(
+        Action::Dance,
+        playerDance,
+        npcDance,
         3.0f);
 }
 

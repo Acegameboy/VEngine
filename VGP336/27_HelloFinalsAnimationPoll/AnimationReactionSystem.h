@@ -10,7 +10,8 @@ public:
     {
         None,
         Taunt,
-        Greet
+        Greet,
+        Dance
     };
 
     struct AnimationPool
@@ -32,6 +33,7 @@ public:
 
     void TriggerTaunt();
     void TriggerGreet();
+    void TriggerDance();
 
     bool IsPlayingReaction() const
     {
