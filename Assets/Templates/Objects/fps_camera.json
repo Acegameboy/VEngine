@@ -5,9 +5,9 @@
       "LookAt": [ 0.0, 1.0, 1.0 ]
     },
     "FPSCameraComponent": {
-      "MoveSpeed": 0.0,
-      "ShiftSpeed": 0.0,
-      "TurnSpeed": 0.0
+      "MoveSpeed": 1.0,
+      "ShiftSpeed": 1.0,
+      "TurnSpeed": 1.0
     }
   }
 }

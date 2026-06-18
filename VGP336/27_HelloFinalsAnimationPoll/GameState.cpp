@@ -47,6 +47,29 @@ void GameState::Update(float deltaTime)
         mReactionSystem.TriggerDance();
     }
 
+    Math::Vector3 velocity = Math::Vector3::Zero;
+
+    if (input->IsKeyDown(KeyCode::UP))
+    {
+        velocity.z += 1.0f;
+    }
+    if (input->IsKeyDown(KeyCode::DOWN))
+    {
+        velocity.z -= 1.0f;
+    }
+    if (input->IsKeyDown(KeyCode::RIGHT))
+    {
+        velocity.x += 1.0f;
+    }
+    if (input->IsKeyDown(KeyCode::LEFT))
+    {
+        velocity.x -= 1.0f;
+    }
+    if (velocity.y < 1.0f && input->IsKeyDown(KeyCode::SPACE))
+    {
+        velocity.y = 10.0f;
+    }
+
     mReactionSystem.Update(deltaTime);
 
     mGameWorld.Update(deltaTime);
