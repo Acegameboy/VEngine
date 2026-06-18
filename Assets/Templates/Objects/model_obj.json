@@ -23,34 +23,6 @@
                 "Origin": [ 0.0, 1.0, 0.0 ]
             }
         },
-        "SoundBankComponent": {
-            "SoundEffects": {
-                "ZombieAttack_1": {
-                    "FileName": "ZAttack1.wav",
-                    "Looping": false
-                },
-                "ZombieAttack_2": {
-                    "FileName": "ZAttack2.wav",
-                    "Looping": false
-                },
-                "ZombieAttack_3": {
-                    "FileName": "ZAttack3.wav",
-                    "Looping": false
-                },
-                "ZombieScream": {
-                    "FileName": "ZScream.wav",
-                    "Looping": false
-                },
-                "ZombieIdle": {
-                    "FileName": "ZIdle.wav",
-                    "Looping": true
-                },
-                "SalsaBG": {
-                    "FileName": "SalsaBG.wav",
-                    "Looping": true
-                }
-            }
-        },
         "UITextComponent": {
             "Text": "Zombie Got Moves",
             "Color": [ 1.0, 1.0, 1.0, 1.0 ],

@@ -137,6 +137,20 @@ GameObject* GameWorld::CreateGameObject(std::string name, const std::filesystem:
     return slot.gameObject.get();
 }
 
+GameObject* VEngine::GameWorld::FindGameObject(const std::string& name)
+{
+    for (Slot& slot : mGameObjectSlots)
+    {
+        if (slot.gameObject != nullptr &&
+            slot.gameObject->GetName() == name)
+        {
+            return slot.gameObject.get();
+        }
+    }
+
+    return nullptr;
+}
+
 void GameWorld::DestroyGameObject(const GameObjectHandle& handle)
 {
     if (!IsValid(handle))

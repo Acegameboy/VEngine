@@ -8,69 +8,13 @@ using namespace VEngine::Math;
 
 void GameState::Initialize()
 {
-    mGameWorld.AddService<CameraService>();
-    mGameWorld.AddService<RenderService>();
+    mGameWorld.LoadLevel("../../Assets/Templates/Levels/level.json");
 
-    mGameWorld.Initialize(100);
+    mPlayer = mGameWorld.FindGameObject("Character01");
+    mNpc = mGameWorld.FindGameObject("Character02");
 
-    std::filesystem::path cameraPath =
-        "../../Assets/Templates/Objects/fps_camera.json";
-
-    std::filesystem::path playerPath =
-        "../../Assets/Templates/Objects/character01.json";
-
-    std::filesystem::path npcPath =
-        "../../Assets/Templates/Objects/character02.json";
-
-    ASSERT(std::filesystem::exists(cameraPath),
-        "Missing camera template file: %s",
-        cameraPath.u8string().c_str());
-
-    ASSERT(std::filesystem::exists(playerPath),
-        "Missing player template file: %s",
-        playerPath.u8string().c_str());
-
-    ASSERT(std::filesystem::exists(npcPath),
-        "Missing NPC template file: %s",
-        npcPath.u8string().c_str());
-
-    mCameraObject = mGameWorld.CreateGameObject(
-        "MainCamera",
-        cameraPath);
-
-    mPlayer = mGameWorld.CreateGameObject(
-        "Character1_Player",
-        playerPath);
-
-    mNpc = mGameWorld.CreateGameObject(
-        "Character2_NPC",
-        npcPath);
-
-    ASSERT(mCameraObject != nullptr, "Failed to create camera.");
-    ASSERT(mPlayer != nullptr, "Failed to create player.");
-    ASSERT(mNpc != nullptr, "Failed to create NPC.");
-
-    mCameraObject->Initialize();
-    mPlayer->Initialize();
-    mNpc->Initialize();
-
-    TransformComponent* playerTransform =
-        mPlayer->GetComponent<TransformComponent>();
-
-    TransformComponent* npcTransform =
-        mNpc->GetComponent<TransformComponent>();
-
-    if (playerTransform != nullptr)
-    {
-        playerTransform->position = { -1.5f, 0.0f, 0.0f };
-        playerTransform->scale = { 1.0f, 1.0f, 1.0f };
-    }
-
-    if (npcTransform != nullptr)
-    {
-        npcTransform->position = { 1.5f, 0.0f, 0.0f };
-        npcTransform->scale = { 1.0f, 1.0f, 1.0f };
-    }
+    ASSERT(mPlayer != nullptr, "GameState: Character01 not found in level.");
+    ASSERT(mNpc != nullptr, "GameState: Character02 not found in level.");
 
     mReactionSystem.Initialize(mPlayer, mNpc);
 }
