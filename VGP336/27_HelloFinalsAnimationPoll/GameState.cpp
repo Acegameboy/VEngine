@@ -30,14 +30,14 @@ void GameState::Terminate()
 
 void GameState::Update(float deltaTime)
 {
-    InputSystem* input = InputSystem::Get();
+    auto* input = VEngine::Input::InputSystem::Get();
 
-    if (input->IsKeyPressed(KeyCode::ONE))
+    if (input->IsKeyPressed(VEngine::Input::KeyCode::ONE))
     {
         mReactionSystem.TriggerTaunt();
     }
 
-    if (input->IsKeyPressed(KeyCode::TWO))
+    if (input->IsKeyPressed(VEngine::Input::KeyCode::TWO))
     {
         mReactionSystem.TriggerGreet();
     }
@@ -56,46 +56,19 @@ void GameState::DebugUI()
 {
     ImGui::Begin("Animation Pool Demo", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
-    if (ImGui::Button("Reaction: Player Taunt / NPC Attack"))
+    ImGui::Text("Press 1 = Random Player Taunt / Random NPC Attack");
+    ImGui::Text("Press 2 = Random Player Greet / Random NPC Greet");
+
+    ImGui::Separator();
+
+    if (ImGui::Button("Random Taunt Reaction"))
     {
         mReactionSystem.TriggerTaunt();
     }
 
-    if (ImGui::Button("Reaction: Player Greet / NPC Greet"))
+    if (ImGui::Button("Random Greet Reaction"))
     {
         mReactionSystem.TriggerGreet();
-    }
-
-    ImGui::Separator();
-
-    AnimatorComponent* playerAnimator =
-        mPlayer->GetComponent<AnimatorComponent>();
-
-    AnimatorComponent* npcAnimator =
-        mNpc->GetComponent<AnimatorComponent>();
-
-    if (ImGui::Button("Direct Play Player Anim 0"))
-    {
-        bool result = playerAnimator->Play(0, true);
-        LOG("Direct Player Play(0) = %s", result ? "true" : "false");
-    }
-
-    if (ImGui::Button("Direct Play Player Anim 1"))
-    {
-        bool result = playerAnimator->Play(1, false);
-        LOG("Direct Player Play(1) = %s", result ? "true" : "false");
-    }
-
-    if (ImGui::Button("Direct Play NPC Anim 0"))
-    {
-        bool result = npcAnimator->Play(0, true);
-        LOG("Direct NPC Play(0) = %s", result ? "true" : "false");
-    }
-
-    if (ImGui::Button("Direct Play NPC Anim 1"))
-    {
-        bool result = npcAnimator->Play(1, false);
-        LOG("Direct NPC Play(1) = %s", result ? "true" : "false");
     }
 
     ImGui::End();

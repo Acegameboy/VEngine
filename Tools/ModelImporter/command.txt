@@ -3,6 +3,8 @@
 -scale 0.01 ../../Assets/Models/Character02/Character02.fbx ../../Assets/Models/Character02/Character02.model
 
 //Character01
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Idle.fbx ../../Assets/Models/Character01/Idle.model
+
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting01.fbx ../../Assets/Models/Character01/Greeting01.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting02.fbx ../../Assets/Models/Character01/Greeting02.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character01/Greeting03.fbx ../../Assets/Models/Character01/Greeting03.model
@@ -17,6 +19,8 @@
 
 
 //Character02
+-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Idle.fbx ../../Assets/Models/Character02/Idle.model
+
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting01.fbx ../../Assets/Models/Character02/Greeting01.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting02.fbx ../../Assets/Models/Character02/Greeting02.model
 -animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Greeting03.fbx ../../Assets/Models/Character02/Greeting03.model

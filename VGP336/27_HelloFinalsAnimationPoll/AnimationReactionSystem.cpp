@@ -33,13 +33,47 @@ void AnimationReactionSystem::Initialize(
     LOG("Player animation count = %d", playerAnimCount);
     LOG("NPC animation count = %d", npcAnimCount);
 
+    //Character01
     mPlayerAnimations.idle = 0;
-    mPlayerAnimations.taunt = 1;
-    mPlayerAnimations.greet = 1;
 
+    mPlayerAnimations.tauntAnimations = {
+        1, //taunt 1
+        2, //taunt 2
+        3  //taunt 3
+    };
+
+    mPlayerAnimations.greetAnimations = {
+        4, //greet 1
+        5, //greet 2
+        6  //greet 3
+    };
+
+    mPlayerAnimations.danceAnimations = {
+        4, //dance 1
+        5, //dance 2
+        6  //dance 3
+    };
+
+    //Character02
     mNpcAnimations.idle = 0;
-    mNpcAnimations.attack = 1;
-    mNpcAnimations.greet = 1;
+
+    mNpcAnimations.threatAnimations = {
+        1,
+        2,
+        3
+    };
+
+    mNpcAnimations.greetAnimations = {
+        4,
+        5,
+        6
+    };
+
+    mPlayerAnimations.danceAnimations = {
+        7, //greet 1
+        8, //greet 2
+        9  //greet 3
+    };
 
     ReturnToIdle();
 }
@@ -69,11 +103,17 @@ void AnimationReactionSystem::TriggerTaunt()
         return;
     }
 
+    const int playerTaunt =
+        PickRandomAnimation(mPlayerAnimations.tauntAnimations);
+
+    const int npcAttack =
+        PickRandomAnimation(mNpcAnimations.attackAnimations);
+
     PlayReaction(
         Action::Taunt,
-        mPlayerAnimations.taunt,
-        mNpcAnimations.attack,
-        5.0f);
+        playerTaunt,
+        npcAttack,
+        3.0f);
 }
 
 void AnimationReactionSystem::TriggerGreet()
@@ -86,11 +126,54 @@ void AnimationReactionSystem::TriggerGreet()
         return;
     }
 
+    const int playerGreet =
+        PickRandomAnimation(mPlayerAnimations.greetAnimations);
+
+    const int npcGreet =
+        PickRandomAnimation(mNpcAnimations.greetAnimations);
+
     PlayReaction(
         Action::Greet,
-        mPlayerAnimations.greet,
-        mNpcAnimations.greet,
-        5.0f);
+        playerGreet,
+        npcGreet,
+        3.0f);
+}
+
+int AnimationReactionSystem::PickRandomAnimation(
+    const std::vector<int>& animationList)
+{
+    if (animationList.empty())
+    {
+        return -1;
+    }
+
+    std::uniform_int_distribution<int> distribution(
+        0,
+        static_cast<int>(animationList.size()) - 1);
+
+    const int randomIndex = distribution(mRandomGenerator);
+
+    return animationList[randomIndex];
+}
+
+bool AnimationReactionSystem::IsValidAnimationIndex(
+    AnimatorComponent* animator,
+    int animationIndex) const
+{
+    if (animator == nullptr)
+    {
+        return false;
+    }
+
+    if (animationIndex < 0)
+    {
+        return false;
+    }
+
+    const uint32_t animationCount =
+        animator->GetAnimator().GetAnimationCount();
+
+    return animationIndex < static_cast<int>(animationCount);
 }
 
 void AnimationReactionSystem::PlayReaction(
@@ -99,9 +182,15 @@ void AnimationReactionSystem::PlayReaction(
     int npcAnimation,
     float duration)
 {
-    if (playerAnimation < 0 || npcAnimation < 0)
+    if (!IsValidAnimationIndex(mPlayerAnimator, playerAnimation))
     {
-        LOG("AnimationReactionSystem: Invalid animation index.");
+        LOG("Player animation index %d is invalid.", playerAnimation);
+        return;
+    }
+
+    if (!IsValidAnimationIndex(mNpcAnimator, npcAnimation))
+    {
+        LOG("NPC animation index %d is invalid.", npcAnimation);
         return;
     }
 
@@ -115,18 +204,13 @@ void AnimationReactionSystem::PlayReaction(
     const bool npcPlayed =
         mNpcAnimator->Play(npcAnimation, false);
 
-    LOG("Player Play(%d) result = %s",
+    LOG("Player randomly picked animation %d. Play result = %s",
         playerAnimation,
         playerPlayed ? "true" : "false");
 
-    LOG("NPC Play(%d) result = %s",
+    LOG("NPC randomly picked animation %d. Play result = %s",
         npcAnimation,
         npcPlayed ? "true" : "false");
-
-    if (!playerPlayed || !npcPlayed)
-    {
-        LOG("AnimationReactionSystem: One or both animation indices are invalid.");
-    }
 }
 
 void AnimationReactionSystem::ReturnToIdle()
@@ -135,23 +219,13 @@ void AnimationReactionSystem::ReturnToIdle()
     mReactionTimer = 0.0f;
     mReactionDuration = 0.0f;
 
-    if (mPlayerAnimator != nullptr)
+    if (IsValidAnimationIndex(mPlayerAnimator, mPlayerAnimations.idle))
     {
-        const bool playerIdlePlayed =
-            mPlayerAnimator->Play(mPlayerAnimations.idle, true);
-
-        LOG("Player Idle Play(%d) result = %s",
-            mPlayerAnimations.idle,
-            playerIdlePlayed ? "true" : "false");
+        mPlayerAnimator->Play(mPlayerAnimations.idle, true);
     }
 
-    if (mNpcAnimator != nullptr)
+    if (IsValidAnimationIndex(mNpcAnimator, mNpcAnimations.idle))
     {
-        const bool npcIdlePlayed =
-            mNpcAnimator->Play(mNpcAnimations.idle, true);
-
-        LOG("NPC Idle Play(%d) result = %s",
-            mNpcAnimations.idle,
-            npcIdlePlayed ? "true" : "false");
+        mNpcAnimator->Play(mNpcAnimations.idle, true);
     }
 }

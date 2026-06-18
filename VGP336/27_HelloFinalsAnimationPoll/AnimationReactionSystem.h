@@ -2,6 +2,7 @@
 
 #include <VEngine/Inc/VEngine.h>
 
+
 class AnimationReactionSystem
 {
 public:
@@ -15,9 +16,12 @@ public:
     struct AnimationPool
     {
         int idle = 0;
-        int taunt = -1;
-        int greet = -1;
-        int attack = -1;
+
+        std::vector<int> greetAnimations;
+        std::vector<int> tauntAnimations;
+        std::vector<int> attackAnimations;
+        std::vector<int> danceAnimations;
+        std::vector<int> threatAnimations;
     };
 
     void Initialize(
@@ -35,6 +39,12 @@ public:
     }
 
 private:
+    int PickRandomAnimation(const std::vector<int>& animationList);
+
+    bool IsValidAnimationIndex(
+        VEngine::AnimatorComponent* animator,
+        int animationIndex) const;
+
     void PlayReaction(
         Action action,
         int playerAnimation,
@@ -56,4 +66,7 @@ private:
 
     float mReactionTimer = 0.0f;
     float mReactionDuration = 0.0f;
+
+    std::random_device mRandomDevice;
+    std::mt19937 mRandomGenerator{ mRandomDevice() };
 };

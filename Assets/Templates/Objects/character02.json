@@ -10,9 +10,17 @@
             "CastShadow": true,
             "FileName": "../../Assets/Models/character02/character02.model",
             "Animations": [
-                "../../Assets/Models/character02/Taunt01.animset",
+
+                "../../Assets/Models/character02/Idle.animset",
+                "../../Assets/Models/character02/Threat01.animset",
+                "../../Assets/Models/character02/Threat02.animset",
+                "../../Assets/Models/character02/Threat03.animset",
                 "../../Assets/Models/character02/Greeting01.animset",
-                "../../Assets/Models/character02/Dance01.animset"
+                "../../Assets/Models/character02/Greeting02.animset",
+                "../../Assets/Models/character02/Greeting03.animset",
+                "../../Assets/Models/character02/Dance01.animset",
+                "../../Assets/Models/character02/Dance02.animset",
+                "../../Assets/Models/character02/Dance03.animset"
             ]
         },
 
