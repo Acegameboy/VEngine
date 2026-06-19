@@ -42,22 +42,22 @@
         "Character01": {
             "Template": "../../Assets/Templates/Objects/character01.json",
             "Components": {
-                "TransformComponent": {
-                    "Position": [ -1.5, 0.0, 0.0 ],
-                    "Rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-                    "Scale": [ 0.01, 0.01, 0.01 ]
-                }
+              "TransformComponent": {
+                "Position": [ -1.5, 0.0, 0.0 ],
+                "Rotation": [ 0.0, 0.7071, 0.0, 0.7071 ],
+                "Scale": [ 0.01, 0.01, 0.01 ]
+              }
             }
         },
 
         "Character02": {
             "Template": "../../Assets/Templates/Objects/character02.json",
             "Components": {
-                "TransformComponent": {
-                    "Position": [ 1.5, 0.0, 0.0 ],
-                    "Rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-                    "Scale": [ 0.01, 0.01, 0.01 ]
-                }
+              "TransformComponent": {
+                "Position": [ 1.5, 0.0, 0.0 ],
+                "Rotation": [ 0.0, -0.7071, 0.0, 0.7071 ],
+                "Scale": [ 0.01, 0.01, 0.01 ]
+              }
             }
         }
     }
