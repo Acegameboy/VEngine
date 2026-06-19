@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>-animOnly 1 - scale 0.01 ../../Assets/Models/Character02/Idle.fbx ../../Assets/Models/Character02/Idle.model</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-animOnly 1 -scale 1.0 ../../Assets/Models/Character01/Dance03.fbx ../../Assets/Models/Character01/Dance03.model</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
