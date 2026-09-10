@@ -4,77 +4,87 @@
 using namespace VEngine;
 using namespace VEngine::Network;
 
-VEngine::Network::NetworkElement::NetworkElement(short prot) : mPort(port)
+NetworkElement::NetworkElement(unsigned short port)
+	: mPort(port)
 {
 
 }
-
-VEngine::Network::NetworkElement::~NetworkElement()
+NetworkElement::~NetworkElement()
 {
-	StopNetWork();
+	StopNetwork();
 }
 
-void VEngine::Network::NetworkElement::Initialize(HWND handle, const char* serverAddress)
+bool NetworkElement::IsInitialized() const
 {
 	return mInitialized;
 }
-
-void VEngine::Network::NetworkElement::Terminate()
+SOCKET NetworkElement::GetSocket() const
 {
+	return mMsgConnection;
+}
+unsigned short NetworkElement::GetPort() const
+{
+	return mPort;
+}
+const char* NetworkElement::GetData() const
+{
+	return mDataBuffer.data();
+}
+int NetworkElement::GetDataLength() const
+{
+	return mDataLength;
+}
+int NetworkElement::GetLastError() const
+{
+	return mWSAErr;
+}
+void NetworkElement::ResetMsg()
+{
+	mDataBuffer.fill('\0');
+	mDataLength = 0;
 }
 
-void VEngine::Network::NetworkElement::ReceiveMsg()
+bool NetworkElement::StartNetwork()
 {
-}
+	if (mNetworkStarted)
+	{
+		return true;
+	}
 
-void VEngine::Network::NetworkElement::SendMsg(const char* msg, int length)
-{
-}
+	WSADATA wsaData{};
+	mWSAErr = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (mWSAErr != 0)
+	{
+		return false;
+	}
 
-bool VEngine::Network::NetworkElement::IsInitialized() const
-{
-	return false;
+	mNetworkStarted = true;
+	return true;
 }
-
-SOCKET VEngine::Network::NetworkElement::GetSocket() const
+void NetworkElement::StopNetwork()
 {
-	return SOCKET();
+	if (mNetworkStarted)
+	{
+		WSACleanup();
+		mNetworkStarted = false;
+	}
 }
-
-unsigned short VEngine::Network::NetworkElement::GetPort() const
+bool NetworkElement::ConfigureSocketForMessages(HWND handle)
 {
-	return 0;
-}
+	if (mMsgConnection == INVALID_SOCKET)
+	{
+		return false;
+	}
+	if (handle != nullptr)
+	{
 
-const char* VEngine::Network::NetworkElement::GetData() const
-{
-	return nullptr;
-}
+		if (WSAAsyncSelect(mMsgConnection, handle, WM_SOCKET, FD_READ | FD_CLOSE) == SOCKET_ERROR)
+		{
+			mWSAErr = WSAGetLastError();
+			return false;
+		}
 
-int VEngine::Network::NetworkElement::GetDataLength() const
-{
-	return 0;
-}
-
-int VEngine::Network::NetworkElement::GetLastError() const
-{
-	return 0;
-}
-
-void VEngine::Network::NetworkElement::ResetMsg()
-{
-}
-
-bool VEngine::Network::NetworkElement::StartNetwork()
-{
-	return false;
-}
-
-void VEngine::Network::NetworkElement::StopNetWork()
-{
-}
-
-bool VEngine::Network::NetworkElement::ConfigureSocketForMessages(HWND handle)
-{
+		return true;
+	}
 	return false;
 }
