@@ -36,7 +36,7 @@ namespace VEngine::Network
 		sockaddr_in mServerAddr = {};
 		sockaddr_in mClientAddr = {};
 
-		std::array<char, RECEIVE_BUFFER_SIZE>mDataBuffer;
+		std::array<char, RECIEVE_BUFFER_SIZE>mDataBuffer;
 		int mDataLength = 0;
 		unsigned short mPort = DEFAULT_PORT;
 		int mWSAErr = 0;

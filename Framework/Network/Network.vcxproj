@@ -166,6 +166,20 @@
     <ClCompile Include="Src\Precompiled.cpp" />
     <ClCompile Include="Src\Server.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{7b9af0cf-95eb-4bab-a33d-828a422e7619}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Graphics\Graphics.vcxproj">
+      <Project>{06715d2d-ed14-4c97-ad48-69d4791835dc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Math\Math.vcxproj">
+      <Project>{466c8526-9784-4fba-8081-bf42092b4aa6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Physics\Physics.vcxproj">
+      <Project>{5004b408-53d4-4232-bf78-c75d3133b06a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

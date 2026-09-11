@@ -137,6 +137,11 @@
   <ItemGroup>
     <ClInclude Include="GameState.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engine\VEngine\VEngine.vcxproj">
+      <Project>{971feb19-88a8-42f5-875a-e3cc1b775dcf}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
