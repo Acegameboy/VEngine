@@ -2,6 +2,12 @@
 
 #include <VEngine/Inc/VEngine.h>
 
+#include <Network/Inc/Common.h>
+#include <Network/Inc/Server.h>
+#include <Network/Inc/Client.h>
+
+#include "NetworkPacket.h"
+
 #include <atomic>
 #include <condition_variable>
 #include <functional>
@@ -68,6 +74,11 @@ private:
     void ResetAsteroid(size_t index);
     bool CheckCollision(const Asteroid& asteroid) const;
 
+    void StartHost();
+    void StartClient();
+    void StopNetwork();
+    void UpdateNetwork();
+
 private:
     VEngine::Graphics::Camera mCamera;
 
@@ -89,4 +100,27 @@ private:
     std::atomic<bool> mGameOver = false;
 
     bool mUseParallelUpdate = true;
+
+    enum class NetworkMode
+    {
+        None,
+        Host,
+        Client
+    };
+
+    std::unique_ptr<VEngine::Network::Server> mServer;
+    std::unique_ptr<VEngine::Network::Client> mClient;
+
+    NetworkMode mNetworkMode = NetworkMode::None;
+
+    int mPlayerID = -1;
+
+    bool mNetworkConnected = false;
+
+    std::string mNetworkStatus = "Not connected";
+
+    char mServerAddress[64] = "127.0.0.1";
+
+
+
 };

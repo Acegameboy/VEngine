@@ -20,6 +20,7 @@
 #define LATENCT_DEV 150
 #define WM_SOCKET (WM_USER + 1)
 #define DEFAULT_PORT 8000
-#define RECIEVE_BUFFER_SIZE 65535 //max 16 value
+#define RECIEVE_BUFFER_SIZE 65535 //max 16 
+
 
 

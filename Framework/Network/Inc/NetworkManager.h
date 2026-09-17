@@ -1,48 +1,61 @@
 #pragma once
 
+
 namespace VEngine::Network
 {
-	class NetworkElement
+	class NetworkElement;
+	class NetworkController;
+
+	class NetworkManager final
 	{
 	public:
-		explicit NetworkElement(unsigned short port = DEFAULT_PORT);
-		virtual ~NetworkElement();
+		static void StaticInitialize(HWND handle);
+		static void StaticTerminate();
+		static NetworkManager* Get();
 
-		// remove copies 
-		NetworkElement(const NetworkElement&) = delete;
-		NetworkElement& operator=(const NetworkElement&) = delete;
+		NetworkManager() = default;
+		~NetworkManager() = default;
 
-		virtual void Initialize(HWND handle, const std::string& serverAddress) = 0;
-		virtual void Terminate() = 0;
+		void Initialize(HWND handle);
+		void StartNetwork(bool server, const std::string& serverAddress);
+		void Update(float deltaTime);
+		void Terminate();
+		void DebugUI();
 
-		virtual void ReceiveMsg() = 0;
-		virtual void SendMsg(const char* msg, int length) = 0;
+		void ReceiveMsg();
+		void SendMsg(const char* msg, int length);
 
-		// shared functions
-		bool IsInitialized() const;
-		SOCKET GetSocket() const;
-		unsigned short GetPort() const;
-		const char* GetData() const;
-		int GetDataLength() const;
-		int GetLastError() const;
-		void ResetMsg();
+		const std::string& GetLocalId() const;
+		const std::vector<std::string>& GetPlayerIds() const;
+		float GetLatencyAverage() const;
 
-	protected:
-		bool StartNetwork();
-		void StopNetwork();
-		bool ConfigureSocketForMessages(HWND handle);
+		void SetNetworkController(const std::string& id, NetworkController* networkController);
+		void RemoveNetworkController(const std::string& id);
 
-		SOCKET mMsgConnection = INVALID_SOCKET;
-		sockaddr_in mServerAddr = {};
-		sockaddr_in mClientAddr = {};
+	private:
+		static LRESULT CALLBACK NetworkManagerMessageHandler(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
 
-		std::array<char, RECEIVE_BUFFER_SIZE>mDataBuffer;
-		int mDataLength = 0;
+		bool mStarted = false;
+		bool mConnected = false;
+		bool mServer = false;
+		bool mObtainLatency = false;
+		bool mServerDoneLatencyCheck = false;
+		int mLatencyCount = 0;
+		float mLatencyTime = 0.0f;
+		float mLatencyAverage = 0.0f;
+		float mClientServerDelta = 0.0f;
+		float mClockDelta = 0.0f;
+		float mSentLatencyTime = 0.0f;
+		float mGameTime = 0.0f;
+		float mNextUpdateTime = 0.0f;
+		std::vector<float> mLatencyCalcTime;
 		unsigned short mPort = DEFAULT_PORT;
-		int mWSAErr = 0;
-
-		bool mNetworkStarted = false;
-		bool mInitialized = false;
-
+		std::string mServerAddress;
+		NetworkElement* mNetwork = nullptr;
+		HWND mWindow = nullptr;
+		std::string mWriteMessage;
+		std::vector<std::string> mPlayerIds;
+		std::unordered_map<std::string, float> mNextSetIdAttemp;
+		std::unordered_map<std::string, NetworkController*> mNetworkControllers;
 	};
 }

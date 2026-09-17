@@ -172,7 +172,7 @@ void NetworkManager::Update(float deltaTime)
 					const Math::Vector3& pos = localTransform->position;
 					const Math::Quaternion& rot = localTransform->rotation;
 					const Math::Vector3 vel = rigidBody->GetVelocity();
-					const Math::Vector3 angVel = rigidBody->GetAngularVelocity();
+					const Math::Vector3 angVel = rigidBody->GetVelocity();
 					float currentTime = Core::TimeUtil::GetTime();
 					char msgData[256];
 					sprintf_s(msgData, "%d %s %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
@@ -182,7 +182,7 @@ void NetworkManager::Update(float deltaTime)
 						currentTime);
 					SendMsg(msgData, 256);
 
-					mNextUpdateTime += POSITION_UPDATE_RATE;
+					//mNextUpdateTime += POSITION_UPDATE_RATE;
 				}
 			}
 		}
@@ -404,7 +404,7 @@ void NetworkManager::Update(float deltaTime)
 			int index = 0;
 			for (int i = 0; i < mLatencyCalcTime.size(); ++i)
 			{
-				if (mLatencyCalcTime[index] > median + LATENCY_DEV ||
+				/*if (mLatencyCalcTime[index] > median + LATENCY_DEV ||
 					mLatencyCalcTime[index] < median - LATENCY_DEV)
 				{
 					std::vector<float>::iterator itr = mLatencyCalcTime.begin() + index;
@@ -414,7 +414,7 @@ void NetworkManager::Update(float deltaTime)
 				{
 					sum += mLatencyCalcTime[index];
 					++index;
-				}
+				}*/
 			}
 			// calculate the latency average
 			mLatencyAverage = sum / (float)mLatencyCalcTime.size();
@@ -472,7 +472,7 @@ void NetworkManager::Update(float deltaTime)
 			// where is the other player now
 			targetTrans.position = pos + vel * (2.0 * mLatencyAverage);
 			// where should it be at the end
-			targetTrans.position += vel * POSITION_UPDATE_RATE;
+			//targetTrans.position += vel * POSITION_UPDATE_RATE;
 			// need to predict current location
 			// startingPoint = pos + vel * mLatencyAverage
 			// endPoint = startingPoint + vel * POSITION_UPDATE_RATE

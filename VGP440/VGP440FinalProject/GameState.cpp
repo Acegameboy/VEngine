@@ -137,6 +137,8 @@ void GameState::Initialize()
 
 void GameState::Terminate()
 {
+    StopNetwork();
+
     mThreadPool.Stop();
     mAsteroids.clear();
 }
@@ -159,6 +161,8 @@ void GameState::ResetGame()
 
 void GameState::Update(float deltaTime)
 {
+    UpdateNetwork();
+
     InputSystem* input = InputSystem::Get();
 
     if (input->IsKeyPressed(KeyCode::R))
@@ -302,6 +306,189 @@ bool GameState::CheckCollision(const Asteroid& asteroid) const
     return distanceSquared <= radiusSum * radiusSum;
 }
 
+void GameState::StartHost()
+{
+    StopNetwork();
+
+    HWND window = GetActiveWindow();
+
+    if (window == nullptr)
+    {
+        mNetworkStatus = "Could not get VEngine window.";
+        return;
+    }
+
+    mServer = std::make_unique<Network::Server>(8000);
+
+    mServer->Initialize(window, "");
+
+    if (!mServer->IsInitialized())
+    {
+        mNetworkStatus =
+            "Server failed. WSA Error: "
+            + std::to_string(mServer->GetLastError());
+
+        mServer.reset();
+        return;
+    }
+
+    mNetworkMode = NetworkMode::Host;
+
+    // Host is always Player 1.
+    mPlayerID = 1;
+
+    mNetworkConnected = false;
+
+    mNetworkStatus =
+        "Host started. Waiting for Player 2...";
+}
+
+void GameState::StartClient()
+{
+    StopNetwork();
+
+    HWND window = GetActiveWindow();
+
+    if (window == nullptr)
+    {
+        mNetworkStatus = "Could not get VEngine window.";
+        return;
+    }
+
+    mClient = std::make_unique<Network::Client>(8000);
+
+    mClient->Initialize(
+        window,
+        mServerAddress);
+
+    if (!mClient->IsInitialized())
+    {
+        mNetworkStatus =
+            "Client failed. WSA Error: "
+            + std::to_string(mClient->GetLastError());
+
+        mClient.reset();
+        return;
+    }
+
+    mNetworkMode = NetworkMode::Client;
+
+    mPlayerID = -1;
+
+    mNetworkConnected = false;
+
+    JoinPacket packet;
+
+    mClient->SendMsg(
+        reinterpret_cast<const char*>(&packet),
+        sizeof(packet));
+
+    mNetworkStatus =
+        "Join request sent...";
+}
+
+void GameState::StopNetwork()
+{
+    if (mServer)
+    {
+        mServer->Terminate();
+        mServer.reset();
+    }
+
+    if (mClient)
+    {
+        mClient->Terminate();
+        mClient.reset();
+    }
+
+    mNetworkMode = NetworkMode::None;
+    mPlayerID = -1;
+    mNetworkConnected = false;
+}
+
+void GameState::UpdateNetwork()
+{
+    // HOST
+    if (mNetworkMode == NetworkMode::Host &&
+        mServer)
+    {
+        mServer->ResetMsg();
+        mServer->ReceiveMsg();
+
+        const int dataLength =
+            mServer->GetDataLength();
+
+        if (dataLength >= sizeof(AsteroidPacketType))
+        {
+            AsteroidPacketType packetType;
+
+            std::memcpy(
+                &packetType,
+                mServer->GetData(),
+                sizeof(packetType));
+
+            if (packetType ==
+                AsteroidPacketType::Join)
+            {
+                mNetworkConnected = true;
+
+                mNetworkStatus =
+                    "Player 2 connected.";
+
+                WelcomePacket welcome;
+
+                welcome.playerID = 2;
+
+                mServer->SendMsg(
+                    reinterpret_cast<const char*>(&welcome),
+                    sizeof(welcome));
+            }
+        }
+    }
+
+    // CLIENT
+    if (mNetworkMode == NetworkMode::Client &&
+        mClient)
+    {
+        mClient->ResetMsg();
+        mClient->ReceiveMsg();
+
+        const int dataLength =
+            mClient->GetDataLength();
+
+        if (dataLength >= sizeof(AsteroidPacketType))
+        {
+            AsteroidPacketType packetType;
+
+            std::memcpy(
+                &packetType,
+                mClient->GetData(),
+                sizeof(packetType));
+
+            if (packetType ==
+                AsteroidPacketType::Welcome &&
+                dataLength >= sizeof(WelcomePacket))
+            {
+                WelcomePacket welcome;
+
+                std::memcpy(
+                    &welcome,
+                    mClient->GetData(),
+                    sizeof(welcome));
+
+                mPlayerID =
+                    welcome.playerID;
+
+                mNetworkConnected = true;
+
+                mNetworkStatus =
+                    "Connected as Player "
+                    + std::to_string(mPlayerID);
+            }
+        }
+    }
+}
+
 void GameState::Render()
 {
     SimpleDraw::AddGroundPlane(12.0f, Colors::DarkSeaGreen);
@@ -360,6 +547,67 @@ void GameState::DebugUI()
     {
         ResetGame();
     }
+
+    ImGui::Text("MULTIPLAYER");
+
+    ImGui::Separator();
+
+    ImGui::Text(
+        "Status: %s",
+        mNetworkStatus.c_str());
+
+    if (mNetworkMode == NetworkMode::Host)
+    {
+        ImGui::Text("Mode: Host");
+    }
+    else if (mNetworkMode == NetworkMode::Client)
+    {
+        ImGui::Text("Mode: Client");
+    }
+    else
+    {
+        ImGui::Text("Mode: None");
+    }
+
+    if (mPlayerID != -1)
+    {
+        ImGui::Text(
+            "Player ID: %d",
+            mPlayerID);
+    }
+    else
+    {
+        ImGui::Text("Player ID: Waiting...");
+    }
+
+    ImGui::InputText(
+        "Server IP",
+        mServerAddress,
+        sizeof(mServerAddress));
+
+    if (ImGui::Button("Start Host"))
+    {
+        StartHost();
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Join Host"))
+    {
+        StartClient();
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Disconnect"))
+    {
+        StopNetwork();
+
+        mNetworkStatus =
+            "Not connected";
+    }
+
+    ImGui::Separator();
 
     ImGui::End();
 }
