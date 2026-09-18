@@ -134,6 +134,9 @@
     <ProjectReference Include="..\..\Engine\VEngine\VEngine.vcxproj">
       <Project>{971feb19-88a8-42f5-875a-e3cc1b775dcf}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Framework\Network\Network.vcxproj">
+      <Project>{b00a6291-8ed4-49d9-93bd-fe25f28fa3f0}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameState.cpp" />
