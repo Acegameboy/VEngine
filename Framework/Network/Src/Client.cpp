@@ -116,7 +116,7 @@ void Client::SendMsg(const char* msg, int length)
 	{
 		return;
 	}
-	if (msg == nullptr || length <= 0 || length > RECEIVE_BUFFER_SIZE)
+	if (msg == nullptr || length <= 0 || length > RECIEVE_BUFFER_SIZE)
 	{
 		mWSAErr = WSAEMSGSIZE;
 		return;

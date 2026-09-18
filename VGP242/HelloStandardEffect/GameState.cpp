@@ -41,7 +41,7 @@ void GameState::Initialize()
 	
 	Mesh mesh = MeshBuilder::CreateSphere(10, 10, 1.0f);
 	mRenderObject.meshBuffer.Initialize<Mesh>(mesh);
-	mRenderObject.texture.Initialize(L"../../Assets/Textures/earth.jpg");
+	mRenderObject.material.Initialize(L"../../Assets/Textures/earth.jpg");
 
 	constexpr uint32_t size = 512;
 	mRenderTarget.Initialize(size, size, RenderTarget::Format::RGBA_U32);

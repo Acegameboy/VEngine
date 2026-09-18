@@ -163,7 +163,9 @@
     <ClCompile Include="Src\NetworkElement.cpp" />
     <ClCompile Include="Src\NetworkEvents.cpp" />
     <ClCompile Include="Src\NetworkManager.cpp" />
-    <ClCompile Include="Src\Precompiled.cpp" />
+    <ClCompile Include="Src\Precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Src\Server.cpp" />
   </ItemGroup>
   <ItemGroup>

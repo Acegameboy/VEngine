@@ -75,10 +75,10 @@ void NetworkController::Update(float deltaTime)
 	// 
 	if (mLastTimeStamp > 0.0f)
 	{
-		mCurrentTime += deltaTime;
+		/*mCurrentTime += deltaTime;
 		float updateRate = POSITION_UPDATE_RATE;
 		mSimTransform.position = Math::Lerp(mLocalTransform->position, mTargetSimTransform.position, mCurrentTime / updateRate);
-		SetPosition(mSimTransform.position);
+		SetPosition(mSimTransform.position);*/
 	}
 }
 void NetworkController::SetTargetTransform(const Graphics::Transform& targetTransform, float timeStamp)

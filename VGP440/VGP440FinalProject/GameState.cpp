@@ -4,6 +4,7 @@ using namespace VEngine;
 using namespace VEngine::Graphics;
 using namespace VEngine::Input;
 using namespace VEngine::Math;
+using namespace VEngine::Network;
 
 namespace
 {

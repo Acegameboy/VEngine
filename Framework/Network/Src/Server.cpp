@@ -126,7 +126,7 @@ void Server::SendMsg(const char* msg, int length)
 		return;
 	}
 
-	if (static_cast<std::size_t>(length) > RECEIVE_BUFFER_SIZE)
+	if (static_cast<std::size_t>(length) > RECIEVE_BUFFER_SIZE)
 	{
 		return;
 	}
