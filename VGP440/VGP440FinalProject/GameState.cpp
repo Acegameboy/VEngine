@@ -1,5 +1,7 @@
 #include "GameState.h"
 
+#include <cstring>
+
 using namespace VEngine;
 using namespace VEngine::Graphics;
 using namespace VEngine::Input;
@@ -146,15 +148,47 @@ void GameState::Terminate()
 
 void GameState::ResetGame()
 {
-    mScore = 0;
-    mGameOver = false;
+    mPlayers[0] = PlayerState{};
+    mPlayers[1] = PlayerState{};
 
-    mPlayerPosition = { 0.0f, 0.25f, -3.0f };
+    // Player 1 starts on the left.
+    mPlayers[0].position =
+    {
+        -1.0f,
+        0.25f,
+        -3.0f
+    };
+
+    // Player 2 starts on the right.
+    mPlayers[1].position =
+    {
+        1.0f,
+        0.25f,
+        -3.0f
+    };
+
+    mPlayers[0].alive = true;
+    mPlayers[1].alive = true;
+
+    mPlayers[0].survivalTime = 0.0f;
+    mPlayers[1].survivalTime = 0.0f;
+
+    mRemoteMovement = 0.0f;
+
+    mMatchOver = false;
+    mWinner = 0;
+
+    mStateBroadcastTimer = 0.0f;
+    mAsteroidBroadcastTimer = 0.0f;
 
     mAsteroids.clear();
-    mAsteroids.resize(static_cast<size_t>(mAsteroidCount));
 
-    for (size_t i = 0; i < mAsteroids.size(); ++i)
+    mAsteroids.resize(
+        static_cast<size_t>(mAsteroidCount));
+
+    for (size_t i = 0;
+        i < mAsteroids.size();
+        ++i)
     {
         ResetAsteroid(i);
     }
@@ -162,36 +196,116 @@ void GameState::ResetGame()
 
 void GameState::Update(float deltaTime)
 {
-    UpdateNetwork();
+    UpdateNetwork(deltaTime);
 
     InputSystem* input = InputSystem::Get();
 
-    if (input->IsKeyPressed(KeyCode::R))
-    {
-        ResetGame();
-    }
-
-    if (input->IsKeyPressed(KeyCode::SPACE))
-    {
-        mUseParallelUpdate = !mUseParallelUpdate;
-    }
-
     UpdateCamera(deltaTime);
 
-    if (mGameOver)
+    // HOST controls restarting the match.
+    if (mNetworkMode == NetworkMode::Host &&
+        mNetworkConnected &&
+        input->IsKeyPressed(KeyCode::R))
+    {
+        ResetGame();
+
+        mMatchStarted = true;
+
+        RestartPacket packet;
+
+        mServer->SendMsg(
+            reinterpret_cast<const char*>(&packet),
+            sizeof(packet));
+
+        SendGameState();
+        SendAsteroidSnapshot();
+    }
+
+    // Nothing should simulate until both players
+    // are connected.
+    if (!mNetworkConnected ||
+        !mMatchStarted)
     {
         return;
     }
 
-    UpdatePlayer(deltaTime);
+    // ===============================
+    // HOST
+    // ===============================
 
-    if (mUseParallelUpdate)
+    if (mNetworkMode == NetworkMode::Host)
     {
-        UpdateAsteroidsParallel(deltaTime);
+        if (!mMatchOver)
+        {
+            UpdatePlayer(deltaTime);
+
+            // Count survival time only while alive.
+            for (PlayerState& player : mPlayers)
+            {
+                if (player.alive)
+                {
+                    player.survivalTime += deltaTime;
+                }
+            }
+
+            // ONLY THE HOST updates the real asteroids.
+            if (mUseParallelUpdate)
+            {
+                UpdateAsteroidsParallel(deltaTime);
+            }
+            else
+            {
+                UpdateAsteroidRange(
+                    0,
+                    mAsteroids.size(),
+                    deltaTime);
+            }
+
+            // Collision is server authoritative.
+            CheckPlayerCollisions();
+        }
+
+        // Send player/game state frequently.
+        mStateBroadcastTimer -= deltaTime;
+
+        if (mStateBroadcastTimer <= 0.0f)
+        {
+            SendGameState();
+
+            mStateBroadcastTimer +=
+                mStateBroadcastRate;
+        }
+
+        // Send asteroid corrections less frequently.
+        mAsteroidBroadcastTimer -= deltaTime;
+
+        if (mAsteroidBroadcastTimer <= 0.0f)
+        {
+            SendAsteroidSnapshot();
+
+            mAsteroidBroadcastTimer +=
+                mAsteroidBroadcastRate;
+        }
     }
-    else
+
+    // ===============================
+    // CLIENT
+    // ===============================
+
+    else if (mNetworkMode == NetworkMode::Client)
     {
-        UpdateAsteroidRange(0, mAsteroids.size(), deltaTime);
+        if (!mMatchOver)
+        {
+            UpdatePlayer(deltaTime);
+
+            // Client only predicts asteroid movement
+            // between server updates.
+            for (Asteroid& asteroid : mAsteroids)
+            {
+                asteroid.position.z +=
+                    asteroid.velocity.z * deltaTime;
+            }
+        }
     }
 }
 
@@ -201,26 +315,73 @@ void GameState::UpdatePlayer(float deltaTime)
 
     float movement = 0.0f;
 
-    if (input->IsKeyDown(KeyCode::A) || input->IsKeyDown(KeyCode::LEFT))
+    if (input->IsKeyDown(KeyCode::A) ||
+        input->IsKeyDown(KeyCode::LEFT))
     {
         movement -= 1.0f;
     }
 
-    if (input->IsKeyDown(KeyCode::D) || input->IsKeyDown(KeyCode::RIGHT))
+    if (input->IsKeyDown(KeyCode::D) ||
+        input->IsKeyDown(KeyCode::RIGHT))
     {
         movement += 1.0f;
     }
 
-    mPlayerPosition.x += movement * mPlayerSpeed * deltaTime;
+    // ===============================
+    // PLAYER 1 / HOST
+    // ===============================
 
-    if (mPlayerPosition.x < -mArenaHalfWidth)
+    if (mNetworkMode == NetworkMode::Host)
     {
-        mPlayerPosition.x = -mArenaHalfWidth;
+        if (mPlayers[0].alive)
+        {
+            ApplyMovement(
+                mPlayers[0],
+                movement,
+                deltaTime);
+        }
+
+        // Player 2 movement comes from network.
+        if (mPlayers[1].alive)
+        {
+            ApplyMovement(
+                mPlayers[1],
+                mRemoteMovement,
+                deltaTime);
+        }
     }
 
-    if (mPlayerPosition.x > mArenaHalfWidth)
+    // ===============================
+    // PLAYER 2 / CLIENT
+    // ===============================
+
+    else if (mNetworkMode == NetworkMode::Client)
     {
-        mPlayerPosition.x = mArenaHalfWidth;
+        // Local prediction.
+        if (mPlayers[1].alive)
+        {
+            ApplyMovement(
+                mPlayers[1],
+                movement,
+                deltaTime);
+        }
+
+        PlayerInputPacket packet;
+
+        packet.playerID = 2;
+
+        if (mPlayers[1].alive)
+        {
+            packet.movement = movement;
+        }
+        else
+        {
+            packet.movement = 0.0f;
+        }
+
+        mClient->SendMsg(
+            reinterpret_cast<const char*>(&packet),
+            sizeof(packet));
     }
 }
 
@@ -261,15 +422,8 @@ void GameState::UpdateAsteroidRange(size_t startIndex, size_t endIndex, float de
 
         if (asteroid.position.z < mDeathZ)
         {
-            ++mScore;
             ++asteroid.resetCount;
             ResetAsteroid(i);
-            continue;
-        }
-
-        if (CheckCollision(asteroid))
-        {
-            mGameOver = true;
         }
     }
 }
@@ -296,13 +450,479 @@ void GameState::ResetAsteroid(size_t index)
     asteroid.radius = Lerp(0.08f, 0.22f, radius01);
 }
 
-bool GameState::CheckCollision(const Asteroid& asteroid) const
+void GameState::ApplyMovement(PlayerState& player, float movement, float deltaTime)
 {
-    const float dx = asteroid.position.x - mPlayerPosition.x;
-    const float dz = asteroid.position.z - mPlayerPosition.z;
+    player.position.x += movement * mPlayerSpeed * deltaTime;
+
+    if (player.position.x < -mArenaHalfWidth)
+    {
+        player.position.x = -mArenaHalfWidth;
+    }
+
+    if (player.position.x > mArenaHalfWidth)
+    {
+        player.position.x = mArenaHalfWidth;
+    }
+}
+
+void GameState::CheckPlayerCollisions()
+{
+    for (const Asteroid& asteroid : mAsteroids)
+    {
+        for (PlayerState& player : mPlayers)
+        {
+            if (!player.alive)
+            {
+                continue;
+            }
+
+            if (CheckCollision(
+                asteroid,
+                player))
+            {
+                player.alive = false;
+            }
+        }
+    }
+
+    // Match ends after BOTH players have died.
+    if (!mPlayers[0].alive &&
+        !mPlayers[1].alive &&
+        !mMatchOver)
+    {
+        mMatchOver = true;
+
+        const float player1Time =
+            mPlayers[0].survivalTime;
+
+        const float player2Time =
+            mPlayers[1].survivalTime;
+
+        const float difference =
+            player1Time - player2Time;
+
+        if (difference > 0.001f)
+        {
+            mWinner = 1;
+        }
+        else if (difference < -0.001f)
+        {
+            mWinner = 2;
+        }
+        else
+        {
+            mWinner = 0;
+        }
+
+        SendGameState();
+    }
+}
+
+bool GameState::CheckCollision(const Asteroid& asteroid, const PlayerState& player) const
+{
+    const float dx = asteroid.position.x - player.position.x;
+
+    const float dz = asteroid.position.z - player.position.z;
 
     const float distanceSquared = (dx * dx) + (dz * dz);
-    const float radiusSum = asteroid.radius + mPlayerRadius;
+
+    const float radiusSum = asteroid.radius + player.radius;
+
+    return distanceSquared <= radiusSum * radiusSum;
+}
+
+void GameState::SendGameState()
+{
+    if (!mServer ||
+        !mNetworkConnected)
+    {
+        return;
+    }
+
+    GameStatePacket packet;
+
+    for (int i = 0; i < 2; ++i)
+    {
+        packet.players[i].x = mPlayers[i].position.x;
+
+        packet.players[i].y = mPlayers[i].position.y;
+
+        packet.players[i].z = mPlayers[i].position.z;
+
+        packet.players[i].survivalTime = mPlayers[i].survivalTime;
+
+        packet.players[i].alive = mPlayers[i].alive ? 1 : 0;
+    }
+
+    packet.matchStarted = mMatchStarted ? 1 : 0;
+
+    packet.matchOver = mMatchOver ? 1 : 0;
+
+    packet.winner = mWinner;
+
+    mServer->SendMsg(reinterpret_cast<const char*>(&packet), sizeof(packet));
+}
+
+void GameState::SendAsteroidSnapshot()
+{
+    if (!mServer ||
+        !mNetworkConnected)
+    {
+        return;
+    }
+
+    for (size_t start = 0;
+        start < mAsteroids.size();
+        start += ASTEROIDS_PER_PACKET)
+    {
+        AsteroidChunkPacket packet;
+
+        packet.startIndex =
+            static_cast<uint32_t>(start);
+
+        packet.count =
+            static_cast<uint32_t>(
+                std::min<size_t>(
+                    ASTEROIDS_PER_PACKET,
+                    mAsteroids.size() - start));
+
+        for (uint32_t i = 0;
+            i < packet.count;
+            ++i)
+        {
+            const Asteroid& asteroid =
+                mAsteroids[start + i];
+
+            NetworkAsteroidState&
+                networkAsteroid =
+                packet.asteroids[i];
+
+            networkAsteroid.x =
+                asteroid.position.x;
+
+            networkAsteroid.y =
+                asteroid.position.y;
+
+            networkAsteroid.z =
+                asteroid.position.z;
+
+            networkAsteroid.velocityZ =
+                asteroid.velocity.z;
+
+            networkAsteroid.radius =
+                asteroid.radius;
+
+            networkAsteroid.resetCount =
+                asteroid.resetCount;
+        }
+
+        mServer->SendMsg(
+            reinterpret_cast<const char*>(&packet),
+            sizeof(packet));
+    }
+}
+
+void GameState::ProcessServerPacket(const char* data, int dataLength)
+{
+    if (data == nullptr ||
+        dataLength <
+        static_cast<int>(sizeof(AsteroidPacketType)))
+    {
+        return;
+    }
+
+    AsteroidPacketType packetType;
+
+    std::memcpy(
+        &packetType,
+        data,
+        sizeof(packetType));
+
+    switch (packetType)
+    {
+        // =====================================
+        // CLIENT JOINS THE HOST
+        // =====================================
+    case AsteroidPacketType::Join:
+    {
+        mNetworkConnected = true;
+
+        mNetworkStatus =
+            "Player 2 connected.";
+
+        // Tell the client that it is Player 2.
+        WelcomePacket welcomePacket;
+
+        welcomePacket.playerID = 2;
+
+        welcomePacket.asteroidCount =
+            static_cast<uint32_t>(
+                mAsteroids.size());
+
+        mServer->SendMsg(
+            reinterpret_cast<const char*>(
+                &welcomePacket),
+            sizeof(welcomePacket));
+
+        // Start one shared match.
+        ResetGame();
+
+        mMatchStarted = true;
+        mMatchOver = false;
+        mWinner = 0;
+
+        // Send the starting world state
+        // immediately to Player 2.
+        SendGameState();
+        SendAsteroidSnapshot();
+
+        break;
+    }
+
+    // =====================================
+    // PLAYER 2 INPUT
+    // =====================================
+    case AsteroidPacketType::PlayerInput:
+    {
+        if (dataLength <
+            static_cast<int>(
+                sizeof(PlayerInputPacket)))
+        {
+            break;
+        }
+
+        PlayerInputPacket inputPacket;
+
+        std::memcpy(
+            &inputPacket,
+            data,
+            sizeof(inputPacket));
+
+        // Only Player 2 should send
+        // movement to the host.
+        if (inputPacket.playerID == 2)
+        {
+            mRemoteMovement =
+                inputPacket.movement;
+
+            // Prevent invalid movement values.
+            if (mRemoteMovement < -1.0f)
+            {
+                mRemoteMovement = -1.0f;
+            }
+
+            if (mRemoteMovement > 1.0f)
+            {
+                mRemoteMovement = 1.0f;
+            }
+        }
+
+        break;
+    }
+
+    default:
+    {
+        break;
+    }
+    }
+}
+
+void GameState::ProcessClientPacket(const char* data, int dataLength)
+{
+    if (data == nullptr ||
+        dataLength <
+        static_cast<int>(sizeof(AsteroidPacketType)))
+    {
+        return;
+    }
+
+    AsteroidPacketType packetType;
+
+    std::memcpy(
+        &packetType,
+        data,
+        sizeof(packetType));
+
+    switch (packetType)
+    {
+        // =====================================
+        // WELCOME
+        // =====================================
+
+    case AsteroidPacketType::Welcome:
+    {
+        if (dataLength <
+            static_cast<int>(
+                sizeof(WelcomePacket)))
+        {
+            break;
+        }
+
+        WelcomePacket packet;
+
+        std::memcpy(
+            &packet,
+            data,
+            sizeof(packet));
+
+        mPlayerID =
+            packet.playerID;
+
+        mNetworkConnected = true;
+
+        mNetworkStatus =
+            "Connected as Player "
+            + std::to_string(mPlayerID);
+
+        // Make sure client has same
+        // number of asteroids as server.
+        mAsteroids.resize(
+            packet.asteroidCount);
+
+        break;
+    }
+
+    // =====================================
+    // GAME STATE
+    // =====================================
+
+    case AsteroidPacketType::GameState:
+    {
+        if (dataLength <
+            static_cast<int>(
+                sizeof(GameStatePacket)))
+        {
+            break;
+        }
+
+        GameStatePacket packet;
+
+        std::memcpy(
+            &packet,
+            data,
+            sizeof(packet));
+
+        for (int i = 0; i < 2; ++i)
+        {
+            mPlayers[i].position =
+            {
+                packet.players[i].x,
+                packet.players[i].y,
+                packet.players[i].z
+            };
+
+            mPlayers[i].survivalTime =
+                packet.players[i].survivalTime;
+
+            mPlayers[i].alive =
+                packet.players[i].alive != 0;
+        }
+
+        mMatchStarted =
+            packet.matchStarted != 0;
+
+        mMatchOver =
+            packet.matchOver != 0;
+
+        mWinner =
+            packet.winner;
+
+        break;
+    }
+
+    // =====================================
+    // ASTEROIDS
+    // =====================================
+
+    case AsteroidPacketType::AsteroidChunk:
+    {
+        if (dataLength <
+            static_cast<int>(
+                sizeof(AsteroidChunkPacket)))
+        {
+            break;
+        }
+
+        AsteroidChunkPacket packet;
+
+        std::memcpy(
+            &packet,
+            data,
+            sizeof(packet));
+
+        for (uint32_t i = 0;
+            i < packet.count;
+            ++i)
+        {
+            const size_t index =
+                packet.startIndex + i;
+
+            if (index >=
+                mAsteroids.size())
+            {
+                continue;
+            }
+
+            Asteroid& asteroid =
+                mAsteroids[index];
+
+            const NetworkAsteroidState&
+                networkAsteroid =
+                packet.asteroids[i];
+
+            asteroid.position =
+            {
+                networkAsteroid.x,
+                networkAsteroid.y,
+                networkAsteroid.z
+            };
+
+            asteroid.velocity =
+            {
+                0.0f,
+                0.0f,
+                networkAsteroid.velocityZ
+            };
+
+            asteroid.radius =
+                networkAsteroid.radius;
+
+            asteroid.resetCount =
+                networkAsteroid.resetCount;
+        }
+
+        break;
+    }
+
+    // =====================================
+    // RESTART
+    // =====================================
+
+    case AsteroidPacketType::Restart:
+    {
+        ResetGame();
+
+        mMatchStarted = true;
+
+        break;
+    }
+
+    default:
+    {
+        break;
+    }
+    }
+}
+
+bool GameState::CheckCollision(const Asteroid& asteroid, const PlayerState& player) const
+{
+    const float dx = asteroid.position.x - player.position.x;
+
+    const float dz = asteroid.position.z - player.position.z;
+
+    const float distanceSquared = (dx * dx) + (dz * dz);
+
+    const float radiusSum = asteroid.radius + player.radius;
 
     return distanceSquared <= radiusSum * radiusSum;
 }
@@ -407,9 +1027,11 @@ void GameState::StopNetwork()
     mNetworkConnected = false;
 }
 
-void GameState::UpdateNetwork()
+void GameState::UpdateNetwork(float deltaTime)
 {
-    // HOST
+    // =============================
+    // HOST / SERVER
+    // =============================
     if (mNetworkMode == NetworkMode::Host &&
         mServer)
     {
@@ -419,35 +1041,17 @@ void GameState::UpdateNetwork()
         const int dataLength =
             mServer->GetDataLength();
 
-        if (dataLength >= sizeof(AsteroidPacketType))
+        if (dataLength > 0)
         {
-            AsteroidPacketType packetType;
-
-            std::memcpy(
-                &packetType,
+            ProcessServerPacket(
                 mServer->GetData(),
-                sizeof(packetType));
-
-            if (packetType ==
-                AsteroidPacketType::Join)
-            {
-                mNetworkConnected = true;
-
-                mNetworkStatus =
-                    "Player 2 connected.";
-
-                WelcomePacket welcome;
-
-                welcome.playerID = 2;
-
-                mServer->SendMsg(
-                    reinterpret_cast<const char*>(&welcome),
-                    sizeof(welcome));
-            }
+                dataLength);
         }
     }
 
+    // =============================
     // CLIENT
+    // =============================
     if (mNetworkMode == NetworkMode::Client &&
         mClient)
     {
@@ -457,35 +1061,28 @@ void GameState::UpdateNetwork()
         const int dataLength =
             mClient->GetDataLength();
 
-        if (dataLength >= sizeof(AsteroidPacketType))
+        if (dataLength > 0)
         {
-            AsteroidPacketType packetType;
-
-            std::memcpy(
-                &packetType,
+            ProcessClientPacket(
                 mClient->GetData(),
-                sizeof(packetType));
+                dataLength);
+        }
+    }
 
-            if (packetType ==
-                AsteroidPacketType::Welcome &&
-                dataLength >= sizeof(WelcomePacket))
-            {
-                WelcomePacket welcome;
+    // =============================
+    // SERVER
+    // =============================
 
-                std::memcpy(
-                    &welcome,
-                    mClient->GetData(),
-                    sizeof(welcome));
+    if (mNetworkMode == NetworkMode::Host && mServer)
+    {
+        mServer->ResetMsg();
+        mServer->ReceiveMsg();
 
-                mPlayerID =
-                    welcome.playerID;
+        const int dataLength = mServer->GetDataLength();
 
-                mNetworkConnected = true;
-
-                mNetworkStatus =
-                    "Connected as Player "
-                    + std::to_string(mPlayerID);
-            }
+        if (dataLength > 0)
+        {
+            ProcessServerPacket(mServer->GetData(), dataLength);
         }
     }
 }
@@ -500,9 +1097,31 @@ void GameState::Render()
     SimpleDraw::AddLine({ -mArenaHalfWidth, 0.05f, mDeathZ }, { mArenaHalfWidth, 0.05f, mDeathZ }, Colors::White);
     SimpleDraw::AddLine({ -mArenaHalfWidth, 0.05f, mSpawnZ }, { mArenaHalfWidth, 0.05f, mSpawnZ }, Colors::White);
 
-    // Player
-    const Color playerColor = mGameOver ? Colors::Red : Colors::Cyan;
-    SimpleDraw::AddSphere(16, 16, mPlayerRadius, mPlayerPosition, playerColor);
+    // Player 1
+    Color player1Color = mPlayers[0].alive ? Colors::Cyan:Colors::Red;
+
+    SimpleDraw::AddSphere(
+        16,
+        16,
+        mPlayers[0].radius,
+        mPlayers[0].position,
+        player1Color);
+
+    // Player 2
+    if (mNetworkConnected)
+    {
+        Color player2Color =
+            mPlayers[1].alive
+            ? Colors::Blue
+            : Colors::Red;
+
+        SimpleDraw::AddSphere(
+            16,
+            16,
+            mPlayers[1].radius,
+            mPlayers[1].position,
+            player2Color);
+    }
 
     // Asteroids
     for (const Asteroid& asteroid : mAsteroids)
@@ -528,11 +1147,44 @@ void GameState::DebugUI()
     ImGui::Text("Asteroid Count: %d", static_cast<int>(mAsteroids.size()));
     ImGui::Text("Worker Threads: %u", mThreadPool.GetThreadCount());
 
-    if (mGameOver)
+    ImGui::Text("SURVIVAL");
+
+    ImGui::Text(
+        "Player 1: %.2f seconds%s",
+        mPlayers[0].survivalTime,
+        mPlayers[0].alive
+        ? ""
+        : " - ELIMINATED");
+
+    ImGui::Text(
+        "Player 2: %.2f seconds%s",
+        mPlayers[1].survivalTime,
+        mPlayers[1].alive
+        ? ""
+        : " - ELIMINATED");
+
+    if (mMatchOver)
     {
         ImGui::Separator();
-        ImGui::Text("GAME OVER");
-        ImGui::Text("Press R to restart.");
+
+        if (mWinner == 1)
+        {
+            ImGui::Text("PLAYER 1 WINS!");
+        }
+        else if (mWinner == 2)
+        {
+            ImGui::Text("PLAYER 2 WINS!");
+        }
+        else
+        {
+            ImGui::Text("TIE!");
+        }
+
+        if (mNetworkMode == NetworkMode::Host)
+        {
+            ImGui::Text(
+                "Press R to restart.");
+        }
     }
 
     ImGui::Separator();
@@ -544,7 +1196,7 @@ void GameState::DebugUI()
 
     ImGui::Checkbox("Use Parallel Update", &mUseParallelUpdate);
 
-    if (ImGui::SliderInt("Asteroid Count", &mAsteroidCount, 10, 10000))
+    if (ImGui::SliderInt("Asteroid Count", &mAsteroidCount, 10, 500))
     {
         ResetGame();
     }

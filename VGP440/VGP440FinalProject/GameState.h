@@ -15,6 +15,7 @@
 #include <queue>
 #include <thread>
 #include <vector>
+#include <array>
 
 class GameState : public VEngine::AppState
 {
@@ -32,6 +33,18 @@ private:
         VEngine::Math::Vector3 velocity = VEngine::Math::Vector3::Zero;
         float radius = 0.15f;
         uint32_t resetCount = 0;
+    };
+
+    struct PlayerState
+    {
+        VEngine::Math::Vector3 position =
+            VEngine::Math::Vector3::Zero;
+
+        float radius = 0.25f;
+
+        float survivalTime = 0.0f;
+
+        bool alive = true;
     };
 
     class ThreadPool
@@ -69,15 +82,24 @@ private:
     void ResetGame();
     void UpdateCamera(float deltaTime);
     void UpdatePlayer(float deltaTime);
+
+
     void UpdateAsteroidsParallel(float deltaTime);
     void UpdateAsteroidRange(size_t startIndex, size_t endIndex, float deltaTime);
     void ResetAsteroid(size_t index);
-    bool CheckCollision(const Asteroid& asteroid) const;
+
+    void ApplyMovement(PlayerState& player, float movement, float deltaTime);
+    void CheckPlayerCollisions();
+    bool CheckCollision(const Asteroid& asteroid, const PlayerState& player) const;
+    void SendGameState();
+    void SendAsteroidSnapshot();
+    void ProcessServerPacket(const char* data, int dataLength);
+    void ProcessClientPacket(const char* data, int dataLength);
 
     void StartHost();
     void StartClient();
     void StopNetwork();
-    void UpdateNetwork();
+    void UpdateNetwork(float deltaTime);
 
 private:
     VEngine::Graphics::Camera mCamera;
@@ -86,8 +108,8 @@ private:
 
     std::vector<Asteroid> mAsteroids;
 
-    VEngine::Math::Vector3 mPlayerPosition = VEngine::Math::Vector3::Zero;
-    float mPlayerRadius = 0.25f;
+    std::array<PlayerState, 2> mPlayers;
+
     float mPlayerSpeed = 4.0f;
 
     float mArenaHalfWidth = 5.0f;
@@ -121,6 +143,17 @@ private:
 
     char mServerAddress[64] = "127.0.0.1";
 
+    float mRemoteMovement = 0.0f;
 
+    bool mMatchStarted = false;
+    bool mMatchOver = false;
+
+    int mWinner = 0;
+
+    float mStateBroadcastTimer = 0.0f;
+    float mAsteroidBroadcastTimer = 0.0f;
+
+    const float mStateBroadcastRate = 0.05f;
+    const float mAsteroidBroadcastRate = 0.10f;
 
 };
